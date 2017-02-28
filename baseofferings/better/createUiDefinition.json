@@ -1,0 +1,46 @@
+{
+     "handler": "Microsoft.Compute.MultiVm",
+     "version": "0.1.2-preview",
+     "parameters": {
+          "basics": [
+          ],
+          "steps": [
+               {
+                    "name": "infrastructureSettings",
+                    "label": "Infrastructure Settings",
+                    "subLabel": {
+                         "preValidation": "Configure basic settings",
+                         "postValidation": "Done"
+                    },
+                    "bladeTitle": "Infrastructure Settings",
+                    "elements": [
+                    ]
+               },
+               {
+                    "name": "virtualMachineSize",
+                    "label": "Size",
+                    "subLabel": {
+                         "preValidation": "Choose virtual machine size",
+                         "postValidation": "Done"
+                    },
+                    "bladeTitle": "Choose a size",
+                    "elements": [
+                    ]
+               },
+               {
+                    "name": "virtualMachineSettings",
+                    "label": "Settings",
+                    "subLabel": {
+                         "preValidation": "Configure optional features",
+                         "postValidation": "Done"
+                    },
+                    "bladeTitle": "Settings",
+                    "elements": [
+                    ]
+               }
+          ],
+          "outputs": {
+               "location": "[location()]"
+          }
+     }
+}
