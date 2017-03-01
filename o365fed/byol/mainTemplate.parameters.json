@@ -3,7 +3,7 @@
   "parameterValues": {
     "baseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/gregcoward/o365Federation/master",
+      "defaultValue": "https://raw.githubusercontent.com/gregcoward/f5-o365fed-byol/master",
       "metadata": {
         "description": "The base URL for marketplace deployment.",
         "artifactsBaseUrl": ""
@@ -11,13 +11,15 @@
     },
     "location": {
       "type": "string",
+      "defaultValue": "westus",
       "metadata": {
         "description": "The Azure location hosting the resource"
       }
     },
     "numberOfInstances": {
       "type": "int",
-      "defaultValue": 2,
+      "defaultValue": 1,
+      "allowedValues": [ 1, 2 ],
       "metadata": {
         "description": "The number of F5 BIG-IPs that will be deployed as federation servers."
       }
@@ -30,7 +32,7 @@
       }
     },
     "adminPassword": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "The BIG-IP administrator password."
       }
@@ -50,6 +52,30 @@
     "instanceType": {
       "type": "string",
       "defaultValue": "Standard_D3_v2",
+      "allowedValues": [
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_D2",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_F2",
+        "Standard_F4"
+      ],
       "metadata": {
         "description": "The size of the Virtual Hardware Instance."
       }
@@ -57,13 +83,13 @@
     "licenseToken1": {
       "type": "string",
       "metadata": {
-        "description": "The License Token for the first BYOL F5 Web Application Firewall."
+        "description": "The License Token for the first F5 BIG-IP."
       }
     },
     "licenseToken2": {
       "type": "string",
       "metadata": {
-        "description": "The License Token for the first BYOL F5 Web Application Firewall."
+        "description": "The License Token for the second BYOL F5 BIG-IP."
       }
     },
     "authFqdn": {
@@ -97,7 +123,7 @@
       }
     },
     "sslPswd": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "The SSL certificate .pfx file corresponding to public facing VIP."
       }
@@ -111,7 +137,7 @@
     },
     "vnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.10.0.0/16",
+      "defaultValue": "10.0.0.0/16",
       "metadata": {
         "description": "Specify the virtual network address space."
       }
@@ -125,7 +151,7 @@
     },
     "subnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.10.1.0/24",
+      "defaultValue": "10.0.1.0/24",
       "metadata": {
         "description": "Specify the virtual subnet address space."
       }
@@ -142,6 +168,18 @@
       "defaultValue": "",
       "metadata": {
         "description": "Existing Virtual Network name"
+      }
+    },
+    "bigip1IP": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify your Active Directory domain controller IP."
+      }
+    },
+    "restrictedSrcAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify source address range for mgmt access."
       }
     }
   }
