@@ -15,12 +15,20 @@
                     "bladeTitle": "Infrastructure Settings",
                     "elements": [
                          {
+                              "name": "solutionDeploymentName",
+                              "type": "Microsoft.Common.TextBox",
                          },                         
                          {
+                              "name": "vmDiskType",
+                              "type": "Microsoft.Common.DropDown",
                          },
                          {
+                              "name": "adminUsername",
+                              "type": "Microsoft.Compute.UserNameTextBox",
                          },
                          {
+                              "name": "authenticationType",
+                              "type": "Microsoft.Compute.CredentialsCombo",
                          }
                     ]
                },
@@ -34,6 +42,8 @@
                     "bladeTitle": "Choose a size",
                     "elements": [
                          {
+                              "name": "instanceType",
+                              "type": "Microsoft.Compute.SizeSelector",
                          }
                     ]
                },
@@ -45,22 +55,62 @@
                          "postValidation": "Done"
                     },
                     "bladeTitle": "Settings",
-                    "elements": [
-                         {
-                         },
-                         {
-                         },
-                         {
-                         },
-                         {
-                         },
-                         {
-                         },
-                         {
-                         },
-                         {
-                         }
-                    ]
+                    {
+                         "name": "storageSection",
+                         "type": "Microsoft.Common.Section",
+                         "label": "Storage",
+                         "elements": [
+                              {
+                                   "name": "managedDisks",
+                                   "type": "Microsoft.Common.OptionsGroup",
+                              },
+                              {
+                                   "name": "storageAccount",
+                                   "type": "Microsoft.Storage.StorageAccountSelector",
+                              }                      
+                         ],
+                         "visible": true
+                    },
+                    {
+                         "name": "networkSection",
+                         "type": "Microsoft.Common.Section",
+                         "label": "Network",
+                         "elements": [                             
+                              {
+                                   "name": "virtualNetwork",
+                                   "type": "Microsoft.Network.VirtualNetworkCombo",
+                              },
+                              {
+                                   "name": "publicIpAddress",
+                                   "type": "Microsoft.Network.PublicIpAddressCombo",
+                              },
+                              {
+                                   "name": "networkSecurityGroup",
+                                   "type": "Microsoft.Common.TextBox",
+                              }                     
+                         ],
+                         "visible": true
+                    },
+                    {
+                         "name": "monitoringSection",
+                         "type": "Microsoft.Common.Section",
+                         "label": "Monitoring",
+                         "elements": [                            
+                              {
+                                   "name": "bootDiagnostics",
+                                   "type": "Microsoft.Common.OptionsGroup",
+                              },
+                              {
+                                   "name": "linuxDiagnostics",
+                                   "type": "Microsoft.Common.OptionsGroup",
+                              },
+                              {
+                                   "name": "diagnosticsStorageAccount",
+                                   "type": "Microsoft.Storage.StorageAccountSelector",
+                              } 
+                         ],
+                         "visible": true
+                    }
                }
           ],
           "outputs": {
