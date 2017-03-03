@@ -74,18 +74,6 @@
         "description": "The admin account passowrd"
       }
     },
-    "authenticationType": {
-      "type": "string",
-      "metadata": {
-        "description": "Authentication method utilizeda"
-      }
-    },
-    "sshPublicKey": {
-      "type": "string",
-      "metadata": {
-        "description": "The ssh public key"
-      }
-    },
     "instanceType": {
       "type": "string",
       "metadata": {
@@ -196,28 +184,6 @@
     }
   },
   "variables": {
-    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-    "osProfileChosen": "[concat('osProfile', parameters('authenticationType'))]",
-    "osProfilesshPublicKey": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "linuxConfiguration": {
-        "disablePasswordAuthentication": "true",
-        "ssh": {
-          "publicKeys": [
-            {
-              "keyData": "[parameters('sshPublicKey')]",
-              "path": "[variables('sshKeyPath')]"
-            }
-          ]
-        }
-      }
-    },
-    "osProfilepassword": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "adminPassword": "[parameters('adminPassword')]"
-    }
   },
   "resources": [
     {
@@ -293,7 +259,11 @@
         "hardwareProfile": {
           "vmSize": "[parameters('instanceType')]"
         },
-        "osProfile": "[variables(variables('osProfileChosen'))]",
+       "osProfile": {
+          "computerName": "[parameters('bigipNamePrefix')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+                    },
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
