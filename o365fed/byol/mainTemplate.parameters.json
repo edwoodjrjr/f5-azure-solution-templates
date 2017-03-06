@@ -3,7 +3,7 @@
   "parameterValues": {
     "baseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/gregcoward/f5-o365fed-byol/master",
+      "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-solution-templates/master",
       "metadata": {
         "description": "The base URL for marketplace deployment.",
         "artifactsBaseUrl": ""
@@ -35,6 +35,20 @@
       "type": "securestring",
       "metadata": {
         "description": "The BIG-IP administrator password."
+      }
+    },
+    "publicIpName": {
+      "type": "string",
+      "defaultValue": "idp-pip",
+      "metadata": {
+        "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
+      }
+    },
+    "dnsLabel": {
+      "type": "string",
+      "defaultValue": "dnslabel",
+      "metadata": {
+        "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
       }
     },
     "sshPublicKey": {
