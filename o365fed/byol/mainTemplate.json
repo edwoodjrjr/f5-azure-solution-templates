@@ -66,6 +66,7 @@
     },
     "licenseToken2": {
       "type": "string",
+      "defaultValue": "NOT_SPECIFIED",
       "metadata": {
         "description": "The License Token for the second BYOL F5 BIG-IP."
       }
