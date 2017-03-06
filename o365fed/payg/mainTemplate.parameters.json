@@ -3,7 +3,7 @@
   "parameterValues": {
     "baseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-solution-templates/master",
+      "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-solution-templates/develop/o365fed/payg",
       "metadata": {
         "description": "The base URL for marketplace deployment.",
         "artifactsBaseUrl": ""
