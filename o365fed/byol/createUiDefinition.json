@@ -1,0 +1,314 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "basics": [
+    ],
+    "steps": [
+      {
+        "name": "bigipSettings",
+        "label": "F5 BIG-IP Settings",
+        "subLabel": {
+          "preValidation": "Configure Settings for the F5 BIG-IP",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "F5 BIG-IP Configuration Settings",
+        "elements": [
+          {
+            "name": "numberOfInstances",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Number of BIG-IPs",
+            "defaultValue": "1",
+            "toolTip": "Select the number of BIG-IPs to deploy, (1 or 2).",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "1",
+                  "value": "1"
+                },
+                {
+                  "label": "2",
+                  "value": "2"
+                }
+              ]
+            },
+            "visible": true
+          },          
+          {
+            "name": "adminUsername",
+            "type": "Microsoft.Compute.UserNameTextBox",
+            "label": "BIG-IP Administrator Username",
+            "defaultValue": "azureuser",
+            "toolTip": "Enter administrator's username for the BIG-IP",
+            "osPlatform": "Windows"
+          },
+          {
+            "name": "adminPassword",
+               "type": "Microsoft.Compute.CredentialsCombo",
+               "label": {
+                   "password": "F5 BIG-IP Password",
+                   "confirmPassword": "Confirm Password"
+               },
+               "toolTip": {
+                   "password": "Administrative password for the Azure virtual machine(s)."
+               },
+               "constraints": {
+                   "required": true
+               },
+               "options": {
+                   "hideConfirmation": false
+               },
+               "osPlatform": "Windows"
+          },
+          {
+            "name": "instanceType",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "Select the desired instance size for virtual machine to provision.",
+            "recommendedSizes": [
+              "Standard_D3_v2",
+              "Standard_A3",
+              "Standard_A4",
+              "Standard_F4"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_F2",
+                "Standard_F4"
+              ]
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+                "publisher": "f5-networks",
+                "offer": "f5-big-ip",
+                "sku": "f5-bigip-virtual-edition-best-byol"
+          }
+          },
+          {
+            "name": "virtualNetwork",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+              "virtualNetwork": "Virtual network",
+              "subnets": "Subnets"
+            },
+            "toolTip": {
+              "virtualNetwork": "Select an existing create a new virtual network.",
+              "subnets": ""
+            },
+            "defaultValue": {
+              "name": "Vnet",
+              "addressPrefixSize": "/16"
+            },
+            "constraints": {
+              "minAddressPrefixSize": "/22"
+            },
+            "options": {
+              "hideExisting": false
+            },
+            "subnets": {
+              "subnet1": {
+                "label": "subnetName",
+                "defaultValue": {
+                  "name": "subnet1",
+                  "addressPrefixSize": "/24"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/24",
+                  "minAddressCount": 12,
+                  "requireContiguousAddresses": true
+                }
+              }
+            },
+            "visible": true
+          },
+          {
+            "name": "licenseToken1",
+            "type": "Microsoft.Common.TextBox",
+            "label": "BYOL License Key1",
+            "defaultValue": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX",
+            "toolTip": "Enter the F5 BIG-IP License key.",
+            "constraints": {
+              "regex": "^[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7}$",
+              "validationMessage": "Provide the BIG-IP licence key in XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX format."
+            }
+          },
+          {
+            "name": "licenseToken2",
+            "type": "Microsoft.Common.TextBox",
+            "label": "BYOL License Key2",
+            "defaultValue": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX",
+            "toolTip": "Enter the F5 BIG-IP License key.",
+            "constraints": {
+              "regex": "^[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7}$",
+              "validationMessage": "Provide the BIG-IP licence key in XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX format."
+            },
+            "visible": "[equals(steps('bigipSettings').numberOfInstances, '2')]"
+          },
+          {
+            "name": "bigip1IP",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Internal Address assigned to first BIGIP",
+            "defaultValue": "0.0.0.0",
+            "toolTip": "Enter an IP address for the BIG-IP. If selected, the IP address for the second BIG-IP will be assigned sequentially.",
+            "constraints": {
+              "required": true,
+              "regex": "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
+              "validationMessage": "Enter a proper IPv4 address"
+            },
+            "visible": "[equals(steps('bigipSettings').virtualNetwork.newOrExisting,'existing')]"
+          },
+          {
+            "name": "restrictedSrcAddress",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Restricted source network or address",
+            "defaultValue": "*",
+            "toolTip": "Restricts management access to a specific network or address; enter a IP address or address range in CIDR notation, or asterisk for all sources.",
+            "constraints": {
+                  "regex": "^\\*$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+                  "required": true,
+                  "validationMessage": "Only valid CIDR addresses and the wildcard character (asterisk) are allowed."
+             }
+           }
+        ]
+      },
+      {
+        "name": "federationSettings",
+        "label": "O365 Federation Settings",
+        "subLabel": {
+          "preValidation": "Configure o365 federation settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Office 365 Federation Settings",
+        "elements": [
+          {
+            "name": "authFqdn",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Authentication Domain Controller FQDN",
+            "defaultValue": "required",
+            "toolTip": "Enter FQDN of primary AD domain controller used for user authentication.",
+            "constraints": {
+              "required": true,
+              "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
+              "validationMessage": "Enter FQDN of primary AD domain controller used for user authentication."
+            }
+          },
+          {
+            "name": "authIp",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Authentication Domain Controller IP Address",
+            "defaultValue": "0.0.0.0",
+            "toolTip": "Enter IP address of primary AD domain controller used for user authentication.",
+            "constraints": {
+              "required": true,
+              "regex": "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
+              "validationMessage": "Enter a proper IPv4 address"
+            }
+          },
+          {
+            "name": "domainFqdn",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Federated Domain  (ex: 'f5demo.net')",
+            "defaultValue": "required",
+            "toolTip": "Enter federated domain suffix, (for example: 'fdemo.net').",
+            "constraints": {
+              "required": true,
+              "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
+              "validationMessage": "Enter domain name.  For example - f5demo.net."
+            }
+          },
+          {
+            "name": "dnsFqdn",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Federation IdP Endpoint FQDN",
+            "defaultValue": "required",
+            "toolTip": "Enter The public federation endpoint FQDN, (for example: 'fs.fdemo.net').",
+            "constraints": {
+              "required": true,
+              "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
+              "validationMessage": "Enter FQDN of the federation endpoint."
+
+            }
+          },
+          {
+            "name": "sslCert",
+            "type": "Microsoft.Common.FileUpload",
+            "label": "SSL Certificate Upload",
+            "toolTip": "Browse to and select the SSL certificate, (.pfx format) file corresponding to public facing VIP.",
+            "constraints": {
+              "required": true,
+              "accept": ".pfx, .p12"
+            },
+            "options": {
+              "multiple": false,
+              "uploadMode": "url",
+              "openMode": "text",
+              "encoding": "UTF-8"
+            },
+            "visible": true
+          },
+          {
+            "name": "sslPswd",
+            "type": "Microsoft.Common.PasswordBox",
+            "label": {
+              "password": "Certificate Passphrase",
+              "confirmPassword": "Confirm Passphrase"
+            },
+            "toolTip": "Enter the passphrase to open the .pfx certificate file.",
+            "constraints": {
+              "required": true,
+              "regex": "",
+              "validationMessage": ""
+            },
+            "options": {
+              "hideConfirmation": false
+            },
+            "visible": true
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "location": "[location()]",
+      "numberOfInstances": "[int(steps('bigipSettings').numberOfInstances)]",
+      "adminUsername": "[steps('bigipSettings').adminUsername]",
+      "adminPassword": "[steps('bigipSettings').adminPassword.password]",
+      "instanceType": "[steps('bigipSettings').instanceType]",
+      "licenseToken1": "[steps('bigipSettings').licenseToken1]",
+      "licenseToken2": "[steps('bigipSettings').licenseToken2]",
+      "authFqdn": "[steps('federationSettings').authFqdn]",
+      "authIp": "[steps('federationSettings').authIp]",
+      "domainFqdn": "[steps('federationSettings').domainFqdn]",
+      "dnsFqdn": "[steps('federationSettings').dnsFqdn]",
+      "sslCert": "[steps('federationSettings').sslCert]",
+      "sslPswd": "[steps('federationSettings').sslPswd]",
+      "vnetName": "[steps('bigipSettings').virtualNetwork.name]",
+      "vnetAddressPrefix": "[steps('bigipSettings').virtualNetwork.addressPrefix]",
+      "subnetName": "[steps('bigipSettings').virtualNetwork.subnets.subnet1.name]",
+      "subnetAddressPrefix": "[steps('bigipSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "vnetNewOrExisting": "[steps('bigipSettings').virtualNetwork.newOrExisting]",
+      "vnetExistingRGName": "[steps('bigipSettings').virtualNetwork.resourceGroup]",
+      "bigip1IP": "[steps('bigipSettings').bigip1IP]",
+      "restrictedSrcAddress": "[steps('bigipSettings').restrictedSrcAddress]"
+    }
+  }
+}
