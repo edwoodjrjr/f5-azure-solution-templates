@@ -4,7 +4,7 @@
   "parameters": {
     "baseUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/gregcoward/f5-o365fed-byol/master",
+      "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-solution-templates/develop/o365fed/byol",
       "metadata": {
         "description": "The base URL for marketplace deployment.",
         "artifactsBaseUrl": ""
