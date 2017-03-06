@@ -173,6 +173,7 @@
             "label": "BYOL License Key1",
             "toolTip": "Enter the F5 BIG-IP License key.",
             "constraints": {
+              "required": true,
               "regex": "^[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7}$",
               "validationMessage": "Provide the BIG-IP licence key in XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX format."
             }
