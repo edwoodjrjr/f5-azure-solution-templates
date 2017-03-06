@@ -281,7 +281,7 @@
       "authenticationType": "[steps('bigipSettings').SSHCredentials.authenticationType]",
       "instanceType": "[steps('bigipSettings').instanceType]",
       "licenseToken1": "[steps('bigipSettings').licenseToken1]",
-      "licenseToken2": "[steps('bigipSettings').licenseToken1]",
+      "licenseToken2": "[steps('bigipSettings').licenseToken2]",
       "authFqdn": "[steps('federationSettings').authFqdn]",
       "authIp": "[steps('federationSettings').authIp]",
       "domainFqdn": "[steps('federationSettings').domainFqdn]",
