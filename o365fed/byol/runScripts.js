@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 F5 Networks, Inc.
+ * Copyright 2016, 2017 F5 Networks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,8 +69,10 @@
             waiting--;
 
             if (!waiting) {
-                logger.info("All children have exitted. Exitting.");
-                process.exit();
+                // Make sure the last log message is flushed before exitting.
+                logger.info("All children have exitted. Exitting.", function() {
+                    process.exit();
+                });
             }
         });
     };
@@ -98,6 +100,8 @@
                 var scriptArgs;
                 var shellOutput;
                 var f5CloudLibsTag;
+                var fstats;
+                var doInstall;
                 var i;
                 var j;
 
@@ -137,7 +141,6 @@
                     console.log("  Options:");
                     console.log();
                     console.log("    --help\t\t\tOutputusage information");
-                    console.log("    --tag\t\t\tGitHub f5-cloud-libs tag that was pulled.");
                     console.log("    --onboard <args>\t\tRun the onboard.js script with args.");
                     console.log("    --cluster <args>\t\tRun the cluster.js script with args.");
                     console.log("    --network <args>\t\tRun the network.js script with args.");
@@ -148,36 +151,6 @@
                 // In Azure, mysql takes extra time to start
                 console.log('Resetting mysql start delay');
                 shellOutput = childProcess.execSync("sed -i 's/sleep\ 5/sleep\ 10/' /etc/init.d/mysql");
-                console.log(shellOutput.toString());
-
-                argIndex = argv.indexOf('--tag');
-                if (argIndex != -1) {
-                    f5CloudLibsTag = argv[argIndex + 1];
-                }
-
-                console.log("Creating f5-cloud-libs directory.");
-                fs.mkdirSync("/config/f5-cloud-libs");
-
-                console.log("Moving libraries to /config.");
-                shellOutput = childProcess.execSync("mv " + f5CloudLibsTag + " /config/f5-cloud-libs.tar.gz");
-                console.log(shellOutput.toString());
-
-                console.log("Expanding libraries.");
-                shellOutput = childProcess.execSync(
-                    "tar -xzf f5-cloud-libs.tar.gz --strip-components 1 --directory f5-cloud-libs",
-                    {
-                        cwd: "/config"
-                    }
-                );
-                console.log(shellOutput.toString());
-
-                console.log("Downloading dependencies.");
-                shellOutput = childProcess.execSync(
-                    "npm install --production",
-                    {
-                        cwd: "/config/f5-cloud-libs"
-                    }
-                );
                 console.log(shellOutput.toString());
 
                 ipc = require('/config/f5-cloud-libs/lib/ipc');
@@ -198,31 +171,34 @@
                 logger.info("Running scripts.");
 
                 argIndex = argv.indexOf('--onboard');
-                logger.debug("onboard arg index", argIndex);
-                if (argIndex !== -1) {
+                while (argIndex !== -1) {
+                    logger.debug("onboard arg index", argIndex);
                     scriptArgs = argv[argIndex + 1];
                     spawnScript("onboard.js", undefined, scriptArgs);
+                    argIndex = argv.indexOf('--onboard', argIndex + 1);
                 }
 
                 argIndex = argv.indexOf('--cluster');
-                logger.debug("cluster arg index", argIndex);
-                if (argIndex !== -1) {
+                while (argIndex !== -1) {
+                    logger.debug("cluster arg index", argIndex);
                     scriptArgs = argv[argIndex + 1];
                     spawnScript("cluster.js", undefined, scriptArgs);
+                    argIndex = argv.indexOf('--cluster', argIndex + 1);
                 }
 
                 argIndex = argv.indexOf('--network');
-                logger.debug("network arg index", argIndex);
-                if (argIndex !== -1) {
+                while (argIndex !== -1) {
+                    logger.debug("network arg index", argIndex);
                     scriptArgs = argv[argIndex + 1];
                     spawnScript("network.js", undefined, scriptArgs);
+                    argIndex = argv.indexOf('--network', argIndex + 1);
                 }
 
-                // Process multiple --script args
                 argIndex = argv.indexOf('--script');
-                logger.debug("script arg index", argIndex);
                 /* jshint loopfunc: true */
                 while (argIndex !== -1) {
+                    logger.debug("script arg index", argIndex);
+
                     args = [];
                     scriptArgs = argv[argIndex + 1];
                     clArgIndex = scriptArgs.indexOf('--cl-args');
@@ -256,15 +232,16 @@
                     spawnScript("runScript.js", args);
 
                     argIndex = argv.indexOf('--script', argIndex + 1);
-                    logger.debug("next script arg index", argIndex);
                 }
                 /* jshint loopfunc: false */
 
                 // If we reboot, exit - otherwise Azure doesn't know the extensions script is done
                 ipc.once('REBOOT')
                     .then(function() {
-                        logger.info("REBOOT signalled. Exitting.");
-                        process.exit();
+                        // Make sure the last log message is flushed before exitting.
+                        logger.info("REBOOT signalled. Exitting.", function() {
+                            process.exit();
+                        });
                     });
 
             }

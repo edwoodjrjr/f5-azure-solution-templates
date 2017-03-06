@@ -74,18 +74,6 @@
         "description": "The admin account passowrd"
       }
     },
-    "authenticationType": {
-      "type": "string",
-      "metadata": {
-        "description": "Authentication method utilizeda"
-      }
-    },
-    "sshPublicKey": {
-      "type": "string",
-      "metadata": {
-        "description": "The ssh public key"
-      }
-    },
     "instanceType": {
       "type": "string",
       "metadata": {
@@ -96,6 +84,12 @@
       "type": "string",
       "metadata": {
         "description": "The bigip availability set"
+      }
+    },
+    "nsgId": {
+      "type": "string",
+      "metadata": {
+        "description": "The NSG Id"
       }
     },
     "asId": {
@@ -122,6 +116,12 @@
         "description": "URL for nested templates"
       }
     },
+    "iAppUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "URL for nested templates"
+      }
+    },
     "f5CloudLibsTagUrl": {
       "type": "string",
       "metadata": {
@@ -132,6 +132,24 @@
       "type": "string",
       "metadata": {
         "description": "Tag for F5 CloudLibs "
+      }
+    },
+    "installCloudLibs": {
+      "type": "string",
+      "metadata": {
+        "description": "Cloudlibs install command "
+      }
+    },
+    "verifyHash": {
+      "type": "string",
+      "metadata": {
+        "description": "Cloudlibs file hash"
+      }
+    },
+    "singleQuote": {
+      "type": "string",
+      "metadata": {
+        "description": "a single quote"
       }
     },
     "domainFqdn": {
@@ -151,32 +169,21 @@
       "metadata": {
         "description": "URL location for run script"
       }
+    },
+    "ipPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Self IP address prefix"
+      }
+    },
+    "lastOctet": {
+      "type": "int",
+      "metadata": {
+        "description": "Last octet of first BIGIP"
+      }
     }
   },
   "variables": {
-    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-    "osProfileChosen": "[concat('osProfile', parameters('authenticationType'))]",
-    "osProfilesshPublicKey": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "linuxConfiguration": {
-        "disablePasswordAuthentication": "true",
-        "ssh": {
-          "publicKeys": [
-            {
-              "keyData": "[parameters('sshPublicKey')]",
-              "path": "[variables('sshKeyPath')]"
-            }
-          ]
-        }
-      }
-    },
-    "osProfilepassword": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "adminPassword": "[parameters('adminPassword')]"
-    },
-    "singleQuote": "'"
   },
   "resources": [
     {
@@ -194,11 +201,15 @@
         "name": "niccopy"
       },
       "properties": {
+        "networkSecurityGroup": {
+           "id": "[parameters('nsgID')]"
+        },
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(parameters('ipPrefix'),add(parameters('lastOctet'),copyIndex()))]",
               "subnet": {
                 "id": "[parameters('subnetId')]"
               },
@@ -249,13 +260,17 @@
         "hardwareProfile": {
           "vmSize": "[parameters('instanceType')]"
         },
-        "osProfile": "[variables(variables('osProfileChosen'))]",
+        "osProfile": {
+          "computerName": "[parameters('bigipNamePrefix')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
             "offer": "f5-big-ip",
             "sku": "f5-bigip-virtual-edition-best-byol",
-            "version": "latest"
+            "version": "12.1.21"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
@@ -292,16 +307,18 @@
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
         "type": "CustomScript",
-        "autoUpgradeMinorVersion": true,          
+        "autoUpgradeMinorVersion": true,
         "typeHandlerVersion": "2.0",
         "settings": {
           "fileUris": [
             "[parameters('runScriptsUrl')]",
-            "[parameters('f5CloudLibsTagUrl')]"
+            "[parameters('f5CloudLibsTagUrl')]",
+            "[parameters('iappUrl')]",
+            "[parameters('scriptLoc')]"
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat('f5-rest-node ./runScripts.js --log-level debug --tag ', parameters('f5CloudLibsTag'), ' --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin -p ', parameters('adminPassword'), ' --hostname ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --update-user user:admin,password:', parameters('adminPassword'), ' --license ', parameters('licenseToken1'), ' --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal --module afm:none --module apm:nominal --update-sigs --signal ONBOARD_DONE \" --cluster \" --wait-for ONBOARD_DONE --output /var/log/clusterGroup.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin -p ', parameters('adminPassword'), ' --create-group --device-group Sync --sync-type sync-failover --device ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --auto-sync --save-on-auto-sync --asm-sync --config-sync-ip ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress,' --signal CLUSTER_DONE \" --script \" --wait-for CLUSTER_DONE --output /var/log/runScript.log --log-level debug --url ',parameters('scriptLoc'),' --cl-args ', variables('singleQuote'),'-i ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), variables('singleQuote'), ' --signal SCRIPT_DONE \"')]"
+          "commandToExecute": "[concat('cp f5-cloud-libs.tar.gz* /config; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null /config/mypass; IFS=', parameters('singleQuote'), '%', parameters('singleQuote'), '; echo -e ', parameters('verifyHash'), ' >> /config/verifyHash; echo -e ', parameters('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo -e ', parameters('adminPassword'), ' >> /config/mypass; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/f5-cloud-libs/scripts/azure/runScripts.js --log-level debug --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --hostname ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --update-user user:admin,password:', parameters('adminPassword'), ' --license ', parameters('licenseToken1'), ' --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal --module afm:none --module apm:nominal --signal ONBOARD_DONE \" --cluster \" --wait-for ONBOARD_DONE --output /var/log/clusterGroup.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --create-group --device-group Sync --sync-type sync-failover --device ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --auto-sync --save-on-auto-sync --asm-sync --config-sync-ip ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress,' --signal CLUSTER_DONE \" --script \" --wait-for CLUSTER_DONE --output /var/log/runScript.log --log-level debug --file /var/lib/waagent/custom-script/download/0/o365FedDeploy.sh --cl-args ', parameters('singleQuote'),'-i ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), parameters('singleQuote'), ' --signal SCRIPT_DONE \"')]"
         }
       }
     },
@@ -316,16 +333,18 @@
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
         "type": "CustomScript",
-        "autoUpgradeMinorVersion": true,          
+        "autoUpgradeMinorVersion": true,
         "typeHandlerVersion": "2.0",
         "settings": {
           "fileUris": [
             "[parameters('runScriptsUrl')]",
-            "[parameters('f5CloudLibsTagUrl')]"
+            "[parameters('f5CloudLibsTagUrl')]",
+            "[parameters('iappUrl')]",
+            "[parameters('scriptLoc')]"
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat('f5-rest-node ./runScripts.js --log-level debug --tag ', parameters('f5CloudLibsTag'), ' --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' -u admin -p ', parameters('adminPassword'), ' --hostname ', concat(parameters('bigipNamePrefix'),'2', '.', parameters('domainFqdn')), ' --update-user user:admin,password:', parameters('adminPassword'), ' --license ', parameters('licenseToken2'), ' --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal --module afm:none --module apm:nominal --signal ONBOARD_DONE \" --cluster \" --wait-for ONBOARD_DONE --output /var/log/cluster.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' -u admin -p ', parameters('adminPassword'), ' --config-sync-ip ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' --join-group --device-group Sync --sync --remote-host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' --remote-user admin --remote-password ', parameters('adminPassword'), ' --signal CLUSTER_DONE \" --script \" --wait-for CLUSTER_DONE --output /var/log/runScript.log --log-level debug --url ',parameters('scriptLoc'),' --cl-args ', variables('singleQuote'),'-i ',reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), variables('singleQuote'), ' --signal SCRIPT_DONE \"')]"
+          "commandToExecute": "[concat('cp f5-cloud-libs.tar.gz* /config; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null /config/mypass; IFS=', parameters('singleQuote'), '%', parameters('singleQuote'), '; echo -e ', parameters('verifyHash'), ' >> /config/verifyHash; echo -e ', parameters('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo -e ', parameters('adminPassword'), ' >> /config/mypass; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/f5-cloud-libs/scripts/azure/runScripts.js --log-level debug --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --hostname ', concat(parameters('bigipNamePrefix'),'2', '.', parameters('domainFqdn')), ' --update-user user:admin,password:', parameters('adminPassword'), ' --license ', parameters('licenseToken2'), ' --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal --module afm:none --module apm:nominal --signal ONBOARD_DONE \" --cluster \" --wait-for ONBOARD_DONE --output /var/log/cluster.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --config-sync-ip ', reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, ' --join-group --device-group Sync --sync --remote-host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' --remote-user admin --remote-password-url file:///config/mypass --signal CLUSTER_DONE \" --script \" --wait-for CLUSTER_DONE --output /var/log/runScript.log --log-level debug --file /var/lib/waagent/custom-script/download/0/o365FedDeploy.sh --cl-args ', parameters('singleQuote'),'-i ',reference(concat(parameters('nicNamePrefix'),'2')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), parameters('singleQuote'), ' --signal SCRIPT_DONE \"')]"
         }
       }
     }

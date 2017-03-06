@@ -18,7 +18,7 @@
             "name": "numberOfInstances",
             "type": "Microsoft.Common.DropDown",
             "label": "Number of BIG-IPs",
-            "defaultValue": "2",
+            "defaultValue": "1",
             "toolTip": "Select the number of BIG-IPs to deploy, (1 or 2).",
             "constraints": {
               "allowedValues": [
@@ -32,8 +32,31 @@
                 }
               ]
             },
-              "visible": true
-          },          
+            "visible": true
+          },
+          {
+            "name": "licensedBandwidth",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Licensed Bandwidth",
+            "defaultValue": "200m",
+            "toolTip": "The amount of licensed bandwidth (Mbps) to allocate for each vm.",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "25mbs",
+                  "value": "25m"
+                },
+                {
+                  "label": "200mbs",
+                  "value": "200m"
+                },
+                {
+                  "label": "1gb",
+                  "value": "1g"
+                }
+              ]
+            }
+          },                    
           {
             "name": "adminUsername",
             "type": "Microsoft.Compute.UserNameTextBox",
@@ -57,7 +80,6 @@
               "sshPublicKey": ""
             },
             "constraints": {
-              "required": true
             },
             "options": {
               "hideConfirmation": false
@@ -71,27 +93,41 @@
             "toolTip": "Select the desired instance size for virtual machine to provision.",
             "recommendedSizes": [
               "Standard_D3_v2",
-              "Standard_DS3_v2",
               "Standard_A3",
               "Standard_A4",
               "Standard_F4"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D3_v2",
-                "Standard_DS3_v2",
                 "Standard_A3",
                 "Standard_A4",
-                "Standard_F4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
                 "Standard_D2",
-                "Standard_D5"
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_F2",
+                "Standard_F4"
               ]
             },
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "f5-networks",
               "offer": "f5-big-ip-hourly",
-              "sku": "f5-bigip-virtual-edition-1g-best-hourly"
+              "sku": "[concat('f5-bigip-virtual-edition-', steps('bigipSettings').licensedBandwidth,'-best-hourly')]"
              }
           },
           {
@@ -102,12 +138,13 @@
               "subnets": "Subnets"
             },
             "toolTip": {
-              "virtualNetwork": "Select an existing create a new virtual network.",
+              "virtualNetwork": "Select an existing or create a new virtual network.",
               "subnets": ""
             },
             "defaultValue": {
               "name": "Vnet",
               "addressPrefixSize": "/16"
+
             },
             "constraints": {
               "minAddressPrefixSize": "/22"
@@ -130,7 +167,32 @@
               }
             },
             "visible": true
-          }
+          },
+          {
+            "name": "bigip1IP",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Internal Address assigned to first BIGIP",
+            "defaultValue": "0.0.0.0",
+            "toolTip": "Enter an IP address for the BIG-IP. If selected, the IP address for the second BIG-IP will be assigned sequentially.",
+            "constraints": {
+              "required": true,
+              "regex": "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
+              "validationMessage": "Enter a proper IPv4 address"
+            },
+            "visible": "[equals(steps('bigipSettings').virtualNetwork.newOrExisting,'existing')]"
+          },
+          {
+            "name": "restrictedSrcAddress",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Restricted source network or address",
+            "defaultValue": "*",
+            "toolTip": "Restricts management access to a specific network or address; enter a IP address or address range in CIDR notation, or asterisk for all sources.",
+            "constraints": {
+                  "regex": "^\\*$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+                  "required": true,
+                  "validationMessage": "Only valid CIDR addresses and the wildcard character (asterisk) are allowed."
+             }
+           }
         ]
       },
       {
@@ -232,6 +294,7 @@
     "outputs": {
       "location": "[location()]",
       "numberOfInstances": "[int(steps('bigipSettings').numberOfInstances)]",
+      "licensedBandwidth": "[steps('bigipSettings').licensedBandwidth]",
       "adminUsername": "[steps('bigipSettings').adminUsername]",
       "adminPassword": "[steps('bigipSettings').SSHCredentials.password]",
       "sshPublicKey": "[steps('bigipSettings').SSHCredentials.sshPublicKey]",
@@ -248,7 +311,9 @@
       "subnetName": "[steps('bigipSettings').virtualNetwork.subnets.subnet1.name]",
       "subnetAddressPrefix": "[steps('bigipSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
       "vnetNewOrExisting": "[steps('bigipSettings').virtualNetwork.newOrExisting]",
-      "vnetExistingRGName": "[steps('bigipSettings').virtualNetwork.resourceGroup]"
+      "vnetExistingRGName": "[steps('bigipSettings').virtualNetwork.resourceGroup]",
+      "bigip1IP": "[steps('bigipSettings').bigip1IP]",
+      "restrictedSrcAddress": "[steps('bigipSettings').restrictedSrcAddress]"
     }
   }
 }
