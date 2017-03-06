@@ -262,7 +262,7 @@
       "properties": {
         "publicIPAllocationMethod": "Static",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsLabel')]",
+          "domainNameLabel": "[parameters('dnsLabel')]"
         }
       }
     },
