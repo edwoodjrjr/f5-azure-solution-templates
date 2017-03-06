@@ -90,6 +90,20 @@
         "description": "The SSL certificate .pfx file corresponding to public facing VIP."
       }
     },
+    "publicIpName": {
+          "type": "string",
+          "defaultValue": "ip01",
+          "metadata": {
+               "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
+          }
+     },
+     "dnsLabel": {
+          "type": "string",
+          "defaultValue": "dnslabel",
+          "metadata": {
+               "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
+          }
+     },
     "vnetName": {
       "type": "string",
       "defaultValue": "Vnet",

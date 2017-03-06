@@ -106,6 +106,20 @@
         "description": "The SSL certificate .pfx file corresponding to public facing VIP."
       }
     },
+    "publicIpName": {
+          "type": "string",
+          "defaultValue": "ip01",
+          "metadata": {
+               "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
+          }
+     },
+    "dnsLabel": {
+          "type": "string",
+          "defaultValue": "dnslabel",
+          "metadata": {
+               "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
+          }
+     },
     "vnetName": {
       "type": "string",
       "defaultValue": "Vnet",
@@ -165,7 +179,6 @@
     "bigipNamePrefix": "bigip",
     "nicNamePrefix": "bigip-nic",
     "nicStop": "[concat(variables('nicNamePrefix'),parameters('numberOfInstances'))]",
-    "publicIPName": "[concat(variables('bigipNamePrefix'),'-ip')]",
     "scriptName": "o365FedDeploy.sh",
     "scriptLoc": "[concat(parameters('baseUrl'),'/files/',variables('scriptName'))]",
     "iappTemplate": "f5.microsoft_office_365_idp.v1.1.0.tmpl",
@@ -175,7 +188,7 @@
     "asId": "[resourceId('Microsoft.Network/availabilitySets',variables('availabilitySetName'))]",
     "lbId": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
-    "publicIpId": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPName'))]",
+    "publicIpId": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
     "f5CloudLibsTag": "F5Networks-f5-cloud-libs-236d600.tar.gz",
     "f5CloudLibsTagUrl": "[concat(parameters('baseUrl'),'/files/',variables('f5CloudLibsTag'))]",
     "commandArgs": "[concat(' -p ',variables('appPort'),' -e ', variables('entityId'),' -d ', parameters('authFqdn'),' -a ', parameters('authIp'),' -f ', parameters('domainfqdn'),' -c ', parameters('sslCert'),' -w ', parameters('sslPswd'),' -x ', parameters('adminPassword'),' -u ', variables('iappUrl'))]"
@@ -240,7 +253,7 @@
     {
       "apiVersion": "[variables('apiVersionNetwork')]",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPName')]",
+      "name": "[parameters('publicIpName')]",
       "location": "[parameters('location')]",
       "tags": {
         "displayName": "PublicIPAddress"
@@ -248,7 +261,7 @@
       "properties": {
         "publicIPAllocationMethod": "Static",
         "dnsSettings": {
-          "domainNameLabel": "[variables('dnsNameForPublicIP')]"
+          "domainNameLabel": "[parameters('dnsLabel')]",
         }
       }
     },
@@ -259,7 +272,7 @@
         "displayName": "AzureLoadBalancer"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPName'))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIpName'))]"
       ],
       "location": "[parameters('location')]",
       "name": "[variables('loadBalancerName')]",
