@@ -105,6 +105,32 @@
           }
           },
           {
+               "name": "publicIp",
+               "type": "Microsoft.Network.PublicIpAddressCombo",
+               "label": {
+                    "publicIpAddress": "Public IP address",
+                    "domainNameLabel": "Domain name label"
+               },
+               "toolTip": {
+                    "publicIpAddress": "",
+                    "domainNameLabel": ""
+               },
+               "defaultValue": {
+                    "publicIpAddressName": "idp-pip"
+               },
+               "constraints": {
+                    "required": {
+                         "domainNameLabel": true
+                    }
+               },
+               "options": {
+                    "hideNone": true,
+                    "hideDomainNameLabel": false,
+                    "hideExisting": true
+               },
+               "visible": true
+          },
+          {
             "name": "virtualNetwork",
             "type": "Microsoft.Network.VirtualNetworkCombo",
             "label": {
@@ -145,9 +171,9 @@
             "name": "licenseToken1",
             "type": "Microsoft.Common.TextBox",
             "label": "BYOL License Key1",
-            "defaultValue": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX",
             "toolTip": "Enter the F5 BIG-IP License key.",
             "constraints": {
+              "required": true,
               "regex": "^[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7}$",
               "validationMessage": "Provide the BIG-IP licence key in XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX format."
             }
@@ -156,7 +182,6 @@
             "name": "licenseToken2",
             "type": "Microsoft.Common.TextBox",
             "label": "BYOL License Key2",
-            "defaultValue": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXXXX",
             "toolTip": "Enter the F5 BIG-IP License key.",
             "constraints": {
               "regex": "^[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7}$",
@@ -168,7 +193,6 @@
             "name": "bigip1IP",
             "type": "Microsoft.Common.TextBox",
             "label": "Internal Address assigned to first BIGIP",
-            "defaultValue": "0.0.0.0",
             "toolTip": "Enter an IP address for the BIG-IP. If selected, the IP address for the second BIG-IP will be assigned sequentially.",
             "constraints": {
               "required": true,
@@ -204,7 +228,6 @@
             "name": "authFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Authentication Domain Controller FQDN",
-            "defaultValue": "required",
             "toolTip": "Enter FQDN of primary AD domain controller used for user authentication.",
             "constraints": {
               "required": true,
@@ -216,7 +239,6 @@
             "name": "authIp",
             "type": "Microsoft.Common.TextBox",
             "label": "Authentication Domain Controller IP Address",
-            "defaultValue": "0.0.0.0",
             "toolTip": "Enter IP address of primary AD domain controller used for user authentication.",
             "constraints": {
               "required": true,
@@ -228,7 +250,6 @@
             "name": "domainFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Federated Domain  (ex: 'f5demo.net')",
-            "defaultValue": "required",
             "toolTip": "Enter federated domain suffix, (for example: 'fdemo.net').",
             "constraints": {
               "required": true,
@@ -240,7 +261,6 @@
             "name": "dnsFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Federation IdP Endpoint FQDN",
-            "defaultValue": "required",
             "toolTip": "Enter The public federation endpoint FQDN, (for example: 'fs.fdemo.net').",
             "constraints": {
               "required": true,
@@ -299,6 +319,8 @@
       "authIp": "[steps('federationSettings').authIp]",
       "domainFqdn": "[steps('federationSettings').domainFqdn]",
       "dnsFqdn": "[steps('federationSettings').dnsFqdn]",
+      "publicIpName": "[steps('bigipSettings').publicIp.name]",
+      "dnsLabel": "[steps('bigipSettings').publicIp.domainNameLabel]",
       "sslCert": "[steps('federationSettings').sslCert]",
       "sslPswd": "[steps('federationSettings').sslPswd]",
       "vnetName": "[steps('bigipSettings').virtualNetwork.name]",
