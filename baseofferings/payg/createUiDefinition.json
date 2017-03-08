@@ -257,16 +257,16 @@
                                              "addressPrefixSize": "/16"
                                         },
                                         "constraints": {
-                                             "minAddressPrefixSize": "/16"
+                                             "minAddressPrefixSize": "/22"
                                         },
                                         "options": {
                                              "hideExisting": false
                                         },
                                         "subnets": {
-                                             "default": {
-                                                  "label": "Subnet name",
+                                             "subnet1": {
+                                                  "label": "subnetName",
                                                   "defaultValue": {
-                                                       "name": "default",
+                                                       "name": "subnet1",
                                                        "addressPrefixSize": "/24"
                                                   },
                                                   "constraints": {
