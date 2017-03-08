@@ -291,7 +291,7 @@
                                         },
                                         "defaultValue": {
                                              "publicIpAddressName": "ip01",
-                                             "domainNameLabel": "dnslabel"
+                                             "domainNameLabel": ""
                                         },
                                         "constraints": {
                                              "required": {
