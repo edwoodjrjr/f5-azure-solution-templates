@@ -68,9 +68,7 @@
                                    "sshPublicKey": "Provide an RSA public key in the single-line forma (starting with 'ssh-rsa') or the multi-line PEM format. You can generate SSH keys using ssh-keygen on Linux and OS X, or PuTTYGen on Windows."
                               },
                               "constraints": {
-                                   "required": true,
-                                   "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-                                   "customValidationMessage": "The password must contain at least 8 characters, with at least 1 letter and 1 number."
+                                   "required": true
                               },
                               "options": {
                                    "hideConfirmation": false,
@@ -119,12 +117,11 @@
                               "type": "Microsoft.Compute.SizeSelector",
                               "label": "Size",
                               "recommendedSizes": [
-                                   "Standard_D1",
-                                   "Standard_D2",
-                                   "Standard_D3"
+                                   "Standard_DS4_v2",
+                                   "Standard_DS13_v2"
                               ],
                               "constraints": {
-                                   "allowedSizes": []
+                                   "excludedSizes": []
                               },
                               "osPlatform": "Linux",
                               "imageReference": {
