@@ -186,7 +186,7 @@
                                    {
                                         "name": "managedDisks",
                                         "type": "Microsoft.Common.OptionsGroup",
-                                        "label": "Managed Disks",
+                                        "label": "Use managed disks",
                                         "defaultValue": "No",
                                         "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own. Managed disks may not be available in all regions.",
                                         "constraints": {
@@ -234,7 +234,7 @@
                                         "type": "Microsoft.Network.VirtualNetworkCombo",
                                         "label": {
                                              "virtualNetwork": "Virtual network",
-                                             "subnets": "Subnets"
+                                             "subnets": "Subnet"
                                         },
                                         "toolTip": {
                                              "virtualNetwork": "Virtual networks are logically isolated from each other in Azure. You can configure their IP address ranges, subnets, route tables, gateways, and security settings, much like a traditional network in your data center. Virtual machines in the same virtual network can access each other by default.",
