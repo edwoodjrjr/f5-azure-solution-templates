@@ -17,18 +17,67 @@
                          {
                               "name": "solutionDeploymentName",
                               "type": "Microsoft.Common.TextBox",
+                              "label": "Name",
+                              "constraints": {
+                                   "required": true
+                              },
+                              "visible": true
                          },                         
                          {
                               "name": "vmDiskType",
                               "type": "Microsoft.Common.DropDown",
+                              "label": "VM disk type",
+                              "defaultValue": "ssd",
+                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "SSD",
+                                             "value": "ssd"
+                                        },
+                                        {
+                                             "label": "HDD",
+                                             "value": "hdd"
+                                        }
+                                   ]
+                              },
+                              "visible": true
                          },
                          {
                               "name": "adminUsername",
                               "type": "Microsoft.Compute.UserNameTextBox",
+                              "label": "User name",
+                              "constraints": {
+                                   "required": true
+                              },
+                              "osPlatform": "Linux",
+                              "visible": true
                          },
                          {
                               "name": "authenticationType",
                               "type": "Microsoft.Compute.CredentialsCombo",
+                              "label": {
+                                   "authenticationType": "Authentication type",
+                                   "password": "Password",
+                                   "confirmPassword": "Confirm password",
+                                   "sshPublicKey": "SSH public key"
+                              },
+                              "toolTip": {
+                                   "authenticationType": "",
+                                   "password": "",
+                                   "sshPublicKey": "Provide an RSA public key in the single-line forma (starting with 'ssh-rsa') or the multi-line PEM format. You can generate SSH keys using ssh-keygen on Linux and OS X, or PuTTYGen on Windows."
+                              },
+                              "constraints": {
+                                   "required": true,
+                                   "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+                                   "customValidationMessage": "The password must contain at least 8 characters, with at least 1 letter and 1 number."
+                              },
+                              "options": {
+                                   "hideConfirmation": false,
+                                   "hidePassword": false
+                              },
+                              "osPlatform": "Linux",
+                              "visible": true
                          }
                     ]
                },
@@ -42,8 +91,108 @@
                     "bladeTitle": "Choose a size",
                     "elements": [
                          {
+                              "name": "licenseType",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP License Type",
+                              "defaultValue": "better",
+                              "toolTip": "Select a BIG-IP license type.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "Good",
+                                             "value": "good"
+                                        },
+                                        {
+                                             "label": "Better",
+                                             "value": "better"
+                                        },
+                                        {
+                                             "label": "Best",
+                                             "value": "best"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
+                              "name": "licensedBandwidth",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "Licensed Bandwidth",
+                              "defaultValue": "200m",
+                              "toolTip": "Select a licensed bandwidth",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "25M",
+                                             "value": "25m"
+                                        },
+                                        {
+                                             "label": "200M",
+                                             "value": "200m"
+                                        },
+                                        {
+                                             "label": "1G",
+                                             "value": "1g"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
                               "name": "instanceType",
                               "type": "Microsoft.Compute.SizeSelector",
+                              "label": "Size",
+                              "recommendedSizes": [
+                                   "Standard_D1",
+                                   "Standard_D2",
+                                   "Standard_D3"
+                              ],
+                              "constraints": {
+                                   "allowedSizes": []
+                              },
+                              "osPlatform": "Linux",
+                              "imageReference": {
+                                   "publisher": "f5-networks",
+                                   "offer": "f5-big-ip",
+                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licensedBandwidth, '-', steps('virtualMachineSize').licenseType, '-byol')]"
+                              },
+                              "visible": true
+                         },
+                         {
+                              "name": "imageVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "latest",
+                              "toolTip": "Select the version of BIG-IP to provision.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "Latest",
+                                             "value": "latest"
+                                        },
+                                        {
+                                             "label": "12.0.0",
+                                             "value": "12.0.674"
+                                        },
+                                        {
+                                             "label": "12.1.0",
+                                             "value": "12.1.02"
+                                        },
+                                        {
+                                             "label": "12.1.1",
+                                             "value": "12.1.11"
+                                        },
+                                        {
+                                             "label": "12.1.2",
+                                             "value": "12.1.21"
+                                        },
+                                        {
+                                             "label": "13.0.0",
+                                             "value": "13.0.000"
+                                        }
+                                   ]
+                              },
+                              "visible": true
                          }
                     ]
                },
@@ -55,62 +204,197 @@
                          "postValidation": "Done"
                     },
                     "bladeTitle": "Settings",
-                    {
-                         "name": "storageSection",
-                         "type": "Microsoft.Common.Section",
-                         "label": "Storage",
-                         "elements": [
-                              {
-                                   "name": "managedDisks",
-                                   "type": "Microsoft.Common.OptionsGroup",
-                              },
-                              {
-                                   "name": "storageAccount",
-                                   "type": "Microsoft.Storage.StorageAccountSelector",
-                              }                      
-                         ],
-                         "visible": true
-                    },
-                    {
-                         "name": "networkSection",
-                         "type": "Microsoft.Common.Section",
-                         "label": "Network",
-                         "elements": [                             
-                              {
-                                   "name": "virtualNetwork",
-                                   "type": "Microsoft.Network.VirtualNetworkCombo",
-                              },
-                              {
-                                   "name": "publicIpAddress",
-                                   "type": "Microsoft.Network.PublicIpAddressCombo",
-                              },
-                              {
-                                   "name": "networkSecurityGroup",
-                                   "type": "Microsoft.Common.TextBox",
-                              }                     
-                         ],
-                         "visible": true
-                    },
-                    {
-                         "name": "monitoringSection",
-                         "type": "Microsoft.Common.Section",
-                         "label": "Monitoring",
-                         "elements": [                            
-                              {
-                                   "name": "bootDiagnostics",
-                                   "type": "Microsoft.Common.OptionsGroup",
-                              },
-                              {
-                                   "name": "linuxDiagnostics",
-                                   "type": "Microsoft.Common.OptionsGroup",
-                              },
-                              {
-                                   "name": "diagnosticsStorageAccount",
-                                   "type": "Microsoft.Storage.StorageAccountSelector",
-                              } 
-                         ],
-                         "visible": true
-                    }
+                    "elements": [
+                         {
+                              "name": "storageSection",
+                              "type": "Microsoft.Common.Section",
+                              "label": "Storage",
+                              "elements": [
+                                   {
+                                        "name": "managedDisks",
+                                        "type": "Microsoft.Common.OptionsGroup",
+                                        "label": "Managed Disks",
+                                        "defaultValue": "no",
+                                        "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own. Managed disks may not be available in all regions.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "Yes",
+                                                       "value": "yes"
+                                                  },
+                                                  {
+                                                       "label": "No",
+                                                       "value": "no"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "storageAccount",
+                                        "type": "Microsoft.Storage.StorageAccountSelector",
+                                        "label": "Storage account",
+                                        "toolTip": "Disks for Azure virtual machines are created in storage accounts",
+                                        "defaultValue": {
+                                             "name": "storageaccount01",
+                                             "type": "Premium_LRS"
+                                        },
+                                        "constraints": {
+                                             "allowedTypes": [],
+                                             "excludedTypes": []
+                                        },
+                                        "options": {
+                                             "hideExisting": false
+                                        },
+                                        "visible": true
+                                   }                      
+                              ],
+                              "visible": true
+                         },
+                         {
+                              "name": "networkSection",
+                              "type": "Microsoft.Common.Section",
+                              "label": "Network",
+                              "elements": [                             
+                                   {
+                                        "name": "virtualNetwork",
+                                        "type": "Microsoft.Network.VirtualNetworkCombo",
+                                        "label": {
+                                             "virtualNetwork": "Virtual network",
+                                             "subnets": "Subnets"
+                                        },
+                                        "toolTip": {
+                                             "virtualNetwork": "Virtual networks are logically isolated from each other in Azure. You can configure their IP address ranges, subnets, route tables, gateways, and security settings, much like a traditional network in your data center. Virtual machines in the same virtual network can access each other by default.",
+                                             "subnets": "A subnet is a range of IP addresses in your virtual network, which can be used to isolate virtual machines from each other or from the Internet."
+                                        },
+                                        "defaultValue": {
+                                             "name": "vnet01",
+                                             "addressPrefixSize": "/16"
+                                        },
+                                        "constraints": {
+                                             "minAddressPrefixSize": "/16"
+                                        },
+                                        "options": {
+                                             "hideExisting": false
+                                        },
+                                        "subnets": {
+                                             "subnet1": {
+                                                  "label": "First subnet",
+                                                  "defaultValue": {
+                                                       "name": "subnet-1",
+                                                       "addressPrefixSize": "/24"
+                                                  },
+                                                  "constraints": {
+                                                       "minAddressPrefixSize": "/24",
+                                                       "minAddressCount": 12,
+                                                       "requireContiguousAddresses": true
+                                                  }
+                                             },
+                                             "subnet2": {
+                                                  "label": "Second subnet",
+                                                  "defaultValue": {
+                                                       "name": "subnet-2",
+                                                       "addressPrefixSize": "/26"
+                                                  },
+                                                  "constraints": {
+                                                       "minAddressPrefixSize": "/26",
+                                                       "minAddressCount": 8,
+                                                       "requireContiguousAddresses": true
+                                                  }
+                                             }
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "publicIpAddress",
+                                        "type": "Microsoft.Network.PublicIpAddressCombo",
+                                        "label": {
+                                             "publicIpAddress": "Public IP address",
+                                             "domainNameLabel": "Domain name label"
+                                        },
+                                        "toolTip": {
+                                             "publicIpAddress": "Use a public IP address if you want to communicate with the virtual machine from outside the virtual network.",
+                                             "domainNameLabel": ""
+                                        },
+                                        "defaultValue": {
+                                             "publicIpAddressName": "ip01",
+                                             "domainNameLabel": "dnslabel"
+                                        },
+                                        "constraints": {
+                                             "required": {
+                                                  "domainNameLabel": true
+                                             }
+                                        },
+                                        "options": {
+                                             "hideNone": false,
+                                             "hideDomainNameLabel": false,
+                                             "hideExisting": false
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "networkSecurityGroup",
+                                        "type": "Microsoft.Common.TextBox",
+                                        "label": "Network Security Group",
+                                        "defaultValue": "",
+                                        "toolTip": "A network security group is a set of firewall rules that control traffic to and from your virtual machine.",
+                                        "constraints": {
+                                             "required": false,
+                                             "regex": "",
+                                             "validationMessage": ""
+                                        },
+                                        "visible": true
+                                   }                     
+                              ],
+                              "visible": true
+                         },
+                         {
+                              "name": "monitoringSection",
+                              "type": "Microsoft.Common.Section",
+                              "label": "Monitoring",
+                              "elements": [                            
+                                   {
+                                        "name": "bootDiagnostics",
+                                        "type": "Microsoft.Common.OptionsGroup",
+                                        "label": "Boot Diagnostics",
+                                        "defaultValue": "disabled",
+                                        "toolTip": "Capture serial console output and screenshots of the virtual machine running on a host to help diagnose startup issues.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "Enabled",
+                                                       "value": "enabled"
+                                                  },
+                                                  {
+                                                       "label": "Disabled",
+                                                       "value": "disabled"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "diagnosticsStorageAccount",
+                                        "type": "Microsoft.Storage.StorageAccountSelector",
+                                        "label": "Diagnostics storage account",
+                                        "toolTip": "Metrics are written to a storage account so you can analyze them with your own tools.",
+                                        "defaultValue": {
+                                             "name": "diagstorageaccount01",
+                                             "type": "Standard_LRS"
+                                        },
+                                        "constraints": {
+                                             "allowedTypes": [],
+                                             "excludedTypes": []
+                                        },
+                                        "options": {
+                                             "hideExisting": false
+                                        },
+                                        "visible": true
+                                   } 
+                              ],
+                              "visible": true
+                         }
+                    ]
                }
           ],
           "outputs": {

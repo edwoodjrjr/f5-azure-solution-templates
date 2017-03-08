@@ -72,9 +72,6 @@
         "licenseType": {
             "type": "string"
         },
-        "licensedBandwidth": {
-            "type": "string"
-        },
         "imageVersion": {
             "type": "string"
         }
