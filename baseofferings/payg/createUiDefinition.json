@@ -92,7 +92,7 @@
                               "name": "licenseType",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP License Type",
-                              "defaultValue": "better",
+                              "defaultValue": "Better",
                               "toolTip": "Select a BIG-IP license type.",
                               "constraints": {
                                    "allowedValues": [
@@ -116,7 +116,7 @@
                               "name": "licensedBandwidth",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "Licensed Bandwidth",
-                              "defaultValue": "200m",
+                              "defaultValue": "200M",
                               "toolTip": "Select a licensed bandwidth",
                               "constraints": {
                                    "allowedValues": [
@@ -140,7 +140,7 @@
                               "name": "imageVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
-                              "defaultValue": "latest",
+                              "defaultValue": "Latest",
                               "toolTip": "Select the version of BIG-IP to provision.",
                               "constraints": {
                                    "allowedValues": [
@@ -199,7 +199,7 @@
                                         "name": "managedDisks",
                                         "type": "Microsoft.Common.OptionsGroup",
                                         "label": "Managed Disks",
-                                        "defaultValue": "no",
+                                        "defaultValue": "No",
                                         "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own. Managed disks may not be available in all regions.",
                                         "constraints": {
                                              "allowedValues": [
@@ -342,7 +342,7 @@
                                         "name": "bootDiagnostics",
                                         "type": "Microsoft.Common.OptionsGroup",
                                         "label": "Boot Diagnostics",
-                                        "defaultValue": "disabled",
+                                        "defaultValue": "Disabled",
                                         "toolTip": "Capture serial console output and screenshots of the virtual machine running on a host to help diagnose startup issues.",
                                         "constraints": {
                                              "allowedValues": [
