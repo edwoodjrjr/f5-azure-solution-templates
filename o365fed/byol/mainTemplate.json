@@ -108,7 +108,7 @@
     },
     "publicIpName": {
       "type": "string",
-      "defaultValue": "idp-pip",
+      "defaultValue": "f5-o365-pip",
       "metadata": {
         "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
       }
