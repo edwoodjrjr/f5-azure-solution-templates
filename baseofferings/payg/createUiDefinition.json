@@ -263,10 +263,10 @@
                                              "hideExisting": false
                                         },
                                         "subnets": {
-                                             "subnet1": {
-                                                  "label": "subnetName",
+                                             "default": {
+                                                  "label": "Subnet",
                                                   "defaultValue": {
-                                                       "name": "subnet1",
+                                                       "name": "default",
                                                        "addressPrefixSize": "/24"
                                                   },
                                                   "constraints": {
