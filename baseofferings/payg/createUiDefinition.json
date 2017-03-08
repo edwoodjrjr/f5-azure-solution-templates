@@ -137,6 +137,30 @@
                               "visible": true
                          },
                          {
+                              "name": "imageVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "latest",
+                              "toolTip": "Select the version of BIG-IP to provision.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "Latest",
+                                             "value": "latest"
+                                        },
+                                        {
+                                             "label": "12.1.2",
+                                             "value": "12.1.22"
+                                        },
+                                        {
+                                             "label": "13.0.0",
+                                             "value": "13.0.000"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
                               "name": "instanceType",
                               "type": "Microsoft.Compute.SizeSelector",
                               "label": "Size",
@@ -152,42 +176,6 @@
                                    "publisher": "f5-networks",
                                    "offer": "f5-big-ip",
                                    "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licensedBandwidth, '-', steps('virtualMachineSize').licenseType, '-byol')]"
-                              },
-                              "visible": true
-                         },
-                         {
-                              "name": "imageVersion",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Version",
-                              "defaultValue": "latest",
-                              "toolTip": "Select the version of BIG-IP to provision.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "Latest",
-                                             "value": "latest"
-                                        },
-                                        {
-                                             "label": "12.0.0",
-                                             "value": "12.0.674"
-                                        },
-                                        {
-                                             "label": "12.1.0",
-                                             "value": "12.1.02"
-                                        },
-                                        {
-                                             "label": "12.1.1",
-                                             "value": "12.1.11"
-                                        },
-                                        {
-                                             "label": "12.1.2",
-                                             "value": "12.1.21"
-                                        },
-                                        {
-                                             "label": "13.0.0",
-                                             "value": "13.0.000"
-                                        }
-                                   ]
                               },
                               "visible": true
                          }
