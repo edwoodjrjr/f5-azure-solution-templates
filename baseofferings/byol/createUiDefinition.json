@@ -251,27 +251,15 @@
                                              "hideExisting": false
                                         },
                                         "subnets": {
-                                             "subnet1": {
-                                                  "label": "First subnet",
+                                             "default": {
+                                                  "label": "Subnet name",
                                                   "defaultValue": {
-                                                       "name": "subnet-1",
+                                                       "name": "default",
                                                        "addressPrefixSize": "/24"
                                                   },
                                                   "constraints": {
                                                        "minAddressPrefixSize": "/24",
                                                        "minAddressCount": 12,
-                                                       "requireContiguousAddresses": true
-                                                  }
-                                             },
-                                             "subnet2": {
-                                                  "label": "Second subnet",
-                                                  "defaultValue": {
-                                                       "name": "subnet-2",
-                                                       "addressPrefixSize": "/26"
-                                                  },
-                                                  "constraints": {
-                                                       "minAddressPrefixSize": "/26",
-                                                       "minAddressCount": 8,
                                                        "requireContiguousAddresses": true
                                                   }
                                              }
