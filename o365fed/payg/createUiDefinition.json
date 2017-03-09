@@ -17,9 +17,9 @@
           {
             "name": "numberOfInstances",
             "type": "Microsoft.Common.DropDown",
-            "label": "Number of BIG-IPs",
+            "label": "Number of BIG-IP VEs",
             "defaultValue": "1",
-            "toolTip": "Select the number of BIG-IPs to deploy, (1 or 2).",
+            "toolTip": "Select the number of BIG-IP Virtual Editions (VEs) you want to deploy.",
             "constraints": {
               "allowedValues": [
                 {
@@ -39,19 +39,19 @@
             "type": "Microsoft.Common.DropDown",
             "label": "Licensed Bandwidth",
             "defaultValue": "200m",
-            "toolTip": "The amount of licensed bandwidth (Mbps) to allocate for each vm.",
+            "toolTip": "The amount of licensed bandwidth (Mbps) you want to allocate for each virtual instance.",
             "constraints": {
               "allowedValues": [
                 {
-                  "label": "25mbs",
+                  "label": "25Mbps",
                   "value": "25m"
                 },
                 {
-                  "label": "200mbs",
+                  "label": "200Mbps",
                   "value": "200m"
                 },
                 {
-                  "label": "1gb",
+                  "label": "1Gbps,
                   "value": "1g"
                 }
               ]
@@ -62,7 +62,7 @@
             "type": "Microsoft.Compute.UserNameTextBox",
             "label": "BIG-IP Administrator Username",
             "defaultValue": "azureuser",
-            "toolTip": "Enter administrator's username for the BIG-IP",
+            "toolTip": "Type the administrator username for the BIG-IP VE",
             "osPlatform": "Linux"
           },
           {
@@ -75,7 +75,7 @@
               "sshPublicKey": "SSH public key"
             },
             "toolTip": {
-              "authenticationType": "Select whether using password or SSH certificate.",
+              "authenticationType": "Select whether you are using a password or SSH certificate.",
               "password": "",
               "sshPublicKey": ""
             },
@@ -90,7 +90,7 @@
             "name": "instanceType",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Virtual machine size",
-            "toolTip": "Select the desired instance size for virtual machine to provision.",
+            "toolTip": "Select the Azure instance size for the virtual machine(s).",
             "recommendedSizes": [
               "Standard_D3_v2",
               "Standard_A3",
@@ -139,7 +139,7 @@
                },
                "toolTip": {
                     "publicIpAddress": "",
-                    "domainNameLabel": ""
+                    "domainNameLabel": "Type a unique name you want to use to access the BIG-IP Configuration utility."
                },
                "defaultValue": {
                     "publicIpAddressName": "f5-o365-pip"
@@ -164,8 +164,8 @@
               "subnets": "Subnets"
             },
             "toolTip": {
-              "virtualNetwork": "Select an existing or create a new virtual network.",
-              "subnets": "Select an existing or create a new subnet."
+              "virtualNetwork": "Select an existing new virtual network or use the template to create a new one.",
+              "subnets": "Select an existing subnet or use the template to create a new one."
             },
             "defaultValue": {
               "name": "Vnet",
@@ -211,7 +211,7 @@
             "type": "Microsoft.Common.TextBox",
             "label": "Restricted source network or address",
             "defaultValue": "*",
-            "toolTip": "Restricts management access to a specific network or address; enter a IP address or address range in CIDR notation, or asterisk for all sources.",
+            "toolTip": "Restricts management access to the BIG-IP instance(s) to a specific network or address; enter a IP address or address range in CIDR notation, or asterisk for all sources.",
             "constraints": {
                   "regex": "^\\*$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
                   "required": true,
@@ -233,18 +233,18 @@
             "name": "authFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Authentication Domain Controller FQDN",
-            "toolTip": "Enter FQDN of primary AD domain controller used for user authentication.",
+            "toolTip": "Type the FQDN of the primary AD domain controller used for user authentication.",
             "constraints": {
               "required": true,
               "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
-              "validationMessage": "Enter FQDN of primary AD domain controller used for user authentication."
+              "validationMessage": "Type the FQDN of the primary AD domain controller used for user authentication."
             }
           },
           {
             "name": "authIp",
             "type": "Microsoft.Common.TextBox",
             "label": "Authentication Domain Controller IP Address",
-            "toolTip": "Enter IP address of primary AD domain controller used for user authentication.",
+            "toolTip": "Type the IP address of the primary AD domain controller used for user authentication.",
             "constraints": {
               "required": true,
               "regex": "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
@@ -255,22 +255,22 @@
             "name": "domainFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Federated Domain",
-            "toolTip": "Enter federated domain suffix (ex.: 'f5demo.net').",
+            "toolTip": "Type the federated domain suffix you want to use. For example: f5demo.net.",
             "constraints": {
               "required": true,
               "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
-              "validationMessage": "Enter domain name.  For example - f5demo.net."
+              "validationMessage": "Enter a domain name.  For example - f5demo.net."
             }
           },
           {
             "name": "dnsFqdn",
             "type": "Microsoft.Common.TextBox",
             "label": "Federation IdP Endpoint FQDN",
-            "toolTip": "Enter The public federation endpoint FQDN (ex.: 'fs.f5demo.net').",
+            "toolTip": "Type the FQDN of the public federation endpoint.  For example: fs.f5demo.net.",
             "constraints": {
               "required": true,
               "regex": "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z0-9]{2,6}$",
-              "validationMessage": "Enter FQDN of the federation endpoint."
+              "validationMessage": "Enter the FQDN of the federation endpoint."
 
             }
           },
@@ -278,7 +278,7 @@
             "name": "sslCert",
             "type": "Microsoft.Common.FileUpload",
             "label": "SSL Certificate Upload",
-            "toolTip": "Browse to and select the SSL certificate archive file (.pfx or .p12 format) corresponding to public facing VIP.",
+            "toolTip": "Browse to and select the SSL certificate archive file (.pfx or .p12 format) that corresponds to the public facing BIG-IP virtual server.",
             "constraints": {
               "required": true,
               "accept": ".pfx, .p12"
@@ -298,7 +298,7 @@
               "password": "Certificate Passphrase",
               "confirmPassword": "Confirm Passphrase"
             },
-            "toolTip": "Enter the passphrase to open the .pfx or .p12 certificate archive file.",
+            "toolTip": "Type the passphrase to open the .pfx or .p12 certificate archive file.",
             "constraints": {
               "required": true,
               "regex": "",
