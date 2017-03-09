@@ -20,6 +20,18 @@
         "description": "The number of F5 BIG-IPs that will be deployed as federation servers."
       }
     },
+    "licenseToken1": {
+      "type": "string",
+      "metadata": {
+        "description": "The first license token for BYOL"
+      }
+    },
+    "licenseToken2": {
+      "type": "string",
+      "metadata": {
+        "description": "The second license token for BYOL"
+      }
+    },
     "location": {
       "type": "string",
       "metadata": {
@@ -60,18 +72,6 @@
       "type": "securestring",
       "metadata": {
         "description": "The admin account passowrd"
-      }
-    },
-    "authenticationType": {
-      "type": "string",
-      "metadata": {
-        "description": "Authentication method utilizeda"
-      }
-    },
-    "sshPublicKey": {
-      "type": "string",
-      "metadata": {
-        "description": "The ssh public key"
       }
     },
     "instanceType": {
@@ -119,7 +119,7 @@
     "iAppUrl": {
       "type": "string",
       "metadata": {
-        "description": "URL for iApp templates"
+        "description": "URL for nested templates"
       }
     },
     "f5CloudLibsTagUrl": {
@@ -181,37 +181,9 @@
       "metadata": {
         "description": "Last octet of first BIGIP"
       }
-    },
-    "imageName": {
-      "type": "string",
-      "metadata": {
-        "description": "F5 image to deploy"
-      }
     }
   },
   "variables": {
-    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-    "osProfileChosen": "[concat('osProfile', parameters('authenticationType'))]",
-    "osProfilesshPublicKey": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "linuxConfiguration": {
-        "disablePasswordAuthentication": "true",
-        "ssh": {
-          "publicKeys": [
-            {
-              "keyData": "[parameters('sshPublicKey')]",
-              "path": "[variables('sshKeyPath')]"
-            }
-          ]
-        }
-      }
-    },
-    "osProfilepassword": {
-      "computerName": "[parameters('bigipNamePrefix')]",
-      "adminUsername": "[parameters('adminUsername')]",
-      "adminPassword": "[parameters('adminPassword')]"
-    }
   },
   "resources": [
     {
@@ -276,9 +248,9 @@
         "name": "bigipcopy"
       },
       "plan": {
-        "name": "[parameters('imageName')]",
+        "name": "f5-bigip-virtual-edition-best-byol",
         "publisher": "f5-networks",
-        "product": "f5-big-ip-hourly"
+        "product": "f5-big-ip"
       },
       "properties": {
         "availabilitySet": {
@@ -287,13 +259,17 @@
         "hardwareProfile": {
           "vmSize": "[parameters('instanceType')]"
         },
-        "osProfile": "[variables(variables('osProfileChosen'))]",
+       "osProfile": {
+          "computerName": "[parameters('bigipNamePrefix')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
-            "offer": "f5-big-ip-hourly",
-            "sku": "[parameters('imageName')]",
-            "version": "12.1.22"
+            "offer": "f5-big-ip",
+            "sku": "f5-bigip-virtual-edition-best-byol",
+            "version": "12.1.21"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
@@ -330,7 +306,7 @@
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
         "type": "CustomScript",
-        "autoUpgradeMinorVersion": true,
+        "autoUpgradeMinorVersion": true,          
         "typeHandlerVersion": "2.0",
         "settings": {
           "fileUris": [
@@ -341,7 +317,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat('cp f5-cloud-libs.tar.gz* /config; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null /config/mypass; IFS=', parameters('singleQuote'), '%', parameters('singleQuote'), '; echo -e ', parameters('verifyHash'), ' >> /config/verifyHash; echo -e ', parameters('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo -e ', parameters('adminPassword'), ' >> /config/mypass; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/f5-cloud-libs/scripts/azure/runScripts.js --log-level debug --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --hostname ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --ntp pool.ntp.org --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:none --module afm:none --module apm:nominal --signal ONBOARD_DONE \" --script \" --wait-for ONBOARD_DONE --output /var/log/runScript.log --log-level debug --file /var/lib/waagent/custom-script/download/0/o365FedDeploy.sh --cl-args ', parameters('singleQuote'),'-i ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), parameters('singleQuote'), ' --signal SCRIPT_DONE \"')]"
+          "commandToExecute": "[concat('cp f5-cloud-libs.tar.gz* /config; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null /config/mypass; IFS=', parameters('singleQuote'), '%', parameters('singleQuote'), '; echo -e ', parameters('verifyHash'), ' >> /config/verifyHash; echo -e ', parameters('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo -e ', parameters('adminPassword'), ' >> /config/mypass; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/f5-cloud-libs/scripts/azure/runScripts.js --log-level debug --onboard \" --output /var/log/onboard.log --log-level debug --host ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, ' -u admin --password-url file:///config/mypass --hostname ', concat(parameters('bigipNamePrefix'),'1', '.', parameters('domainFqdn')), ' --update-user user:admin,password:', parameters('adminPassword'), ' --license ', parameters('licenseToken1'), ' --db provision.1nicautoconfig:disable --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:none --module afm:none --module apm:nominal --signal ONBOARD_DONE \" --script \" --wait-for ONBOARD_DONE --output /var/log/runScript.log --log-level debug --file /var/lib/waagent/custom-script/download/0/o365FedDeploy.sh --cl-args ', parameters('singleQuote'),'-i ', reference(concat(parameters('nicNamePrefix'),'1')).ipConfigurations[0].properties.privateIpAddress, parameters('commandArgs'), parameters('singleQuote'), ' --signal SCRIPT_DONE \"')]"
         }
       }
     }
