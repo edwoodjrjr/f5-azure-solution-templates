@@ -1,1 +1,0 @@
-PAYG readme
