@@ -51,18 +51,6 @@
         "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
       }
     },
-    "sshPublicKey": {
-      "type": "string",
-      "metadata": {
-        "description": "The BIG-IP ssh public key."
-      }
-    },
-    "authenticationType": {
-      "type": "string",
-      "metadata": {
-        "description": "The type of auth utilized - password or ssh public key"
-      }
-    },
     "instanceType": {
       "type": "string",
       "defaultValue": "Standard_D3_v2",
