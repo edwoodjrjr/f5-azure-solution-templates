@@ -263,7 +263,7 @@
           "computerName": "[parameters('bigipNamePrefix')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
-                    },
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
