@@ -180,7 +180,7 @@
             },
             "subnets": {
               "subnet1": {
-                "label": "subnetName",
+                "label": "Subnet",
                 "defaultValue": {
                   "name": "subnet1",
                   "addressPrefixSize": "/24"
