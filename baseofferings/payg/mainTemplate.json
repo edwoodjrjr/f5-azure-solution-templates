@@ -78,24 +78,8 @@
     "variables": {
         "vnetId": "[resourceId(parameters('virtualMachineName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
-        "offerMap": {
-               "byol": {
-                    "name": "f5-big-ip"
-               },
-               "payg": {
-                    "name": "f5-big-ip-hourly"
-               }
-          },
-          "offerName": "[variables('offerMap')[parameters('licenseType')].name]",
-          "skuMap": {
-               "f5-big-ip": {
-                    "name": "f5-bigip-virtual-edition-best-byol"
-               },
-               "f5-big-ip-hourly": {
-                    "name": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'),'-best-hourly')]"                  
-               }
-          },
-          "skuName": "[variables('skuMap')[variables('offerName')].name]"
+        "offerName": "f5-big-ip-hourly",
+        "skuName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-', parameters('licenseType'), '-hourly')]"
     },
     "resources": [
         {
