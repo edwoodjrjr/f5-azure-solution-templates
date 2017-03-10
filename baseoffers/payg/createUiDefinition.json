@@ -140,7 +140,7 @@
                               "name": "imageVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
-                              "defaultValue": "Latest",
+                              "defaultValue": "12.1.2",
                               "toolTip": "Select the version of BIG-IP to provision.",
                               "constraints": {
                                    "allowedValues": [
