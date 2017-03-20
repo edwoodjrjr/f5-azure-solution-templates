@@ -68,6 +68,9 @@
         "licenseType": {
             "type": "String"
         },
+        "licensedBandwidth": {
+            "type": "String"
+        },
         "imageVersion": {
             "type": "String"
         }
@@ -75,8 +78,8 @@
     "variables": {
         "vnetId": "[resourceId(parameters('virtualMachineName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
-        "offerName": "f5-big-ip",
-        "skuName": "['f5-bigip-virtual-edition-', parameters('licenseType'), '-byol')]"
+        "offerName": "f5-big-ip-hourly",
+        "skuName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-', parameters('licenseType'), '-hourly')]"
     },
     "resources": [
         {

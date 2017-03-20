@@ -113,6 +113,30 @@
                               "visible": true
                          },
                          {
+                              "name": "licensedBandwidth",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "Licensed Bandwidth",
+                              "defaultValue": "200M",
+                              "toolTip": "Select a licensed bandwidth",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "25M",
+                                             "value": "25m"
+                                        },
+                                        {
+                                             "label": "200M",
+                                             "value": "200m"
+                                        },
+                                        {
+                                             "label": "1G",
+                                             "value": "1g"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
                               "name": "imageVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
@@ -125,20 +149,8 @@
                                              "value": "latest"
                                         },
                                         {
-                                             "label": "12.0.0",
-                                             "value": "12.0.674"
-                                        },
-                                        {
-                                             "label": "12.1.0",
-                                             "value": "12.1.02"
-                                        },
-                                        {
-                                             "label": "12.1.1",
-                                             "value": "12.1.11"
-                                        },
-                                        {
                                              "label": "12.1.2",
-                                             "value": "12.1.21"
+                                             "value": "12.1.22"
                                         },
                                         {
                                              "label": "13.0.0",
@@ -163,7 +175,7 @@
                               "imageReference": {
                                    "publisher": "f5-networks",
                                    "offer": "f5-big-ip",
-                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licenseType,'-byol')]"
+                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licensedBandwidth, '-', steps('virtualMachineSize').licenseType, '-byol')]"
                               },
                               "visible": true
                          }
