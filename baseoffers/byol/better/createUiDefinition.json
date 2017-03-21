@@ -179,7 +179,7 @@
                                         "options": {
                                              "hideExisting": false
                                         },
-                                        "visible": true
+                                        "visible": "[equals(steps('virtualMachineSettings').managedDisks, 'no')]"
                                    }                      
                               ],
                               "visible": true
