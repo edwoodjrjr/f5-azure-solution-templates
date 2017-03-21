@@ -89,30 +89,6 @@
                     "bladeTitle": "Choose a size",
                     "elements": [
                          {
-                              "name": "licenseType",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP License Type",
-                              "defaultValue": "Better",
-                              "toolTip": "Select a BIG-IP license type.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "Good",
-                                             "value": "good"
-                                        },
-                                        {
-                                             "label": "Better",
-                                             "value": "better"
-                                        },
-                                        {
-                                             "label": "Best",
-                                             "value": "best"
-                                        }
-                                   ]
-                              },
-                              "visible": true
-                         },
-                         {
                               "name": "imageVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
@@ -120,22 +96,6 @@
                               "toolTip": "Select the version of BIG-IP to provision.",
                               "constraints": {
                                    "allowedValues": [
-                                        {
-                                             "label": "Latest",
-                                             "value": "latest"
-                                        },
-                                        {
-                                             "label": "12.0.0",
-                                             "value": "12.0.674"
-                                        },
-                                        {
-                                             "label": "12.1.0",
-                                             "value": "12.1.02"
-                                        },
-                                        {
-                                             "label": "12.1.1",
-                                             "value": "12.1.11"
-                                        },
                                         {
                                              "label": "12.1.2",
                                              "value": "12.1.21"
@@ -292,66 +252,7 @@
                                              "hideExisting": false
                                         },
                                         "visible": true
-                                   },
-                                   {
-                                        "name": "networkSecurityGroup",
-                                        "type": "Microsoft.Common.TextBox",
-                                        "label": "Network Security Group",
-                                        "defaultValue": "",
-                                        "toolTip": "A network security group is a set of firewall rules that control traffic to and from your virtual machine.",
-                                        "constraints": {
-                                             "required": false,
-                                             "regex": "",
-                                             "validationMessage": ""
-                                        },
-                                        "visible": true
-                                   }                     
-                              ],
-                              "visible": true
-                         },
-                         {
-                              "name": "monitoringSection",
-                              "type": "Microsoft.Common.Section",
-                              "label": "Monitoring",
-                              "elements": [                            
-                                   {
-                                        "name": "bootDiagnostics",
-                                        "type": "Microsoft.Common.OptionsGroup",
-                                        "label": "Boot Diagnostics",
-                                        "defaultValue": "Disabled",
-                                        "toolTip": "Capture serial console output and screenshots of the virtual machine running on a host to help diagnose startup issues.",
-                                        "constraints": {
-                                             "allowedValues": [
-                                                  {
-                                                       "label": "Enabled",
-                                                       "value": "enabled"
-                                                  },
-                                                  {
-                                                       "label": "Disabled",
-                                                       "value": "disabled"
-                                                  }
-                                             ]
-                                        },
-                                        "visible": true
-                                   },
-                                   {
-                                        "name": "diagnosticsStorageAccount",
-                                        "type": "Microsoft.Storage.StorageAccountSelector",
-                                        "label": "Diagnostics storage account",
-                                        "toolTip": "Metrics are written to a storage account so you can analyze them with your own tools.",
-                                        "defaultValue": {
-                                             "name": "diagstorageaccount01",
-                                             "type": "Standard_LRS"
-                                        },
-                                        "constraints": {
-                                             "allowedTypes": [],
-                                             "excludedTypes": []
-                                        },
-                                        "options": {
-                                             "hideExisting": false
-                                        },
-                                        "visible": true
-                                   } 
+                                   }                  
                               ],
                               "visible": true
                          }
