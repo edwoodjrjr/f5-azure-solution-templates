@@ -123,7 +123,7 @@
                               "imageReference": {
                                    "publisher": "f5-networks",
                                    "offer": "f5-big-ip",
-                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licenseType,'-byol')]"
+                                   "sku": "f5-bigip-virtual-edition-better-byol"
                               },
                               "visible": true
                          }
