@@ -6,6 +6,56 @@
           ],
           "steps": [
                {
+                    "name": "virtualMachineSize",
+                    "label": "Size",
+                    "subLabel": {
+                         "preValidation": "Choose virtual machine size",
+                         "postValidation": "Done"
+                    },
+                    "bladeTitle": "Choose a size",
+                    "elements": [
+                         {
+                              "name": "imageVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "12.1.2",
+                              "toolTip": "Select the version of BIG-IP to provision.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "12.1.2",
+                                             "value": "12.1.21"
+                                        },
+                                        {
+                                             "label": "13.0.0",
+                                             "value": "13.0.000"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
+                              "name": "instanceType",
+                              "type": "Microsoft.Compute.SizeSelector",
+                              "label": "Size",
+                              "recommendedSizes": [
+                                   "Standard_DS4_v2",
+                                   "Standard_DS13_v2"
+                              ],
+                              "constraints": {
+                                   "excludedSizes": []
+                              },
+                              "osPlatform": "Linux",
+                              "imageReference": {
+                                   "publisher": "f5-networks",
+                                   "offer": "f5-big-ip",
+                                   "sku": "f5-bigip-virtual-edition-good-byol"
+                              },
+                              "visible": true
+                         }
+                    ]
+               },
+               {
                     "name": "infrastructureSettings",
                     "label": "Infrastructure Settings",
                     "subLabel": {
@@ -75,56 +125,6 @@
                                    "hidePassword": false
                               },
                               "osPlatform": "Linux",
-                              "visible": true
-                         }
-                    ]
-               },
-               {
-                    "name": "virtualMachineSize",
-                    "label": "Size",
-                    "subLabel": {
-                         "preValidation": "Choose virtual machine size",
-                         "postValidation": "Done"
-                    },
-                    "bladeTitle": "Choose a size",
-                    "elements": [
-                         {
-                              "name": "imageVersion",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Version",
-                              "defaultValue": "12.1.2",
-                              "toolTip": "Select the version of BIG-IP to provision.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "12.1.2",
-                                             "value": "12.1.21"
-                                        },
-                                        {
-                                             "label": "13.0.0",
-                                             "value": "13.0.000"
-                                        }
-                                   ]
-                              },
-                              "visible": true
-                         },
-                         {
-                              "name": "instanceType",
-                              "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Size",
-                              "recommendedSizes": [
-                                   "Standard_DS4_v2",
-                                   "Standard_DS13_v2"
-                              ],
-                              "constraints": {
-                                   "excludedSizes": []
-                              },
-                              "osPlatform": "Linux",
-                              "imageReference": {
-                                   "publisher": "f5-networks",
-                                   "offer": "f5-big-ip",
-                                   "sku": "f5-bigip-virtual-edition-good-byol"
-                              },
                               "visible": true
                          }
                     ]

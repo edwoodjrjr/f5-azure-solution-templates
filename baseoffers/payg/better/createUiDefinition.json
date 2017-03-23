@@ -6,80 +6,6 @@
           ],
           "steps": [
                {
-                    "name": "infrastructureSettings",
-                    "label": "Infrastructure Settings",
-                    "subLabel": {
-                         "preValidation": "Configure basic settings",
-                         "postValidation": "Done"
-                    },
-                    "bladeTitle": "Infrastructure Settings",
-                    "elements": [
-                         {
-                              "name": "solutionDeploymentName",
-                              "type": "Microsoft.Common.TextBox",
-                              "label": "Name",
-                              "constraints": {
-                                   "required": true
-                              },
-                              "visible": true
-                         },                         
-                         {
-                              "name": "vmDiskType",
-                              "type": "Microsoft.Common.DropDown",
-                              "label": "VM disk type",
-                              "defaultValue": "ssd",
-                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "SSD",
-                                             "value": "ssd"
-                                        },
-                                        {
-                                             "label": "HDD",
-                                             "value": "hdd"
-                                        }
-                                   ]
-                              },
-                              "visible": true
-                         },
-                         {
-                              "name": "adminUsername",
-                              "type": "Microsoft.Compute.UserNameTextBox",
-                              "label": "User name",
-                              "constraints": {
-                                   "required": true
-                              },
-                              "osPlatform": "Linux",
-                              "visible": true
-                         },
-                         {
-                              "name": "authenticationType",
-                              "type": "Microsoft.Compute.CredentialsCombo",
-                              "label": {
-                                   "authenticationType": "Authentication type",
-                                   "password": "Password",
-                                   "confirmPassword": "Confirm password",
-                                   "sshPublicKey": "SSH public key"
-                              },
-                              "toolTip": {
-                                   "authenticationType": "",
-                                   "password": "",
-                                   "sshPublicKey": "Provide an RSA public key in the single-line forma (starting with 'ssh-rsa') or the multi-line PEM format. You can generate SSH keys using ssh-keygen on Linux and OS X, or PuTTYGen on Windows."
-                              },
-                              "constraints": {
-                                   "required": true
-                              },
-                              "options": {
-                                   "hideConfirmation": false,
-                                   "hidePassword": false
-                              },
-                              "osPlatform": "Linux",
-                              "visible": true
-                         }
-                    ]
-               },
-               {
                     "name": "virtualMachineSize",
                     "label": "Size",
                     "subLabel": {
@@ -149,6 +75,80 @@
                                    "offer": "f5-big-ip",
                                    "sku": "[concat('f5-bigip-virtual-edition-', steps('virtualMachineSize').licensedBandwidth, '-better-byol')]"
                               },
+                              "visible": true
+                         }
+                    ]
+               },
+               {
+                    "name": "infrastructureSettings",
+                    "label": "Infrastructure Settings",
+                    "subLabel": {
+                         "preValidation": "Configure basic settings",
+                         "postValidation": "Done"
+                    },
+                    "bladeTitle": "Infrastructure Settings",
+                    "elements": [
+                         {
+                              "name": "solutionDeploymentName",
+                              "type": "Microsoft.Common.TextBox",
+                              "label": "Name",
+                              "constraints": {
+                                   "required": true
+                              },
+                              "visible": true
+                         },                         
+                         {
+                              "name": "vmDiskType",
+                              "type": "Microsoft.Common.DropDown",
+                              "label": "VM disk type",
+                              "defaultValue": "ssd",
+                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "SSD",
+                                             "value": "ssd"
+                                        },
+                                        {
+                                             "label": "HDD",
+                                             "value": "hdd"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
+                              "name": "adminUsername",
+                              "type": "Microsoft.Compute.UserNameTextBox",
+                              "label": "User name",
+                              "constraints": {
+                                   "required": true
+                              },
+                              "osPlatform": "Linux",
+                              "visible": true
+                         },
+                         {
+                              "name": "authenticationType",
+                              "type": "Microsoft.Compute.CredentialsCombo",
+                              "label": {
+                                   "authenticationType": "Authentication type",
+                                   "password": "Password",
+                                   "confirmPassword": "Confirm password",
+                                   "sshPublicKey": "SSH public key"
+                              },
+                              "toolTip": {
+                                   "authenticationType": "",
+                                   "password": "",
+                                   "sshPublicKey": "Provide an RSA public key in the single-line forma (starting with 'ssh-rsa') or the multi-line PEM format. You can generate SSH keys using ssh-keygen on Linux and OS X, or PuTTYGen on Windows."
+                              },
+                              "constraints": {
+                                   "required": true
+                              },
+                              "options": {
+                                   "hideConfirmation": false,
+                                   "hidePassword": false
+                              },
+                              "osPlatform": "Linux",
                               "visible": true
                          }
                     ]
