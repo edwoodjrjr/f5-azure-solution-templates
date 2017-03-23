@@ -284,7 +284,24 @@
                }
           ],
           "outputs": {
-               "location": "[location()]"
+               "location": "[location()]",
+               "vmDiskType": "[steps('virtualMachineSize').vmDiskType]",
+               "licensedBandwidth": "[steps('virtualMachineSize').licensedBandwidth]",
+               "imageVersion": "[steps('virtualMachineSize').imageVersion]",
+               "instanceType": "[steps('virtualMachineSize').instanceType]",
+               "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",              
+               "adminUsername": "[steps('infrastructureSettings').adminUsername]",
+               "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
+               "managedDisks": "[steps('virtualMachineSettings').storageSection.managedDisks]",
+               "storageAccount": "[steps('virtualMachineSettings').storageSection.storageAccount.name]",
+               "vnetName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.name]",
+               "vnetAddressPrefix": "[steps('virtualMachineSettings').networkSection.virtualNetwork.addressPrefix]",
+               "subnetName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.subnets.default.name]",
+               "subnetAddressPrefix": "[steps('virtualMachineSettings').networkSection.virtualNetwork.subnets.default.addressPrefix]",
+               "vnetNewOrExisting": "[steps('virtualMachineSettings').networkSection.virtualNetwork.newOrExisting]",
+               "vnetExistingRGName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.resourceGroup]",
+               "publicIpName": "[steps('virtualMachineSettings').networkSection.publicIpAddress.publicIpAddressName]",
+               "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]"
           }
      }
 }
