@@ -104,7 +104,7 @@
                                    "offer": "f5-big-ip",
                                    "sku": "f5-bigip-virtual-edition-good-byol"
                               },
-                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'SSD')]"
+                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'ssd')]"
                          },
                          {
                               "name": "hddInstanceType",
@@ -155,7 +155,7 @@
                                    "offer": "f5-big-ip",
                                    "sku": "f5-bigip-virtual-edition-good-byol"
                               },
-                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'HDD')]"
+                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'hdd')]"
                          }
                     ]
                },
