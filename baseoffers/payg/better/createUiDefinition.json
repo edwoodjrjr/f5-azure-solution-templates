@@ -15,6 +15,26 @@
                     "bladeTitle": "Choose a size",
                     "elements": [
                          {
+                              "name": "vmDiskType",
+                              "type": "Microsoft.Common.DropDown",
+                              "label": "VM disk type",
+                              "defaultValue": "ssd",
+                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "SSD",
+                                             "value": "ssd"
+                                        },
+                                        {
+                                             "label": "HDD",
+                                             "value": "hdd"
+                                        }
+                                   ]
+                              },
+                              "visible": true
+                         },
+                         {
                               "name": "licensedBandwidth",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "Licensed Bandwidth",
@@ -97,26 +117,6 @@
                               },
                               "visible": true
                          },                         
-                         {
-                              "name": "vmDiskType",
-                              "type": "Microsoft.Common.DropDown",
-                              "label": "VM disk type",
-                              "defaultValue": "ssd",
-                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "SSD",
-                                             "value": "ssd"
-                                        },
-                                        {
-                                             "label": "HDD",
-                                             "value": "hdd"
-                                        }
-                                   ]
-                              },
-                              "visible": true
-                         },
                          {
                               "name": "adminUsername",
                               "type": "Microsoft.Compute.UserNameTextBox",
