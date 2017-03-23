@@ -81,7 +81,7 @@
                          {
                               "name": "sddInstanceType",
                               "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Size",
+                              "label": "Size - SSD",
                               "recommendedSizes": [
                                    "Standard_DS4_v2",
                                    "Standard_DS13_v2"
@@ -133,7 +133,7 @@
                          {
                               "name": "hddInstanceType",
                               "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Size",
+                              "label": "Size - HDD",
                               "recommendedSizes": [
                                    "Standard_A7"
                               ],
