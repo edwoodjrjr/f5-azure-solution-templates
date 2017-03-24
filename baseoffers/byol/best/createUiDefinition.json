@@ -266,7 +266,17 @@
                                              "hideExisting": false
                                         },
                                         "visible": true
-                                   }                  
+                                   },
+                                   {
+                                        "name": "nsgName",
+                                        "type": "Microsoft.Common.TextBox",
+                                        "label": "New Network Security Group name",
+                                        "defaultValue": "[concat(steps('infrastructureSettings').solutionDeploymentName, '-nsg')]",
+                                        "constraints": {
+                                             "required": true
+                                        },
+                                        "visible": true
+                                   },
                               ],
                               "visible": true
                          },
@@ -444,6 +454,7 @@
                "vnetExistingRGName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.resourceGroup]",
                "publicIpName": "[steps('virtualMachineSettings').networkSection.publicIpAddress.publicIpAddressName]",
                "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]",
+               "nsgName": "[steps('virtualMachineSettings').networkSection.nsgName]",
                "avsetNewOrNone": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySet]",
                "avSetName": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetName]",
                "avSetFaultDomains": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetFaultDomains]",
