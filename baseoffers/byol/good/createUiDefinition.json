@@ -299,7 +299,7 @@
                                         "name": "availabilitySetName",
                                         "type": "Microsoft.Common.TextBox",
                                         "label": "New availability set name",
-                                        "defaultValue": "[concat(resourceGroup().id, '-avset']",
+                                        "defaultValue": "[concat(steps('infrastructureSettings').solutionDeploymentName, '-avset')]",
                                         "constraints": {
                                              "required": true
                                         },
