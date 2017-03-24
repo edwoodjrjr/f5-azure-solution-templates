@@ -44,6 +44,7 @@
                                    "Standard_DS13_v2"
                               ],
                               "constraints": {
+                                   "excludedSizes": []
                               },
                               "osPlatform": "Linux",
                               "imageReference": {
@@ -245,7 +246,7 @@
                "instanceType": "[steps('virtualMachineSize').instanceType]",
                "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",              
                "adminUsername": "[steps('infrastructureSettings').adminUsername]",
-               "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
+               "adminPassword": "[steps('infrastructureSettings').authenticationType.password]",
                "managedDisks": "[steps('virtualMachineSettings').storageSection.managedDisks]",
                "storageAccount": "[steps('virtualMachineSettings').storageSection.storageAccount.name]",
                "vnetName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.name]",
