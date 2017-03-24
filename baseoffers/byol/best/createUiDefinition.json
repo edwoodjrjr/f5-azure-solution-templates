@@ -183,7 +183,7 @@
                                         "label": "Storage account",
                                         "toolTip": "Disks for Azure virtual machines are created in storage accounts",
                                         "defaultValue": {
-                                             "name": "storageaccount01",
+                                             "name": "[concat(steps('infrastructureSettings').solutionDeploymentName, 'st')]",
                                              "type": "Premium_LRS"
                                         },
                                         "constraints": {
@@ -215,7 +215,7 @@
                                              "subnets": "A subnet is a range of IP addresses in your virtual network, which can be used to isolate virtual machines from each other or from the Internet."
                                         },
                                         "defaultValue": {
-                                             "name": "vnet01",
+                                             "name": "[concat(steps('infrastructureSettings').solutionDeploymentName, '-vnet01')]",
                                              "addressPrefixSize": "/16"
                                         },
                                         "constraints": {
@@ -252,7 +252,7 @@
                                              "domainNameLabel": ""
                                         },
                                         "defaultValue": {
-                                             "publicIpAddressName": "ip01",
+                                             "publicIpAddressName": "[concat(steps('infrastructureSettings').solutionDeploymentName, '-pip')]",
                                              "domainNameLabel": ""
                                         },
                                         "constraints": {
@@ -299,7 +299,7 @@
                                         "name": "availabilitySetName",
                                         "type": "Microsoft.Common.TextBox",
                                         "label": "New availability set name",
-                                        "defaultValue": "f5-avset",
+                                        "defaultValue": "[concat(steps('infrastructureSettings').solutionDeploymentName, '-avset')]",
                                         "constraints": {
                                              "required": true
                                         },
