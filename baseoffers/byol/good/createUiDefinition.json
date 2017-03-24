@@ -279,7 +279,7 @@
                                         "name": "availabilitySet",
                                         "type": "Microsoft.Common.OptionsGroup",
                                         "label": "Availability set",
-                                        "defaultValue": "New",
+                                        "defaultValue": "[concat(resourceGroup().id, '-avset']",
                                         "toolTip": "To provide redundancyfor your application, we recommend that you group two or more virtual machines in an availablity set. This configuration ensures that during a planned or unplanned maintenance event, at least one virtual machine will be available and meet 99.95% Azure SLA. The availability set of a virtual machine can't be changed after it's created.",
                                         "constraints": {
                                              "allowedValues": [
