@@ -15,26 +15,6 @@
                     "bladeTitle": "Choose a size",
                     "elements": [
                          {
-                              "name": "vmDiskType",
-                              "type": "Microsoft.Common.DropDown",
-                              "label": "VM disk type",
-                              "defaultValue": "SSD",
-                              "toolTip": "Premium disks are backed by solid state drives and offer consistent, low-latency performance. They provide the best balance between price and performance, and are ideal for I/O-intensive applications and production workloads. Standard disks (HDD) are backed by magnetic drives and are preferable for applications where data is accessed infrequently.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "SSD",
-                                             "value": "ssd"
-                                        },
-                                        {
-                                             "label": "HDD",
-                                             "value": "hdd"
-                                        }
-                                   ]
-                              },
-                              "visible": true
-                         },
-                         {
                               "name": "imageVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
@@ -55,107 +35,57 @@
                               "visible": true
                          },
                          {
-                              "name": "ssdInstanceType",
+                              "name": "instanceType",
                               "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Size - SSD",
+                              "label": "Size",
                               "recommendedSizes": [
+                                   "Standard_A7",
                                    "Standard_DS4_v2",
                                    "Standard_DS13_v2"
                               ],
                               "constraints": {
                                    "allowedSizes": [
-                                        "Standard_DS1_V2",
-                                        "Standard_DS2_V2",
-                                        "Standard_DS3_V2",
-                                        "Standard_DS4_V2",
-                                        "Standard_DS5_V2",
-                                        "Standard_DS11_V2",
-                                        "Standard_DS12_V2",
-                                        "Standard_DS13_V2 ",
-                                        "Standard_DS14_V2",
-                                        "Standard_DS15_V2",
-                                        "Standard_DS1",
-                                        "Standard_DS2",
-                                        "Standard_DS3",
-                                        "Standard_DS4",
-                                        "Standard_DS11",
-                                        "Standard_DS12",
-                                        "Standard_DS13",
-                                        "Standard_DS14",
-                                        "Standard_GS1",
-                                        "Standard_GS2",
-                                        "Standard_GS3",
-                                        "Standard_GS4",
-                                        "Standard_GS5",
-                                        "Standard_L4S",
-                                        "Standard_L8S",
-                                        "Standard_L16S",
-                                        "Standard_L32S",
-                                        "Standard_F1S",
-                                        "Standard_F2S",
-                                        "Standard_F4S",
-                                        "Standard_F8S",
-                                        "Standard_F16S"
+                                        "Standard_A1",
+                                        "Standard_A2",
+                                        "Standard_A3",
+                                        "Standard_A4",
+                                        "Standard_A5",
+                                        "Standard_A6",
+                                        "Standard_A7",
+                                        "Standard_A2_v2",
+                                        "Standard_A4_v2",
+                                        "Standard_D1",
+                                        "Standard_D2",
+                                        "Standard_D3",
+                                        "Standard_D4",
+                                        "Standard_D11",
+                                        "Standard_D12",
+                                        "Standard_D13",
+                                        "Standard_D14",
+                                        "Standard_DS1_v2",
+                                        "Standard_DS2_v2",
+                                        "Standard_DS3_v2",
+                                        "Standard_DS4_v2",
+                                        "Standard_DS11_v2",
+                                        "Standard_DS12_v2",
+                                        "Standard_DS13_v2",
+                                        "Standard_F2",
+                                        "Standard_F4",
+                                        "Standard_F8",
+                                        "Standard_F16",
+                                        "Standard_F2s",
+                                        "Standard_F4s",
+                                        "Standard_F8s",
+                                        "Standard_F16s"
                                    ]
                               },
                               "osPlatform": "Linux",
                               "imageReference": {
                                    "publisher": "f5-networks",
                                    "offer": "f5-big-ip",
-                                   "sku": "f5-bigip-virtual-edition-good-byol"
+                                   "sku": "f5-bigip-virtual-edition-best-byol"
                               },
-                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'ssd')]"
-                         },
-                         {
-                              "name": "hddInstanceType",
-                              "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Size - HDD",
-                              "recommendedSizes": [
-                                   "Standard_A7"
-                              ],
-                              "constraints": {
-                                   "excludedSizes": [
-                                        "Standard_DS1_V2",
-                                        "Standard_DS2_V2",
-                                        "Standard_DS3_V2",
-                                        "Standard_DS4_V2",
-                                        "Standard_DS5_V2",
-                                        "Standard_DS11_V2",
-                                        "Standard_DS12_V2",
-                                        "Standard_DS13_V2 ",
-                                        "Standard_DS14_V2",
-                                        "Standard_DS15_V2",
-                                        "Standard_DS1",
-                                        "Standard_DS2",
-                                        "Standard_DS3",
-                                        "Standard_DS4",
-                                        "Standard_DS11",
-                                        "Standard_DS12",
-                                        "Standard_DS13",
-                                        "Standard_DS14",
-                                        "Standard_GS1",
-                                        "Standard_GS2",
-                                        "Standard_GS3",
-                                        "Standard_GS4",
-                                        "Standard_GS5",
-                                        "Standard_L4S",
-                                        "Standard_L8S",
-                                        "Standard_L16S",
-                                        "Standard_L32S",
-                                        "Standard_F1S",
-                                        "Standard_F2S",
-                                        "Standard_F4S",
-                                        "Standard_F8S",
-                                        "Standard_F16S"
-                                   ]
-                              },
-                              "osPlatform": "Linux",
-                              "imageReference": {
-                                   "publisher": "f5-networks",
-                                   "offer": "f5-big-ip",
-                                   "sku": "f5-bigip-virtual-edition-good-byol"
-                              },
-                              "visible": "[equals(steps('virtualMachineSize').vmDiskType, 'hdd')]"
+                              "visible": true
                          }
                     ]
                },               
@@ -339,19 +269,171 @@
                                    }                  
                               ],
                               "visible": true
+                         },
+                         {
+                              "name": "highAvailabilitySection",
+                              "type": "Microsoft.Common.Section",
+                              "label": "High availability",
+                              "elements": [
+                                   {
+                                        "name": "availabilitySet",
+                                        "type": "Microsoft.Common.OptionsGroup",
+                                        "label": "Availability set",
+                                        "defaultValue": "New",
+                                        "toolTip": "To provide redundancyfor your application, we recommend that you group two or more virtual machines in an availablity set. This configuration ensures that during a planned or unplanned maintenance event, at least one virtual machine will be available and meet 99.95% Azure SLA. The availability set of a virtual machine can't be changed after it's created.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "New",
+                                                       "value": "new"
+                                                  },
+                                                  {
+                                                       "label": "None",
+                                                       "value": "none"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "availabilitySetName",
+                                        "type": "Microsoft.Common.TextBox",
+                                        "label": "New availability set name",
+                                        "defaultValue": "f5-avset",
+                                        "constraints": {
+                                             "required": true
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   },
+                                   {
+                                        "name": "availabilitySetFaultDomains",
+                                        "type": "Microsoft.Common.DropDown",
+                                        "label": "Number of fault domains",
+                                        "defaultValue": "2",
+                                        "toolTip": "The number of fault domains to create in the new availablity set.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "1",
+                                                       "value": "1"
+                                                  },
+                                                  {
+                                                       "label": "2",
+                                                       "value": "2"
+                                                  },
+                                                  {
+                                                       "label": "3",
+                                                       "value": "3"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   },
+                                   {
+                                        "name": "availabilitySetUpdateDomains",
+                                        "type": "Microsoft.Common.DropDown",
+                                        "label": "Number of update domains",
+                                        "defaultValue": "5",
+                                        "toolTip": "The number of update domains to create in the new availablity set.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "1",
+                                                       "value": "1"
+                                                  },
+                                                  {
+                                                       "label": "2",
+                                                       "value": "2"
+                                                  },
+                                                  {
+                                                       "label": "3",
+                                                       "value": "3"
+                                                  },
+                                                  {
+                                                       "label": "4",
+                                                       "value": "4"
+                                                  },
+                                                  {
+                                                       "label": "5",
+                                                       "value": "5"
+                                                  },
+                                                  {
+                                                       "label": "6",
+                                                       "value": "6"
+                                                  },
+                                                  {
+                                                       "label": "7",
+                                                       "value": "7"
+                                                  },
+                                                  {
+                                                       "label": "8",
+                                                       "value": "8"
+                                                  },
+                                                  {
+                                                       "label": "9",
+                                                       "value": "9"
+                                                  },
+                                                  {
+                                                       "label": "10",
+                                                       "value": "10"
+                                                  },
+                                                  {
+                                                       "label": "11",
+                                                       "value": "11"
+                                                  },
+                                                  {
+                                                       "label": "12",
+                                                       "value": "12"
+                                                  },
+                                                  {
+                                                       "label": "13",
+                                                       "value": "13"
+                                                  },
+                                                  {
+                                                       "label": "14",
+                                                       "value": "14"
+                                                  },
+                                                  {
+                                                       "label": "15",
+                                                       "value": "15"
+                                                  },
+                                                  {
+                                                       "label": "16",
+                                                       "value": "16"
+                                                  },
+                                                  {
+                                                       "label": "17",
+                                                       "value": "17"
+                                                  },
+                                                  {
+                                                       "label": "18",
+                                                       "value": "18"
+                                                  },
+                                                  {
+                                                       "label": "19",
+                                                       "value": "19"
+                                                  },
+                                                  {
+                                                       "label": "20",
+                                                       "value": "20"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   }
+                              ],
+                              "visible": true
                          }
                     ]
                }
           ],
           "outputs": {
                "location": "[location()]",
-               "vmDiskType": "[steps('virtualMachineSize').vmDiskType]",
                "imageVersion": "[steps('virtualMachineSize').imageVersion]",
-               "sddInstanceType": "[steps('virtualMachineSize').sddInstanceType]",
-               "hddInstanceType": "[steps('virtualMachineSize').hddInstanceType]",
+               "instanceType": "[steps('virtualMachineSize').instanceType]",
                "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",              
+               "adminPassword": "[steps('infrastructureSettings').authenticationType.password]",
                "adminUsername": "[steps('infrastructureSettings').adminUsername]",
-               "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
                "managedDisks": "[steps('virtualMachineSettings').storageSection.managedDisks]",
                "storageAccount": "[steps('virtualMachineSettings').storageSection.storageAccount.name]",
                "vnetName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.name]",
@@ -361,7 +443,11 @@
                "vnetNewOrExisting": "[steps('virtualMachineSettings').networkSection.virtualNetwork.newOrExisting]",
                "vnetExistingRGName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.resourceGroup]",
                "publicIpName": "[steps('virtualMachineSettings').networkSection.publicIpAddress.publicIpAddressName]",
-               "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]"
+               "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]",
+               "avsetNewOrNone": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySet]",
+               "avSetName": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetName]",
+               "avSetFaultDomains": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetFaultDomains]",
+               "avSetUpdateDomains": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetUpdateDomains]"
           }
      }
 }

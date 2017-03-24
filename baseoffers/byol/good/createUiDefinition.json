@@ -44,7 +44,40 @@
                                    "Standard_DS13_v2"
                               ],
                               "constraints": {
-                                   "excludedSizes": []
+                                   "allowedSizes": [
+                                        "Standard_A1",
+                                        "Standard_A2",
+                                        "Standard_A3",
+                                        "Standard_A4",
+                                        "Standard_A5",
+                                        "Standard_A6",
+                                        "Standard_A7",
+                                        "Standard_A2_v2",
+                                        "Standard_A4_v2",
+                                        "Standard_D1",
+                                        "Standard_D2",
+                                        "Standard_D3",
+                                        "Standard_D4",
+                                        "Standard_D11",
+                                        "Standard_D12",
+                                        "Standard_D13",
+                                        "Standard_D14",
+                                        "Standard_DS1_v2",
+                                        "Standard_DS2_v2",
+                                        "Standard_DS3_v2",
+                                        "Standard_DS4_v2",
+                                        "Standard_DS11_v2",
+                                        "Standard_DS12_v2",
+                                        "Standard_DS13_v2",
+                                        "Standard_F2",
+                                        "Standard_F4",
+                                        "Standard_F8",
+                                        "Standard_F16",
+                                        "Standard_F2s",
+                                        "Standard_F4s",
+                                        "Standard_F8s",
+                                        "Standard_F16s"
+                                   ]
                               },
                               "osPlatform": "Linux",
                               "imageReference": {
@@ -236,6 +269,160 @@
                                    }                    
                               ],
                               "visible": true
+                         },
+                         {
+                              "name": "highAvailabilitySection",
+                              "type": "Microsoft.Common.Section",
+                              "label": "High availability",
+                              "elements": [
+                                   {
+                                        "name": "availabilitySet",
+                                        "type": "Microsoft.Common.OptionsGroup",
+                                        "label": "Availability set",
+                                        "defaultValue": "New",
+                                        "toolTip": "To provide redundancyfor your application, we recommend that you group two or more virtual machines in an availablity set. This configuration ensures that during a planned or unplanned maintenance event, at least one virtual machine will be available and meet 99.95% Azure SLA. The availability set of a virtual machine can't be changed after it's created.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "New",
+                                                       "value": "new"
+                                                  },
+                                                  {
+                                                       "label": "None",
+                                                       "value": "none"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": true
+                                   },
+                                   {
+                                        "name": "availabilitySetName",
+                                        "type": "Microsoft.Common.TextBox",
+                                        "label": "New availability set name",
+                                        "defaultValue": "f5-avset",
+                                        "constraints": {
+                                             "required": true
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   },
+                                   {
+                                        "name": "availabilitySetFaultDomains",
+                                        "type": "Microsoft.Common.DropDown",
+                                        "label": "Number of fault domains",
+                                        "defaultValue": "2",
+                                        "toolTip": "The number of fault domains to create in the new availablity set.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "1",
+                                                       "value": "1"
+                                                  },
+                                                  {
+                                                       "label": "2",
+                                                       "value": "2"
+                                                  },
+                                                  {
+                                                       "label": "3",
+                                                       "value": "3"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   },
+                                   {
+                                        "name": "availabilitySetUpdateDomains",
+                                        "type": "Microsoft.Common.DropDown",
+                                        "label": "Number of update domains",
+                                        "defaultValue": "5",
+                                        "toolTip": "The number of update domains to create in the new availablity set.",
+                                        "constraints": {
+                                             "allowedValues": [
+                                                  {
+                                                       "label": "1",
+                                                       "value": "1"
+                                                  },
+                                                  {
+                                                       "label": "2",
+                                                       "value": "2"
+                                                  },
+                                                  {
+                                                       "label": "3",
+                                                       "value": "3"
+                                                  },
+                                                  {
+                                                       "label": "4",
+                                                       "value": "4"
+                                                  },
+                                                  {
+                                                       "label": "5",
+                                                       "value": "5"
+                                                  },
+                                                  {
+                                                       "label": "6",
+                                                       "value": "6"
+                                                  },
+                                                  {
+                                                       "label": "7",
+                                                       "value": "7"
+                                                  },
+                                                  {
+                                                       "label": "8",
+                                                       "value": "8"
+                                                  },
+                                                  {
+                                                       "label": "9",
+                                                       "value": "9"
+                                                  },
+                                                  {
+                                                       "label": "10",
+                                                       "value": "10"
+                                                  },
+                                                  {
+                                                       "label": "11",
+                                                       "value": "11"
+                                                  },
+                                                  {
+                                                       "label": "12",
+                                                       "value": "12"
+                                                  },
+                                                  {
+                                                       "label": "13",
+                                                       "value": "13"
+                                                  },
+                                                  {
+                                                       "label": "14",
+                                                       "value": "14"
+                                                  },
+                                                  {
+                                                       "label": "15",
+                                                       "value": "15"
+                                                  },
+                                                  {
+                                                       "label": "16",
+                                                       "value": "16"
+                                                  },
+                                                  {
+                                                       "label": "17",
+                                                       "value": "17"
+                                                  },
+                                                  {
+                                                       "label": "18",
+                                                       "value": "18"
+                                                  },
+                                                  {
+                                                       "label": "19",
+                                                       "value": "19"
+                                                  },
+                                                  {
+                                                       "label": "20",
+                                                       "value": "20"
+                                                  }
+                                             ]
+                                        },
+                                        "visible": "[equals(steps('virtualMachineSettings').highAvailabilitySection.availabilitySet, 'new')]"
+                                   }
+                              ],
+                              "visible": true
                          }
                     ]
                }
@@ -245,8 +432,8 @@
                "imageVersion": "[steps('virtualMachineSize').imageVersion]",
                "instanceType": "[steps('virtualMachineSize').instanceType]",
                "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",              
-               "adminUsername": "[steps('infrastructureSettings').adminUsername]",
                "adminPassword": "[steps('infrastructureSettings').authenticationType.password]",
+               "adminUsername": "[steps('infrastructureSettings').adminUsername]",
                "managedDisks": "[steps('virtualMachineSettings').storageSection.managedDisks]",
                "storageAccount": "[steps('virtualMachineSettings').storageSection.storageAccount.name]",
                "vnetName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.name]",
@@ -256,7 +443,11 @@
                "vnetNewOrExisting": "[steps('virtualMachineSettings').networkSection.virtualNetwork.newOrExisting]",
                "vnetExistingRGName": "[steps('virtualMachineSettings').networkSection.virtualNetwork.resourceGroup]",
                "publicIpName": "[steps('virtualMachineSettings').networkSection.publicIpAddress.publicIpAddressName]",
-               "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]"
+               "dnsLabel": "[steps('virtualMachineSettings').networkSection.publicIpAddress.domainNameLabel]",
+               "avSetNewOrNone": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySet]",
+               "avSetName": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetName]",
+               "avSetFaultDomains": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetFaultDomains]",
+               "avSetUpdateDomains": "[steps('virtualMachineSettings').highAvailabilitySection.availabilitySetUpdateDomains]"
           }
      }
 }
