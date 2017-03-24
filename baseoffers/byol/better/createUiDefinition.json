@@ -276,7 +276,7 @@
                                              "required": true
                                         },
                                         "visible": true
-                                   },
+                                   }
                               ],
                               "visible": true
                          },
