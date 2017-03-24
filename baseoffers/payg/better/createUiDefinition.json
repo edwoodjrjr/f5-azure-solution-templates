@@ -211,7 +211,6 @@
                                              "type": "Premium_LRS"
                                         },
                                         "constraints": {
-                                             "allowedTypes": [],
                                              "excludedTypes": []
                                         },
                                         "options": {
