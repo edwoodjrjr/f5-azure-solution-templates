@@ -43,27 +43,44 @@
       "defaultValue": "Standard_D3_v2",
       "allowedValues": [
         "Standard_A3",
-        "Standard_A4",
-        "Standard_A5",
-        "Standard_A6",
-        "Standard_A7",
-        "Standard_D2",
-        "Standard_D3",
-        "Standard_D4",
-        "Standard_D11",
-        "Standard_D12",
-        "Standard_D13",
-        "Standard_D14",
-        "Standard_D2_v2",
-        "Standard_D3_v2",
-        "Standard_D4_v2",
-        "Standard_D5_v2",
-        "Standard_D11_v2",
-        "Standard_D12_v2",
-        "Standard_D13_v2",
-        "Standard_D14_v2",
-        "Standard_F2",
-        "Standard_F4"
+           "Standard_A4",
+           "Standard_A5",
+           "Standard_A6",
+           "Standard_A7",
+           "Standard_D2",
+           "Standard_D3",
+           "Standard_D4",
+           "Standard_D11",
+           "Standard_D12",
+           "Standard_D13",
+           "Standard_D14",
+           "Standard_D2_v2",
+           "Standard_D3_v2",
+           "Standard_D4_v2",
+           "Standard_D5_v2",
+           "Standard_D11_v2",
+           "Standard_D12_v2",
+           "Standard_D13_v2",
+           "Standard_D14_v2",
+           "Standard_F2",
+           "Standard_F4",
+           "Standard_DS2",
+           "Standard_DS3",
+           "Standard_DS4",
+           "Standard_DS11",
+           "Standard_DS12",
+           "Standard_DS13",
+           "Standard_DS14",
+           "Standard_DS2_v2",
+           "Standard_DS3_v2",
+           "Standard_DS4_v2",
+           "Standard_DS5_v2",
+           "Standard_DS11_v2",
+           "Standard_DS12_v2",
+           "Standard_DS13_v2",
+           "Standard_DS14_v2",
+           "Standard_F2S",
+           "Standard_F4S"
       ],
       "metadata": {
         "description": "The size of the Virtual Hardware Instance."
@@ -219,7 +236,8 @@
     "ipPrefix": "[variables('instanceIPBase').prefix]",
     "lastOctet": "[variables('instanceIPBase').lastOctet]",
     "appPort": 6443,
-    "newStorageAccountName": "[concat('f5',uniqueString(resourceGroup().id),'stor')]",  
+    "newStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'st')), 'st')]",
+    "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",  
     "nicNamePrefix": "bigip-nic",
     "nicStop": "[concat(variables('nicNamePrefix'),parameters('numberOfInstances'))]",
     "scriptName": "o365FedDeploy.sh",
@@ -394,17 +412,29 @@
   },
   "resources": [
     {
-      "name": "[variables('newStorageAccountName')]",
-      "tags": {
-        "displayName": "StorageAccount"
-      },
-      "type": "Microsoft.Storage/storageAccounts",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('apiVersionStorage')]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
+          "name": "[variables('diagStorageAccountName')]",
+          "type": "Microsoft.Storage/storageAccounts",
+          "location": "[parameters('location')]",
+          "tags": {
+               "displayName": "StorageAccount"
+          },
+          "apiVersion": "[variables('apiVersionStorage')]",
+          "properties": {
+               "accountType": "Standard_LRS" 
+          }
+     },
+     {
+          "name": "[variables('newStorageAccountName')]",
+          "type": "Microsoft.Storage/storageAccounts",
+          "location": "[parameters('location')]",
+          "tags": {
+               "displayName": "StorageAccount"
+          },
+          "apiVersion": "[variables('apiVersionStorage')]",
+          "properties": {
+               "accountType": "[variables('instanceTypeMap')[parameters('instanceType')].storageAccountType]" 
+          }
+     },
     {
       "apiVersion": "2015-01-01",
       "name": "virtualNetworkTemplate",
@@ -638,6 +668,7 @@
         "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]",
         "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName'))]",
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
         "[concat(variables('lbId'),'/inboundNatRules/guimgt1')]",
         "[concat(variables('lbId'),'/inboundNatRules/sshmgt1')]",
@@ -668,6 +699,7 @@
           "asId": { "value": "[variables('asId')]" },
           "nicNamePrefix": { "value": "[variables('nicNamePrefix')]" },
           "newStorageAccountName": { "value": "[variables('newStorageAccountName')]" },
+          "diagStorageAccountName": { "value": "[variables('diagStorageAccountName')]" },
           "runScriptsUrl": { "value": "[variables('runScriptsUrl')]" },
           "iappUrl": { "value": "[variables('iappUrl')]" },
           "singleQuote": { "value": "[variables('singleQuote')]" },

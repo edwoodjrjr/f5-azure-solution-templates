@@ -98,6 +98,12 @@
         "description": "vhd storage file"
       }
     },
+    "diagStorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "diagnostics storage file"
+      }
+    },
     "runScriptsUrl": {
       "type": "string",
       "metadata": {
@@ -285,7 +291,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[concat('http://',parameters('newstorageAccountName'),'.blob.core.windows.net')]"
+            "storageUri": "[concat('http://',parameters('diagStorageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }
