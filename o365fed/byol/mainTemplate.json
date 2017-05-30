@@ -242,7 +242,7 @@
     "nicStop": "[concat(variables('nicNamePrefix'),parameters('numberOfInstances'))]",
     "scriptName": "o365FedDeploy.sh",
     "scriptLoc": "[concat(parameters('baseUrl'),'/',variables('scriptName'))]",
-    "iappTemplate": "f5.microsoft_office_365_idp.v1.1.0.tmpl",
+    "iappTemplate": "f5.microsoft_office_365_idp.v1.2.0rc1.tmpl",
     "iappUrl": "[concat(parameters('baseUrl'),'/',variables('iappTemplate'))]",
     "runScripts": "runScripts.js",
     "runScriptsUrl": "[concat(parameters('baseUrl'),'/',variables('runScripts'))]",
