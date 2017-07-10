@@ -81,7 +81,7 @@
                                    "allowedValues": [
                                         {
                                              "label": "Best",
-                                             "value": "Best"
+                                             "value": "best"
                                         }
                                    ]
                               }
@@ -168,7 +168,7 @@
                               "imageReference": {
                                    "publisher": "f5-networks",
                                    "offer": "f5-web-application-firewall",
-                                   "sku": "[concat('f5-waf-solution-', steps('infrastructureSettings').licensedBandwidth,'-hourly')]"
+                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
                               "count": "[steps('infrastructureSettings').numberOfInstances]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
@@ -208,8 +208,8 @@
                               "osPlatform": "Linux",
                               "imageReference": {
                                    "publisher": "f5-networks",
-                                   "offer": "f5-web-application-firewall",
-                                   "sku": "[concat('f5-waf-solution-', steps('infrastructureSettings').licensedBandwidth,'-hourly')]"
+                                   "offer": "f5-big-ip-hourly",
+                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
                               "count": "[steps('infrastructureSettings').numberOfInstances]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
