@@ -782,7 +782,6 @@
             "apiVersion": "[variables('apiVersionCompute')]",
             "dependsOn": [
                 "linkedVnetTemplate",
-                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', variables('diagStorageAccountName'))]",
                 "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
@@ -898,7 +897,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachineScaleSets/', variables('vmssName'))]"
             ],
-            "location": "[variables('location')]",
+            "location": "[parameters('location')]",
             "name": "autoscaleconfig",
             "properties": {
                 "enabled": true,
