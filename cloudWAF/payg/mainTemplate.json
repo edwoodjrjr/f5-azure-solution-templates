@@ -9,7 +9,7 @@
                 "description": "The base URL for marketplace deployment.",
                 "artifactsBaseUrl": ""
             }
-        }
+        },
         "solutionDeploymentName": {
             "metadata": {
                 "description": "A unique name for this deployment."
@@ -183,7 +183,7 @@
             "metadata": {
                 "description": "New or Existing Virtual Network"
             }
-        }
+        },
         "vnetName": {
             "type": "string",
             "defaultValue": "waf-vnet",
