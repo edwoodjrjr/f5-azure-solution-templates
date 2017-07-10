@@ -9,6 +9,12 @@
                     "artifactsBaseUrl": ""
                }
           },
+          "location": {
+            "type":"string",
+            "metadata": {
+                "description": "The location of the deployment"
+            }
+            },
           "solutionDeploymentName": {
                "type": "string",
                "metadata": {

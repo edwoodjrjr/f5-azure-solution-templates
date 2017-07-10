@@ -43,6 +43,12 @@
                "metadata": {
                     "description": "Name of the Resource Group for the existing Virtual Network"
                }
+          },
+		  "nsgID": {
+               "type": "string",
+               "metadata": {
+                    "description": "Name of the NSG to associate with the Subnet"
+               }
           }
      },
 	"variables": {
@@ -50,11 +56,35 @@
 		"subnet1" : "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]"
      },
 	"resources": [
+		{
+			 "apiVersion": "[parameters('apiVersionNetwork')]",
+			 "type": "Microsoft.Network/virtualNetworks",
+			 "name": "[parameters('vnetName')]",
+			 "location": "[parameters('location')]",
+			 "properties": {
+				  "addressSpace": {
+					   "addressPrefixes": [
+							"[parameters('vnetAddressPrefix')]"
+					   ]
+				  },
+				  "subnets": [
+					   {
+							"name": "[parameters('subnetName')]",
+							"properties": {
+								 "addressPrefix": "[parameters('subnetAddressPrefix')]",
+								 "networkSecurityGroup": {
+									  "id": "[parameters('nsgID')]"
+								  }
+							}
+					   }
+				  ]
+			 }
+		}
      ],
 	"outputs": {
           "vnetId": {
                "value": "[variables('vnetID')]",
                "type": "string"
-          }	
+          }
      }
 }

@@ -43,6 +43,12 @@
                "metadata": {
                     "description": "Name of the Resource Group for the existing Virtual Network"
                }
+          },
+          "nsgID": {
+               "type": "string",
+               "metadata": {
+                    "description": "Name of the NSG to associate with the Subnet"
+               }
           }
      },
      "variables": {
@@ -65,7 +71,10 @@
                          {
                               "name": "[parameters('subnetName')]",
                               "properties": {
-                                   "addressPrefix": "[parameters('subnetAddressPrefix')]"
+                                   "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                                   "networkSecurityGroup": {
+                                        "id": "[parameters('nsgID')]"
+                                    }
                               }
                          }
                     ]
