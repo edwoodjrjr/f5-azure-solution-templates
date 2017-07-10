@@ -9,86 +9,11 @@
                     "artifactsBaseUrl": ""
                }
           },
-          "vmScaleSetMinCount": {
-              "allowedValues": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6
-              ],
-              "defaultValue": 2,
-              "metadata": {
-                  "description": "The minimum (and default) number of BIG-IP VEs that will be deployed into the VM Scale Set."
-              },
-              "type": "int"
-          },
-          "vmScaleSetMaxCount": {
-              "allowedValues": [
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                  8
-              ],
-              "defaultValue": 4,
-              "metadata": {
-                  "description": "The maximum number of BIG-IP VEs that can be deployed into the VM Scale Set."
-              },
-              "type": "int"
-          },
-          "scaleOutThroughput": {
-              "allowedValues": [
-                  50,
-                  55,
-                  60,
-                  65,
-                  70,
-                  75,
-                  80,
-                  85,
-                  90,
-                  95
-              ],
-              "defaultValue": 90,
-              "metadata": {
-                  "description": "The percentage of 'Network Out' throughput that triggers a Scale Out event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose."
-              },
-              "type": "int"
-          },
-          "scaleInThroughput": {
-              "allowedValues": [
-                  5,
-                  10,
-                  15,
-                  20,
-                  25,
-                  30,
-                  35,
-                  40,
-                  45
-              ],
-              "defaultValue": 10,
-              "metadata": {
-                  "description": "The percentage of 'Network Out' throughput that triggers a Scale In event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose."
-              },
-              "type": "int"
-          },
-          "scaleTimeWindow": {
-              "allowedValues": [
-                  5,
-                  10,
-                  15,
-                  30
-              ],
-              "defaultValue": 10,
-              "metadata": {
-                  "description": "The time window required to trigger a scale event (in and out). This is used to determine the amount of time needed for a threshold to be breached, as well as to prevent excessive scaling events (flapping)."
-              },
-              "type": "int"
+          "solutionDeploymentName": {
+               "type": "string",
+               "metadata": {
+                    "description": "A unique name for this deployment."
+               }
           },
           "adminUsername": {
                "type": "string",
@@ -103,12 +28,6 @@
                     "description": "Password to login to the Web Application Firewall."
                }
           },
-          "solutionDeploymentName": {
-               "type": "string",
-               "metadata": {
-                    "description": "A unique name for this deployment."
-               }
-          },
           "licensedBandwidth": {
                "type": "string",
                "defaultValue": "200mbps",
@@ -119,13 +38,6 @@
                ],
                "metadata": {
                     "description": "The VM image to use for this deployment."
-               }
-          },
-          "dnsLabel": {
-               "type": "string",
-               "defaultValue": "dnslabel",
-               "metadata": {
-                    "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
                }
           },
           "instanceType": {
@@ -251,6 +163,13 @@
                     "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
                }
           },
+          "dnsLabel": {
+               "type": "string",
+               "defaultValue": "dnslabel",
+               "metadata": {
+                    "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
+               }
+          },
           "vnetNewOrExisting": {
                "type": "string",
                "defaultValue": "new",
@@ -258,17 +177,17 @@
                     "description": "New or Existing Virtual Network"
                }
           },
-          "vnetExistingRGName": {
-               "type": "string",
-               "metadata": {
-                    "description": "Existing Virtual Network name"
-               }
-          },
           "vnetName": {
                "type": "string",
                "defaultValue": "Vnet",
                "metadata": {
                     "description": "Specify the virtual network name."
+               }
+          },
+          "vnetExistingRGName": {
+               "type": "string",
+               "metadata": {
+                    "description": "Existing Virtual Network name"
                }
           },
           "vnetAddressPrefix": {
@@ -298,6 +217,20 @@
                     "description": "Enter an IP address for the BIG-IP."
                }
           },
+          "restrictedSrcAddress": {
+              "defaultValue": "*",
+              "metadata": {
+                  "description": "This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation, or asterisk for all sources"
+              },
+              "type": "string"
+          },
+          "ntpServer": {
+              "defaultValue": "0.pool.ntp.org",
+              "metadata": {
+                  "description": "If you would like to change the NTP server the BIG-IP uses replace the default ntp server with your choice."
+              },
+              "type": "string"
+          },
           "applicationProtocols": {
                "type": "string",
                "defaultValue": "http",
@@ -317,13 +250,6 @@
                     "description": "The public IP address or DNS FQDN of the application that this WAF will protect."
                }
           },
-          "applicationServiceFqdn": {
-               "type": "string",
-               "defaultValue": "NOT_SPECIFIED",
-               "metadata": {
-                    "description": "If deploying in front of an Azure App Service, the FQDN of the public application."
-               }
-          },
           "applicationPort": {
                "type": "string",
                "defaultValue": "80",
@@ -336,20 +262,6 @@
                "defaultValue": "443",
                "metadata": {
                     "description": "If deploying an HTTPS application, the port on which your service listens for encrypted traffic. This field is not required when deploying http only."
-               }
-          },
-          "sslCert": {
-               "type": "string",
-               "defaultValue": "NOT_SPECIFIED",
-               "metadata": {
-                    "description": "The SSL certificate .pfx file corresponding to public facing VIP."
-               }
-          },
-          "sslPswd": {
-               "type": "securestring",
-               "defaultValue": "NOT_SPECIFIED",
-               "metadata": {
-                    "description": "The SSL certificate .pfx file corresponding to public facing VIP."
                }
           },
           "applicationType": {
@@ -384,6 +296,13 @@
                     "cms"
                ]
           },
+          "applicationServiceFqdn": {
+               "type": "string",
+               "defaultValue": "NOT_SPECIFIED",
+               "metadata": {
+                    "description": "If deploying in front of an Azure App Service, the FQDN of the public application."
+               }
+          },
           "blockingLevel": {
                "type": "string",
                "defaultValue": "medium",
@@ -405,6 +324,101 @@
                     "description": "Specify the publicly available URL of a custom ASM security policy in XML format. This policy will be applied in place of the standard High/Medium/Low policy as indicated above."
                }
           },
+          "sslCert": {
+               "type": "string",
+               "defaultValue": "NOT_SPECIFIED",
+               "metadata": {
+                    "description": "The SSL certificate .pfx file corresponding to public facing VIP."
+               }
+          },
+          "sslPswd": {
+               "type": "securestring",
+               "defaultValue": "NOT_SPECIFIED",
+               "metadata": {
+                    "description": "The SSL certificate .pfx file corresponding to public facing VIP."
+               }
+          },
+          "vmScaleSetMinCount": {
+              "allowedValues": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+              ],
+              "defaultValue": 2,
+              "metadata": {
+                  "description": "The minimum (and default) number of BIG-IP VEs that will be deployed into the VM Scale Set."
+              },
+              "type": "int"
+          },
+          "vmScaleSetMaxCount": {
+              "allowedValues": [
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8
+              ],
+              "defaultValue": 4,
+              "metadata": {
+                  "description": "The maximum number of BIG-IP VEs that can be deployed into the VM Scale Set."
+              },
+              "type": "int"
+          },
+          "scaleOutThroughput": {
+              "allowedValues": [
+                  50,
+                  55,
+                  60,
+                  65,
+                  70,
+                  75,
+                  80,
+                  85,
+                  90,
+                  95
+              ],
+              "defaultValue": 90,
+              "metadata": {
+                  "description": "The percentage of 'Network Out' throughput that triggers a Scale Out event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose."
+              },
+              "type": "int"
+          },
+          "scaleInThroughput": {
+              "allowedValues": [
+                  5,
+                  10,
+                  15,
+                  20,
+                  25,
+                  30,
+                  35,
+                  40,
+                  45
+              ],
+              "defaultValue": 10,
+              "metadata": {
+                  "description": "The percentage of 'Network Out' throughput that triggers a Scale In event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose."
+              },
+              "type": "int"
+          },
+          "scaleTimeWindow": {
+              "allowedValues": [
+                  5,
+                  10,
+                  15,
+                  30
+              ],
+              "defaultValue": 10,
+              "metadata": {
+                  "description": "The time window required to trigger a scale event (in and out). This is used to determine the amount of time needed for a threshold to be breached, as well as to prevent excessive scaling events (flapping)."
+              },
+              "type": "int"
+          },
           "tenantId": {
               "metadata": {
                   "description": "Your Azure service principal application tenant ID."
@@ -422,20 +436,6 @@
                   "description": "Your Azure service principal application secret."
               },
               "type": "securestring"
-          },
-          "ntpServer": {
-              "defaultValue": "0.pool.ntp.org",
-              "metadata": {
-                  "description": "If you would like to change the NTP server the BIG-IP uses replace the default ntp server with your choice."
-              },
-              "type": "string"
-          },
-          "restrictedSrcAddress": {
-              "defaultValue": "*",
-              "metadata": {
-                  "description": "This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation, or asterisk for all sources"
-              },
-              "type": "string"
           }
      }
 }
