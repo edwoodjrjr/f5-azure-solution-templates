@@ -53,6 +53,40 @@
                               "osPlatform": "Windows"
                          },
                          {
+                              "name": "bigIpVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "13.0.21",
+                              "toolTip": "F5 BIG-IP version you want to use.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "13.0.21",
+                                             "value": "13.0.21"
+                                        },
+                                        {
+                                             "label": "12.1.24",
+                                             "value": "12.1.24"
+                                        }
+                                   ]
+                              }
+                         },
+                         {
+                              "name": "imageName",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Image Name",
+                              "defaultValue": "Best",
+                              "toolTip": "F5 SKU (IMAGE) you want to deploy. 'Best' is the only option because ASM is required.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "Best",
+                                             "value": "Best"
+                                        }
+                                   ]
+                              }
+                         },
+                         {
                               "name": "licensedBandwidth",
                               "type": "Microsoft.Common.DropDown",
                               "label": "Licensed Bandwidth",
@@ -179,40 +213,6 @@
                               },
                               "count": "[steps('infrastructureSettings').numberOfInstances]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
-                         },
-                         {
-                              "name": "imageName",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Image Name",
-                              "defaultValue": "Best",
-                              "toolTip": "F5 SKU (IMAGE) you want to deploy. 'Best' is the only option because ASM is required.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "Best",
-                                             "value": "Best"
-                                        }
-                                   ]
-                              }
-                         },
-                         {
-                              "name": "bigIpVersion",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Version",
-                              "defaultValue": "13.0.21",
-                              "toolTip": "F5 BIG-IP version you want to use.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "13.0.21",
-                                             "value": "13.0.21"
-                                        },
-                                        {
-                                             "label": "12.1.24",
-                                             "value": "12.1.24"
-                                        }
-                                   ]
-                              }
                          },
                          {
                               "name": "publicIp",
