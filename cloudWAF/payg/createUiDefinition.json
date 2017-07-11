@@ -205,7 +205,7 @@
                                   "offer": "f5-big-ip-hourly",
                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
-                              "count": "[int(steps('infrastructureSettings').numberOfInstances)]",
+                              "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
                          },
                          {
@@ -246,7 +246,7 @@
                                    "offer": "f5-big-ip-hourly",
                                    "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
-                              "count": "[int(steps('infrastructureSettings').numberOfInstances)]",
+                              "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
                          },
                          {
