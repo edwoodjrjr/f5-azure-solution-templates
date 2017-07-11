@@ -96,15 +96,15 @@
                                    "allowedValues": [
                                         {
                                              "label": "25M",
-                                             "value": "25mbps"
+                                             "value": "25m"
                                         },
                                         {
                                              "label": "200M",
-                                             "value": "200mbps"
+                                             "value": "200m"
                                         },
                                         {
                                              "label": "1G",
-                                             "value": "1gbps"
+                                             "value": "1g"
                                         }
                                    ]
                               }
@@ -166,9 +166,9 @@
                               },
                               "osPlatform": "Linux",
                               "imageReference": {
-                                   "publisher": "f5-networks",
-                                   "offer": "f5-web-application-firewall",
-                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
+                                  "publisher": "f5-networks",
+                                  "offer": "f5-big-ip-hourly",
+                                  "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
                               "count": "[steps('infrastructureSettings').numberOfInstances]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
