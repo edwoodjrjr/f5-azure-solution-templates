@@ -53,11 +53,11 @@
                               "osPlatform": "Windows"
                          },
                          {
-                             "name": "numberOfInstances",
+                             "name": "vmScaleSetMinCount",
                               "type": "Microsoft.Common.DropDown",
-                              "label": "Number of WAFs",
+                              "label": "Minimum Number of WAFs",
                               "defaultValue": "2",
-                              "toolTip": "The number of individual F5 WAFs (nodes) to initially provision for this cluster.",
+                              "toolTip": "The minimum (and default) number of BIG-IP VEs that will be deployed into the VM Scale Set.",
                               "constraints": {
                                    "allowedValues": [
                                        {
@@ -639,41 +639,6 @@
                     "bladeTitle": "Autoscale Settings",
                     "elements": [
                         {
-                            "name": "vmScaleSetMinCount",
-                             "type": "Microsoft.Common.DropDown",
-                             "label": "VM Scale Set Minimum Count",
-                             "defaultValue": "[steps('infrastructureSettings').numberOfInstances]",
-                             "toolTip": "The minimum (and default) number of BIG-IP VEs that will be deployed into the VM Scale Set.",
-                             "constraints": {
-                                  "allowedValues": [
-                                       {
-                                            "label": "1",
-                                            "value": "1"
-                                       },
-                                       {
-                                            "label": "2",
-                                            "value": "2"
-                                       },
-                                       {
-                                            "label": "3",
-                                            "value": "3"
-                                       },
-                                       {
-                                            "label": "4",
-                                            "value": "4"
-                                       },
-                                       {
-                                            "label": "5",
-                                            "value": "5"
-                                       },
-                                       {
-                                            "label": "6",
-                                            "value": "6"
-                                       }
-                                  ]
-                             }
-                        },
-                        {
                             "name": "vmScaleSetMaxCount",
                              "type": "Microsoft.Common.DropDown",
                              "label": "VM Scale Set Maximum Count",
@@ -909,7 +874,7 @@
                "customPolicy": "[steps('appSettings').customPolicy]",
                "sslCert": "[steps('appSettings').sslCert]",
                "sslPswd": "[steps('appSettings').sslPswd]",
-               "vmScaleSetMinCount": "[int(steps('autoscaleSettings').vmScaleSetMinCount)]",
+               "vmScaleSetMinCount": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                "vmScaleSetMaxCount": "[int(steps('autoscaleSettings').vmScaleSetMaxCount)]",
                "scaleOutThroughput": "[int(steps('autoscaleSettings').scaleOutThroughput)]",
                "scaleInThroughput": "[int(steps('autoscaleSettings').scaleInThroughput)]",
