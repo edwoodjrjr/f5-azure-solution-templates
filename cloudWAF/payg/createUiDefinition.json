@@ -642,7 +642,7 @@
                             "name": "vmScaleSetMaxCount",
                              "type": "Microsoft.Common.DropDown",
                              "label": "VM Scale Set Maximum Count",
-                             "defaultValue": "4",
+                             "defaultValue": "[string(add(int(steps('infrastructureSettings').vmScaleSetMinCount), 1))]",
                              "toolTip": "The maximum number of BIG-IP VEs that can be deployed into the VM Scale Set.",
                              "constraints": {
                                   "allowedValues": [
