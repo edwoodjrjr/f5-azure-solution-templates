@@ -27,30 +27,38 @@
                               }
                          },
                          {
-                              "name": "adminUsername",
-                              "type": "Microsoft.Compute.UserNameTextBox",
-                              "label": "F5 WAF Username",
-                              "defaultValue": "azureuser",
-                              "toolTip": "Administrative username for the Azure virtual machine(s).",
-                              "osPlatform": "Windows"
+                              "name": "bigIpVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "13.0.21",
+                              "toolTip": "F5 BIG-IP version you want to use.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "13.0.21",
+                                             "value": "13.0.21"
+                                        },
+                                        {
+                                             "label": "12.1.24",
+                                             "value": "12.1.24"
+                                        }
+                                   ]
+                              }
                          },
                          {
-                              "name": "adminPassword",
-                              "type": "Microsoft.Compute.CredentialsCombo",
-                              "label": {
-                                   "password": "F5 WAF Password",
-                                   "confirmPassword": "Confirm Password"
-                              },
-                              "toolTip": {
-                                   "password": "Administrative password for the Azure virtual machine(s)."
-                              },
+                              "name": "imageName",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Image Name",
+                              "defaultValue": "Best",
+                              "toolTip": "F5 SKU (IMAGE) you want to deploy. 'Best' is the only option because ASM is required.",
                               "constraints": {
-                                   "required": true
-                              },
-                              "options": {
-                                   "hideConfirmation": false
-                              },
-                              "osPlatform": "Windows"
+                                   "allowedValues": [
+                                        {
+                                             "label": "Best",
+                                             "value": "best"
+                                        }
+                                   ]
+                              }
                          },
                          {
                              "name": "vmScaleSetMinCount",
@@ -88,40 +96,6 @@
                               }
                          },
                          {
-                              "name": "bigIpVersion",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Version",
-                              "defaultValue": "13.0.21",
-                              "toolTip": "F5 BIG-IP version you want to use.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "13.0.21",
-                                             "value": "13.0.21"
-                                        },
-                                        {
-                                             "label": "12.1.24",
-                                             "value": "12.1.24"
-                                        }
-                                   ]
-                              }
-                         },
-                         {
-                              "name": "imageName",
-                              "type": "Microsoft.Common.OptionsGroup",
-                              "label": "BIG-IP Image Name",
-                              "defaultValue": "Best",
-                              "toolTip": "F5 SKU (IMAGE) you want to deploy. 'Best' is the only option because ASM is required.",
-                              "constraints": {
-                                   "allowedValues": [
-                                        {
-                                             "label": "Best",
-                                             "value": "best"
-                                        }
-                                   ]
-                              }
-                         },
-                         {
                               "name": "licensedBandwidth",
                               "type": "Microsoft.Common.DropDown",
                               "label": "Licensed Bandwidth",
@@ -143,6 +117,32 @@
                                         }
                                    ]
                               }
+                         },
+                         {
+                              "name": "adminUsername",
+                              "type": "Microsoft.Compute.UserNameTextBox",
+                              "label": "F5 WAF Username",
+                              "defaultValue": "azureuser",
+                              "toolTip": "Administrative username for the Azure virtual machine(s).",
+                              "osPlatform": "Windows"
+                         },
+                         {
+                              "name": "adminPassword",
+                              "type": "Microsoft.Compute.CredentialsCombo",
+                              "label": {
+                                   "password": "F5 WAF Password",
+                                   "confirmPassword": "Confirm Password"
+                              },
+                              "toolTip": {
+                                   "password": "Administrative password for the Azure virtual machine(s)."
+                              },
+                              "constraints": {
+                                   "required": true
+                              },
+                              "options": {
+                                   "hideConfirmation": false
+                              },
+                              "osPlatform": "Windows"
                          },
                          {
                              "name": "storageAccount",
