@@ -53,6 +53,41 @@
                               "osPlatform": "Windows"
                          },
                          {
+                             "name": "numberOfInstances",
+                              "type": "Microsoft.Common.DropDown",
+                              "label": "Number of WAFs",
+                              "defaultValue": "2",
+                              "toolTip": "The number of individual F5 WAFs (nodes) to initially provision for this cluster.",
+                              "constraints": {
+                                   "allowedValues": [
+                                       {
+                                            "label": "1",
+                                            "value": "1"
+                                       },
+                                       {
+                                            "label": "2",
+                                            "value": "2"
+                                       },
+                                       {
+                                            "label": "3",
+                                            "value": "3"
+                                       },
+                                       {
+                                            "label": "4",
+                                            "value": "4"
+                                       },
+                                       {
+                                            "label": "5",
+                                            "value": "5"
+                                       },
+                                       {
+                                            "label": "6",
+                                            "value": "6"
+                                       }
+                                   ]
+                              }
+                         },
+                         {
                               "name": "bigIpVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
@@ -170,7 +205,7 @@
                                   "offer": "f5-big-ip-hourly",
                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
-                              "count": 1,
+                              "count": "[int(steps('infrastructureSettings').numberOfInstances)]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
                          },
                          {
@@ -211,7 +246,7 @@
                                    "offer": "f5-big-ip-hourly",
                                    "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                               },
-                              "count": 1,
+                              "count": "[int(steps('infrastructureSettings').numberOfInstances)]",
                               "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
                          },
                          {
@@ -607,7 +642,7 @@
                             "name": "vmScaleSetMinCount",
                              "type": "Microsoft.Common.DropDown",
                              "label": "VM Scale Set Minimum Count",
-                             "defaultValue": "2",
+                             "defaultValue": "[steps('infrastructureSettings').numberOfInstances]",
                              "toolTip": "The minimum (and default) number of BIG-IP VEs that will be deployed into the VM Scale Set.",
                              "constraints": {
                                   "allowedValues": [
