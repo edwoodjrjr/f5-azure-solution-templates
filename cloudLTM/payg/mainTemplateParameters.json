@@ -102,9 +102,11 @@
         },
         "imageName": {
             "allowedValues": [
+                "Good",
+                "Better",
                 "Best"
             ],
-            "defaultValue": "Best",
+            "defaultValue": "Good",
             "metadata": {
                 "description": "F5 SKU (IMAGE) you want to deploy. 'Best' is the only option because ASM is required."
             },
