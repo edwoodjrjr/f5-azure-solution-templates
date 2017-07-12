@@ -54,16 +54,16 @@
                               "constraints": {
                                    "allowedValues": [
                                         {
-                                             "label": "Best",
-                                             "value": "best"
+                                             "label": "Good",
+                                             "value": "good"
                                         },
                                         {
                                              "label": "Better",
                                              "value": "better"
                                         },
                                         {
-                                             "label": "Good",
-                                             "value": "good"
+                                             "label": "Best",
+                                             "value": "best"
                                         }
                                    ]
                               }
