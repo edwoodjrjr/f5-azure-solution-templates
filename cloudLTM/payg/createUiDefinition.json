@@ -269,7 +269,7 @@
                                    "domainNameLabel": ""
                               },
                               "defaultValue": {
-                                   "publicIpAddressName": "waf-pip"
+                                   "publicIpAddressName": "ltm-pip"
                               },
                               "constraints": {
                                    "required": {

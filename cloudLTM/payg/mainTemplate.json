@@ -173,7 +173,7 @@
         },
         "publicIpName": {
             "type": "string",
-            "defaultValue": "waf-pip",
+            "defaultValue": "ltm-pip",
             "metadata": {
                 "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
             }
