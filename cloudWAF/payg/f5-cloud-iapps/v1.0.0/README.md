@@ -1,1 +1,0 @@
-# iapps specific to BIG-IPs in cloud environments
