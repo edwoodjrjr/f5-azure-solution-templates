@@ -810,8 +810,7 @@
                               "constraints": {
                                    "required": true,
                                    "validationMessage": "Please provide a valid tenant ID for your service prinicipal application."
-                              },
-                              "visible": "[equals(steps('appSettings').applicationPlatform, 'paas')]"
+                              }
                          },
                          {
                                "name": "clientId",
@@ -821,8 +820,7 @@
                                "constraints": {
                                     "required": true,
                                     "validationMessage": "Please provide a valid client ID for your service prinicipal application."
-                               },
-                               "visible": "[equals(steps('appSettings').applicationPlatform, 'paas')]"
+                               }
                           },
                           {
                                 "name": "servicePrincipalSecret",
@@ -832,8 +830,7 @@
                                 "constraints": {
                                      "required": true,
                                      "validationMessage": "Please provide a valid secret key for your service prinicipal application."
-                                },
-                                "visible": "[equals(steps('appSettings').applicationPlatform, 'paas')]"
+                                }
                            }
                     ]
                }
