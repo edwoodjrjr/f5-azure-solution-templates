@@ -530,7 +530,18 @@
                                      "required": true,
                                      "validationMessage": "Please provide a valid secret key for your service prinicipal application."
                                 }
-                           }
+                           },
+                           {
+                                 "name": "customEmail",
+                                 "type": "Microsoft.Common.TextBox",
+                                 "label": "Email for Scale Event Notifications",
+                                 "toolTip": "An email address that will receive notifications of scale events.",
+                                 "constraints": {
+                                     "regex": ".+\\@.+\\..+",
+                                      "required": false,
+                                      "validationMessage": "Please provide a valid email address."
+                                 }
+                            }
                     ]
                }
           ],
@@ -567,6 +578,7 @@
                "scaleOutThroughput": "[int(steps('autoscaleSettings').scaleOutThroughput)]",
                "scaleInThroughput": "[int(steps('autoscaleSettings').scaleInThroughput)]",
                "scaleTimeWindow": "[int(steps('autoscaleSettings').scaleTimeWindow)]",
+               "customEmail": "[steps('autoscaleSettings').customEmail]",
                "tenantId": "[steps('autoscaleSettings').tenantId]",
                "clientId": "[steps('autoscaleSettings').clientId]",
                "servicePrincipalSecret": "[steps('autoscaleSettings').servicePrincipalSecret]"

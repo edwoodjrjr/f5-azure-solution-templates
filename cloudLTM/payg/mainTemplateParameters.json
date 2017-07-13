@@ -312,6 +312,13 @@
             },
             "type": "int"
         },
+        "customEmail": {
+            "metadata": {
+                "description": "Email address for scale event notifications."
+            },
+            "defaultValue": "OPTIONAL", 
+            "type": "string"
+        },
         "tenantId": {
             "metadata": {
                 "description": "Your Azure service principal application tenant ID."

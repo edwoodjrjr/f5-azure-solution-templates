@@ -320,6 +320,13 @@
             },
             "type": "int"
         },
+        "customEmail": {
+            "metadata": {
+                "description": "Email address for scale event notifications."
+            },
+            "defaultValue": "OPTIONAL",
+            "type": "string"
+        },
         "tenantId": {
             "metadata": {
                 "description": "Your Azure service principal application tenant ID."
@@ -439,7 +446,11 @@
         "scaleInNetworkBits": "[div(variables('scaleInCalc'), 100)]",
         "scaleOutNetworkBytes": "[div(variables('scaleOutNetworkBits'), 8)]",
         "scaleInNetworkBytes": "[div(variables('scaleInNetworkBits'), 8)]",
-        "timeWindow": "[concat('PT', parameters('scaleTimeWindow'), 'M')]"
+        "timeWindow": "[concat('PT', parameters('scaleTimeWindow'), 'M')]",
+        "customEmailToUse": [
+            "[parameters('customEmail')]"
+        ],
+        "customEmail": "[take(variables('customEmailToUse'), length(replace(parameters('customEmail'), 'OPTIONAL', '')))]"
     },
     "resources": [
         {
@@ -723,6 +734,16 @@
             "properties": {
                 "enabled": true,
                 "name": "autoscaleconfig",
+                "notifications": [
+                    {
+                        "email": {
+                            "customEmails": "[variables('customEmail')]",
+                            "sendToSubscriptionAdministrator": false,
+                            "sendToSubscriptionCoAdministrators": false
+                        },
+                        "operation": "Scale"
+                    }
+                ],
                 "profiles": [
                     {
                         "capacity": {
@@ -731,16 +752,6 @@
                             "minimum": "[parameters('vmScaleSetMinCount')]"
                         },
                         "name": "Profile1",
-                        "notifications": [
-                            {
-                                "email": {
-                                    "customEmails": "",
-                                    "sendToSubscriptionAdministrator": false,
-                                    "sendToSubscriptionCoAdministrators": false
-                                },
-                                "operation": "Scale"
-                            }
-                        ],
                         "rules": [
                             {
                                 "metricTrigger": {
