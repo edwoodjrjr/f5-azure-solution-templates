@@ -4,7 +4,7 @@
     "parameters": {
         "baseUrl": {
             "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-waf-tier2/develop/payg",
+            "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-solution-templates/develop/tier2WAF/payg",
             "metadata": {
                 "description": "The base URL for marketplace deployment.",
                 "artifactsBaseUrl": ""
@@ -33,7 +33,7 @@
         "licensedBandwidth": {
             "type": "string",
             "defaultValue": "200mbps",
-            "allowedValues": [ 
+            "allowedValues": [
                 "1gbps",
                 "200mbps",
                 "25mbps"
@@ -49,50 +49,50 @@
                 "description": "The size of the Virtual Hardware Instance."
             },
             "allowedValues": [
-                "Standard_A3", 
-                "Standard_A4", 
-                "Standard_A5", 
-                "Standard_A6", 
-                "Standard_A7", 
-                "Standard_A8", 
-                "Standard_A9", 
-                "Standard_D2", 
-                "Standard_D3", 
-                "Standard_D4", 
-                "Standard_D11", 
-                "Standard_D12", 
-                "Standard_D13", 
-                "Standard_D14", 
-                "Standard_DS2", 
-                "Standard_DS3", 
-                "Standard_DS4", 
-                "Standard_DS11", 
-                "Standard_DS12", 
-                "Standard_DS13", 
-                "Standard_DS14", 
-                "Standard_D2_v2", 
-                "Standard_D3_v2", 
-                "Standard_D4_v2", 
-                "Standard_D5_v2", 
-                "Standard_D11_v2", 
-                "Standard_D12_v2", 
-                "Standard_D13_v2", 
-                "Standard_D14_v2", 
-                "Standard_D15_v2", 
-                "Standard_DS2_v2", 
-                "Standard_DS3_v2", 
-                "Standard_DS4_v2", 
-                "Standard_DS5_v2", 
-                "Standard_DS11_v2", 
-                "Standard_DS12_v2", 
-                "Standard_DS13_v2", 
-                "Standard_DS14_v2", 
-                "Standard_DS15_v2", 
-                "Standard_F2", 
-                "Standard_F4", 
-                "Standard_F8", 
-                "Standard_F2S", 
-                "Standard_F4S", 
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_A5",
+                "Standard_A6",
+                "Standard_A7",
+                "Standard_A8",
+                "Standard_A9",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_F2",
+                "Standard_F4",
+                "Standard_F8",
+                "Standard_F2S",
+                "Standard_F4S",
                 "Standard_F8S"
             ]
         },
@@ -228,7 +228,7 @@
             "defaultValue": "apache",
             "metadata": {
                 "description": "Is your application running on a Linux OS or a Windows OS?"
-            },     
+            },
             "allowedValues": [
                 "apache",
                 "iis",
@@ -260,7 +260,7 @@
             "defaultValue": "medium",
             "metadata": {
                 "description": "Please select how aggressive you would like the blocking level of this WAF to be.  Remember that the more aggressive the blocking level, the more potential there is for false-positives that the WAF might detect. Select Custom to specify your own security policy below."
-            },    
+            },
             "allowedValues": [
                 "low",
                 "medium",
@@ -300,7 +300,7 @@
         "subnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0.1.0/24",
-            "metadata": { 
+            "metadata": {
                 "description": "Specify the virtual subnet address space."
             }
         },
@@ -341,10 +341,10 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "imageName": "[concat('f5-waf-solution-', parameters('licensedBandwidth'),'-hourly')]",
         "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), '.json')]",
-        "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",         
-        "subnetAddressArray": "[split(parameters('subnetAddressPrefix'),'.')]",         
+        "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
+        "subnetAddressArray": "[split(parameters('subnetAddressPrefix'),'.')]",
         "privateAddressArray": "[split(parameters('privateIpAddressRangeStart'),'.')]",
-        "ipPrefix": "[concat(variables('privateAddressArray')[0],'.',variables('privateAddressArray')[1],'.',variables('privateAddressArray')[2],'.')]", 
+        "ipPrefix": "[concat(variables('privateAddressArray')[0],'.',variables('privateAddressArray')[1],'.',variables('privateAddressArray')[2],'.')]",
         "lastOctet": "[int(variables('privateAddressArray')[3])]",
         "nicNamePrefix": "[concat(parameters('dnsLabel'),'-nic')]",
         "publicIpRGArray": {
@@ -438,7 +438,7 @@
                 "type": "linux"
             }
         },
-        "appType": "[variables('appTypeMap')[parameters('applicationType')].type]",                   
+        "appType": "[variables('appTypeMap')[parameters('applicationType')].type]",
         "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
     },
     "resources": [
@@ -748,7 +748,7 @@
             },
             "apiVersion": "[variables('apiVersionStorage')]",
             "properties": {
-                "accountType": "Standard_LRS" 
+                "accountType": "Standard_LRS"
             }
         },
         {
@@ -761,7 +761,7 @@
             },
             "apiVersion": "[variables('apiVersionStorage')]",
             "properties": {
-                "accountType": "[parameters('storageAccountType')]" 
+                "accountType": "[parameters('storageAccountType')]"
             }
         },
         {
