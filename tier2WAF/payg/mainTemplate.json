@@ -1,0 +1,813 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "baseUrl": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/edwoodjrjr/f5-azure-waf-tier2/develop/payg",
+            "metadata": {
+                "description": "The base URL for marketplace deployment.",
+                "artifactsBaseUrl": ""
+            }
+        },
+        "location": {
+            "type":"string",
+            "metadata": {
+                "description": "The location of the deployment"
+            }
+        },
+        "solutionDeploymentName": {
+            "type": "string",
+            "metadata": {
+                "description": "A unique name for this deployment."
+            }
+        },
+        "numberOfInstances": {
+            "type": "int",
+            "defaultValue": 1,
+            "allowedValues": [ 1, 2 ],
+            "metadata": {
+                "description": "The number of Web Application Firewalls that will be deployed in front of your application."
+            }
+        },
+        "licensedBandwidth": {
+            "type": "string",
+            "defaultValue": "200mbps",
+            "allowedValues": [ 
+                "1gbps",
+                "200mbps",
+                "25mbps"
+            ],
+            "metadata": {
+                "description": "The VM image to use for this deployment."
+            }
+        },
+        "instanceType": {
+            "type": "string",
+            "defaultValue": "Standard_DS2",
+            "metadata": {
+                "description": "The size of the Virtual Hardware Instance."
+            },
+            "allowedValues": [
+                "Standard_A3", 
+                "Standard_A4", 
+                "Standard_A5", 
+                "Standard_A6", 
+                "Standard_A7", 
+                "Standard_A8", 
+                "Standard_A9", 
+                "Standard_D2", 
+                "Standard_D3", 
+                "Standard_D4", 
+                "Standard_D11", 
+                "Standard_D12", 
+                "Standard_D13", 
+                "Standard_D14", 
+                "Standard_DS2", 
+                "Standard_DS3", 
+                "Standard_DS4", 
+                "Standard_DS11", 
+                "Standard_DS12", 
+                "Standard_DS13", 
+                "Standard_DS14", 
+                "Standard_D2_v2", 
+                "Standard_D3_v2", 
+                "Standard_D4_v2", 
+                "Standard_D5_v2", 
+                "Standard_D11_v2", 
+                "Standard_D12_v2", 
+                "Standard_D13_v2", 
+                "Standard_D14_v2", 
+                "Standard_D15_v2", 
+                "Standard_DS2_v2", 
+                "Standard_DS3_v2", 
+                "Standard_DS4_v2", 
+                "Standard_DS5_v2", 
+                "Standard_DS11_v2", 
+                "Standard_DS12_v2", 
+                "Standard_DS13_v2", 
+                "Standard_DS14_v2", 
+                "Standard_DS15_v2", 
+                "Standard_F2", 
+                "Standard_F4", 
+                "Standard_F8", 
+                "Standard_F2S", 
+                "Standard_F4S", 
+                "Standard_F8S"
+            ]
+        },
+        "storageAccountNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "metadata": {
+                "description": "New or Existing Storage Account"
+            }
+        },
+        "storageAccountExistingRGName": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Existing Storage Account Resoure Group name"
+            }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "wafst",
+            "metadata": {
+                "description": "Unique name for the new Storage Account."
+            }
+        },
+        "storageAccountType": {
+               "type": "string",
+               "defaultValue": "Premium_LRS",
+               "metadata": {
+                    "description": "Storage account type."
+               },
+               "allowedValues": [
+                    "Premium_LRS",
+                    "Standard_LRS"
+            ]
+          },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "azureuser",
+            "metadata": {
+                "description": "User name to login to the Web Application Firewall."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password to login to the Web Application Firewall."
+            }
+        },
+        "publicIpNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "metadata": {
+                "description": "New or Existing Public IP"
+            }
+        },
+        "publicIpExistingRGName": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Existing Virtual Network Resource Group name"
+            }
+        },
+        "publicIpName": {
+            "type": "string",
+            "defaultValue": "waf-pip",
+            "metadata": {
+                "description": "Unique name for the Public IP used to access the Web Application Firewalls for management."
+            }
+        },
+        "dnsLabel": {
+            "type": "string",
+            "defaultValue": "dnslabel",
+            "metadata": {
+                "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
+            }
+        },
+        "applicationProtocols": {
+            "type": "string",
+            "defaultValue": "http-https",
+            "metadata": {
+                "description": "The protocol(s) used by your application."
+            },
+            "allowedValues" : [
+                "http",
+                "https",
+                "http-https",
+                "https-offload"
+            ]
+        },
+        "applicationAddress": {
+            "type": "string",
+            "metadata": {
+                "description": "The public IP address or DNS FQDN of the application that this WAF will protect."
+            }
+        },
+        "applicationServiceFqdn": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "If deploying in front of an Azure App Service, the FQDN of the public application."
+            }
+        },
+        "applicationPort": {
+            "type": "string",
+            "defaultValue": "80",
+            "metadata": {
+                "description": "If deploying an HTTP application, the port on which your service listens for unencrypted traffic. This field is not required when deploying https only."
+            }
+        },
+        "applicationSecurePort": {
+            "type": "string",
+            "defaultValue": "443",
+            "metadata": {
+                "description": "If deploying an HTTPS application, the port on which your service listens for encrypted traffic. This field is not required when deploying http only."
+            }
+        },
+        "sslCert": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The SSL certificate .pfx file corresponding to public facing VIP."
+            }
+        },
+        "sslPswd": {
+            "type": "securestring",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The SSL certificate .pfx file corresponding to public facing VIP."
+            }
+        },
+        "applicationType": {
+            "type": "string",
+            "defaultValue": "apache",
+            "metadata": {
+                "description": "Is your application running on a Linux OS or a Windows OS?"
+            },     
+            "allowedValues": [
+                "apache",
+                "iis",
+                "nginx",
+                "magento",
+                "woo",
+                "big",
+                "volusion",
+                "miva",
+                "shopify",
+                "demandware",
+                "os",
+                "shop",
+                "wordpress",
+                "drupal",
+                "joomla",
+                "blogger",
+                "vbulletin",
+                "expression",
+                "dnn",
+                "adobecq",
+                "ektron",
+                "sharepoint",
+                "cms"
+            ]
+        },
+        "blockingLevel": {
+            "type": "string",
+            "defaultValue": "medium",
+            "metadata": {
+                "description": "Please select how aggressive you would like the blocking level of this WAF to be.  Remember that the more aggressive the blocking level, the more potential there is for false-positives that the WAF might detect. Select Custom to specify your own security policy below."
+            },    
+            "allowedValues": [
+                "low",
+                "medium",
+                "high",
+                "off",
+                "custom"
+            ]
+        },
+        "customPolicy": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Specify the publicly available URL of a custom ASM security policy in XML format. This policy will be applied in place of the standard High/Medium/Low policy as indicated above."
+            }
+        },
+        "vnetName": {
+            "type": "string",
+            "defaultValue": "waf-vnet",
+            "metadata": {
+                "description": "Specify the virtual network name."
+            }
+        },
+        "vnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "Specify the virtual network address space."
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "subnet1",
+            "metadata": {
+                "description": "Specify the virtual subnet name wher the BIG-IP will reside."
+            }
+        },
+        "subnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": { 
+                "description": "Specify the virtual subnet address space."
+            }
+        },
+        "vnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "metadata": {
+                "description": "New or Existing Virtual Network"
+            }
+        },
+        "privateIpAddressRangeStart": {
+            "type": "string",
+            "defaultValue": "0.0.0.0",
+            "metadata": {
+                "description": "Enter an IP address for the BIG-IP."
+            }
+        },
+        "vnetExistingRGName": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Existing Virtual Network name"
+            }
+        },
+        "restrictedSrcAddress": {
+            "type": "string",
+            "defaultValue": "*",
+            "metadata": {
+                "description": "Restricts management access to a specific network or address. Enter a IP address or address range in CIDR notation, or asterisk for all sources."
+            }
+        }
+    },
+    "variables": {
+        "apiVersionCompute": "2016-03-30",
+		"apiVersionNetwork": "2015-06-15",
+		"apiVersionStorage": "2015-06-15",
+		"apiVersionTemplate": "2015-01-01",
+        "subscriptionID": "[subscription().subscriptionId]",
+        "imageName": "[concat('f5-waf-solution-', parameters('licensedBandwidth'),'-hourly')]",
+        "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), '.json')]",
+        "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",         
+        "subnetAddressArray": "[split(parameters('subnetAddressPrefix'),'.')]",         
+        "privateAddressArray": "[split(parameters('privateIpAddressRangeStart'),'.')]",
+        "ipPrefix": "[concat(variables('privateAddressArray')[0],'.',variables('privateAddressArray')[1],'.',variables('privateAddressArray')[2],'.')]", 
+        "lastOctet": "[int(variables('privateAddressArray')[3])]",
+        "nicNamePrefix": "[concat(parameters('dnsLabel'),'-nic')]",
+        "publicIpRGArray": {
+            "existing": "[parameters('publicIpExistingRGName')]",
+            "new": "[resourceGroup().name]"
+        },
+        "publicIpRG": "[variables('publicIpRGArray')[parameters('publicIpNewOrExisting')]]",
+        "publicIpID": "[resourceId(variables('publicIpRG'),'Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
+        "loadBalancerName": "[concat(parameters('dnsLabel'),'-lb')]",
+        "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
+        "storageAccountRGArray": {
+            "existing": "[parameters('storageAccountExistingRGName')]",
+            "new": "[resourceGroup().name]"
+        },
+        "storageAccountRG": "[variables('storageAccountRGArray')[parameters('storageAccountNewOrExisting')]]",
+        "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
+        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
+        "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-nsg'))]",
+        "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
+        "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
+        "guiMgtID": "[concat(variables('lbID'),'/inboundNatRules/guimgt')]",
+        "sshMgtID": "[concat(variables('lbID'),'/inboundNatRules/sshmgt')]",
+        "appTypeMap": {
+            "iis": {
+                "type": "windows"
+            },
+            "apache": {
+                "type": "linux"
+            },
+            "nginx": {
+                "type": "linux"
+            },
+            "magento": {
+                "type": "linux"
+            },
+            "woo": {
+                "type": "linux"
+            },
+            "big": {
+                "type": "linux"
+            },
+            "volusion": {
+                "type": "linux"
+            },
+            "miva": {
+                "type": "linux"
+            },
+            "shopify": {
+                "type": "linux"
+            },
+            "demandware": {
+                "type": "linux"
+            },
+            "os": {
+                "type": "linux"
+            },
+            "shop": {
+                "type": "linux"
+            },
+            "wordpress": {
+                "type": "linux"
+            },
+            "drupal": {
+                "type": "linux"
+            },
+            "joomla": {
+                "type": "linux"
+            },
+            "blogger": {
+                "type": "linux"
+            },
+            "vbulletin": {
+                "type": "linux"
+            },
+            "expression": {
+                "type": "linux"
+            },
+            "dnn": {
+                "type": "linux"
+            },
+            "adobecq": {
+                "type": "linux"
+            },
+            "ektron": {
+                "type": "linux"
+            },
+            "sharepoint": {
+                "type": "windows"
+            },
+            "cms": {
+                "type": "linux"
+            }
+        },
+        "appType": "[variables('appTypeMap')[parameters('applicationType')].type]",                   
+        "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "condition": "[equals(parameters('publicIpNewOrExisting'),'new')]",
+            "name": "[parameters('publicIpName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "PublicIPAddress"
+            },
+            "properties": {
+                "idleTimeoutInMinutes": 30,
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[parameters('dnsLabel')]"
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionTemplate')]",
+            "name": "linkedVnetTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": { "value": "[parameters('location')]" },
+                    "apiVersionNetwork": { "value": "[variables('apiVersionNetwork')]" },
+                    "vnetName": { "value": "[parameters('vnetName')]" },
+                    "vnetAddressPrefix": { "value": "[parameters('vnetAddressPrefix')]" },
+                    "subnetName": { "value": "[parameters('subnetName')]" },
+                    "subnetAddressPrefix": { "value": "[parameters('subnetAddressPrefix')]" },
+                    "vnetExistingRGName": { "value": "[parameters('vnetExistingRGName')]" }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('nicNamePrefix'),copyindex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkInterface"
+            },
+            "dependsOn": [
+                "linkedVnetTemplate",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/guimgt',copyindex())]",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/sshmgt',copyindex())]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('dnsLabel'),'-nsg')]"
+            ],
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "niccopy"
+            },
+            "properties": {
+                "networkSecurityGroup": {
+                    "id": "[variables('nsgID')]"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[concat(variables('ipPrefix'),add(variables('lastOctet'),copyIndex()))]",
+                            "subnet": {
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('subnetName'))]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(variables('lbID'), '/backendAddressPools/', 'loadBalancerBackEnd')]"
+                                }
+                            ],
+                            "loadBalancerInboundNatRules": [
+                                {
+                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'guimgt',copyIndex())]"
+                                },
+                                {
+                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'sshmgt',copyIndex())]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[concat(parameters('dnsLabel'), '-nsg')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkSecurityGroup"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "mgmt_allow_443",
+                        "properties": {
+                            "description": "",
+                            "priority": 101,
+                            "sourceAddressPrefix": "[parameters('restrictedSrcAddress')]",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "443",
+                            "protocol": "TCP",
+                            "direction": "Inbound",
+                            "access": "Allow"
+                        }
+                    },
+                    {
+                        "name": "ssh_allow_22",
+                        "properties": {
+                            "description": "",
+                            "priority": 102,
+                            "sourceAddressPrefix": "[parameters('restrictedSrcAddress')]",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22",
+                            "protocol": "TCP",
+                            "direction": "Inbound",
+                            "access": "Allow"
+                        }
+                    },
+                    {
+                        "name": "app_allow_880",
+                        "properties": {
+                            "description": "",
+                            "priority": 103,
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "880",
+                            "protocol": "TCP",
+                            "direction": "Inbound",
+                            "access": "Allow"
+                        }
+                    },
+                    {
+                        "name": "app_allow_8445",
+                        "properties": {
+                            "description": "",
+                            "priority": 104,
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "8445",
+                            "protocol": "TCP",
+                            "direction": "Inbound",
+                            "access": "Allow"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIpName'))]"
+            ],
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "LoadBalancer"
+            },
+            "name": "[variables('loadBalancerName')]",
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "loadBalancerFrontEnd",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[variables('publicIpID')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "loadBalancerBackEnd"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "Name": "http-880",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/probes/tcp-880')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": "[parameters('applicationPort')]",
+                            "backendPort": 880,
+                            "idleTimeoutInMinutes": 15
+                        }
+                    },
+                    {
+                        "Name": "http-8445",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/probes/tcp-8445')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": "[parameters('applicationSecurePort')]",
+                            "backendPort": 8445,
+                            "idleTimeoutInMinutes": 15
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 880,
+                            "intervalInSeconds": 15,
+                            "numberOfProbes": 2
+                        },
+                        "name": "tcp-880"
+                    },
+                    {
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 8445,
+                            "intervalInSeconds": 15,
+                            "numberOfProbes": 2
+                        },
+                        "name": "tcp-8445"
+                    }
+                ]
+            },
+            "type": "Microsoft.Network/loadBalancers"
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/loadBalancers/inboundNatRules",
+            "name": "[concat(variables('loadBalancerName'),'/guimgt', copyIndex())]",
+            "location": "[parameters('location')]",
+            "copy": {
+                "name": "lbNatLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
+            ],
+            "properties": {
+                "frontendIPConfiguration": {
+                    "id": "[variables('frontEndIPConfigID')]"
+                },
+                "protocol": "tcp",
+                "frontendPort": "[copyIndex(8443)]",
+                "backendPort": 443,
+                "enableFloatingIP": false
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/loadBalancers/inboundNatRules",
+            "name": "[concat(variables('loadBalancerName'),'/sshmgt', copyIndex())]",
+            "location": "[parameters('location')]",
+            "copy": {
+                "name": "lbNatLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
+            ],
+            "properties": {
+                "frontendIPConfiguration": {
+                    "id": "[variables('frontEndIPConfigID')]"
+                },
+                "protocol": "tcp",
+                "frontendPort": "[copyIndex(8022)]",
+                "backendPort": 22,
+                "enableFloatingIP": false
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "AvailabilitySet"
+            },
+            "name": "[variables('availabilitySetName')]",
+            "type": "Microsoft.Compute/availabilitySets"
+        },
+        {
+            "name": "[variables('diagStorageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "StorageAccount"
+            },
+            "apiVersion": "[variables('apiVersionStorage')]",
+            "properties": {
+                "accountType": "Standard_LRS" 
+            }
+        },
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "condition": "[equals(parameters('storageAccountNewOrExisting'),'new')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "StorageAccount"
+            },
+            "apiVersion": "[variables('apiVersionStorage')]",
+            "properties": {
+                "accountType": "[parameters('storageAccountType')]" 
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionTemplate')]",
+            "name": "linkedBigIpTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "linkedVnetTemplate",
+                "niccopy",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
+                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('diagStorageAccountName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('bigipTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "baseUrl": { "value": "[parameters('baseUrl')]" },
+                    "location": { "value": "[parameters('location')]" },
+                    "imageName": { "value": "[variables('imageName')]" },
+                    "instanceType": { "value": "[parameters('instanceType')]" },
+                    "storageAccountName": { "value": "[parameters('storageAccountName')]" },
+                    "storageAccountRG": { "value": "[variables('storageAccountRG')]" },
+                    "adminUsername": { "value": "[parameters('adminUsername')]" },
+                    "adminPassword": { "value": "[parameters('adminPassword')]" },
+                    "dnsLabel": { "value": "[parameters('dnsLabel')]" },
+                    "nicNamePrefix": { "value": "[variables('nicNamePrefix')]" },
+                    "ipPrefix": { "value": "[variables('ipPrefix')]" },
+                    "lastOctet": { "value": "[variables('lastOctet')]" },
+                    "commandArgs": { "value": "[variables('commandArgs')]" }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "GUI-URL": {
+            "type": "String",
+            "value": "[concat('https://', reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,':8443')]"
+        },
+        "SSH-URL": {
+            "type": "String",
+            "value": "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
+        }
+    }
+}
