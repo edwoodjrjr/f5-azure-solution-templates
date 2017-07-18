@@ -151,7 +151,7 @@
                                    "offer": "f5-big-ip",
                                    "sku": "f5-bigip-virtual-edition-best-byol"
                               },
-                              "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
+                              "count": "[int(steps('infrastructureSettings').numberOfInstances)]",
                               "visible": true
                          },
                          {
