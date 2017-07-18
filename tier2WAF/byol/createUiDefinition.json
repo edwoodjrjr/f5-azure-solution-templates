@@ -149,7 +149,7 @@
                               "imageReference": {
                                    "publisher": "f5-networks",
                                    "offer": "f5-big-ip",
-                                   "sku": "f5-bigip-virtual-edition-best-byol",
+                                   "sku": "f5-bigip-virtual-edition-best-byol"
                               },
                               "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                               "visible": true

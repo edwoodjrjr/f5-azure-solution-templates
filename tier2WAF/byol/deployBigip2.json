@@ -215,8 +215,21 @@
                     "networkInterfaces": [
                         {
                             "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('mgmtNicNamePrefix')),0)]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
                             "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('externalNicNamePrefix')),0)]",
-                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),0)]"
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),0)]",
+                            "properties": {
+                                "primary": false
+                            }
                         }
                     ]
                 },
@@ -268,8 +281,21 @@
                     "networkInterfaces": [
                         {
                             "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('mgmtNicNamePrefix')),1)]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
                             "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('externalNicNamePrefix')),1)]",
-                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),1)]"
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),1)]",
+                            "properties": {
+                                "primary": false
+                            }
                         }
                     ]
                 },
