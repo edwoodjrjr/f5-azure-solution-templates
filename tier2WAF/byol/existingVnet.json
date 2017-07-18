@@ -2,52 +2,78 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
      "parameters": {
-          "location": {
-               "type": "string",
-               "metadata": {
-                    "description": "Location where to create the resources"
-               }
-          },
-          "apiVersionNetwork": {
-               "type": "string",
-               "metadata": {
-                    "description": "API version for network resources"
-               }
-          },
-          "vnetName": {
-               "type": "string",
-               "metadata": {
-                    "description": "Name of the Virtual Network"
-               }
-          },
-          "vnetAddressPrefix": {
-               "type": "string",
-               "metadata": {
-                    "description": "Address Prefix for Virtual Network"
-               }
-          },
-          "subnetName": {
-               "type": "string",
-               "metadata": {
-                    "description": "Name of first Subnet"
-               }
-          },
-          "subnetAddressPrefix": {
-               "type": "string",
-               "metadata": {
-                    "description": "Address Prefix for first Subnet"
-               }
-          },
-          "vnetExistingRGName": {
-               "type": "string",
-               "metadata": {
-                    "description": "Name of the Resource Group for the existing Virtual Network"
-               }
-          }
+		 "location": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Location where to create the resources"
+			  }
+		 },
+		 "apiVersionNetwork": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "API version for network resources"
+			  }
+		 },
+		 "vnetName": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Name of the Virtual Network"
+			  }
+		 },
+		 "vnetExistingRGName": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Name of the Resource Group for the existing Virtual Network"
+			  }
+		 },
+		 "vnetAddressPrefix": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Address Prefix for Virtual Network"
+			  }
+		 },
+		 "mgmtSubnetName": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Name of management Subnet"
+			  }
+		 },
+		 "mgmtSubnetAddressPrefix": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Address Prefix for management Subnet"
+			  }
+		 },
+		 "externalSubnetName": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Name of external Subnet"
+			  }
+		 },
+		 "externalSubnetAddressPrefix": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Address Prefix for external Subnet"
+			  }
+		 },
+		 "internalSubnetName": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Name of internal Subnet"
+			  }
+		 },
+		 "internalSubnetAddressPrefix": {
+			  "type": "string",
+			  "metadata": {
+				   "description": "Address Prefix for internal Subnet"
+			  }
+		 }
      },
 	"variables": {
 		"vnetID" : "[resourceId(parameters('vnetExistingRGName'),'Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
-		"subnet1" : "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]"
+		"subnet1": "[concat(variables('vnetID'),'/subnets/',parameters('mgmtSubnetName'))]",
+		"subnet2": "[concat(variables('vnetID'),'/subnets/',parameters('externalSubnetName'))]",
+		"subnet3": "[concat(variables('vnetID'),'/subnets/',parameters('internalSubnetName'))]"
      },
 	"resources": [
      ],
@@ -55,6 +81,6 @@
           "vnetId": {
                "value": "[variables('vnetID')]",
                "type": "string"
-          }	
+          }
      }
 }

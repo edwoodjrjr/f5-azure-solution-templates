@@ -224,7 +224,7 @@
                               },
                               "toolTip": {
                                    "virtualNetwork": "Select an existing new virtual network or use the template to create a new one.",
-                                   "subnets": "Select an existing subnet or use the template to create a new one."
+                                   "subnets": "Select existing subnets or use the template to create new ones."
                               },
                               "defaultValue": {
                                    "name": "waf-vnet",
@@ -239,9 +239,33 @@
                               },
                               "subnets": {
                                    "subnet1": {
-                                        "label": "Subnet",
+                                        "label": "Management Subnet",
                                         "defaultValue": {
                                              "name": "subnet1",
+                                             "addressPrefixSize": "/24"
+                                        },
+                                        "constraints": {
+                                             "minAddressPrefixSize": "/28",
+                                             "minAddressCount": 2,
+                                             "requireContiguousAddresses": true
+                                        }
+                                   },
+                                   "subnet2": {
+                                        "label": "External Subnet",
+                                        "defaultValue": {
+                                             "name": "subnet2",
+                                             "addressPrefixSize": "/24"
+                                        },
+                                        "constraints": {
+                                             "minAddressPrefixSize": "/28",
+                                             "minAddressCount": 4,
+                                             "requireContiguousAddresses": true
+                                        }
+                                   },
+                                   "subnet3": {
+                                        "label": "Internal Subnet",
+                                        "defaultValue": {
+                                             "name": "subnet3",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
@@ -588,13 +612,19 @@
                "customPolicy": "[steps('appSettings').customPolicy]",
                "sslCert": "[steps('appSettings').sslCert]",
                "sslPswd": "[steps('appSettings').sslPswd]",
-               "vnetName": "[steps('infrastructureSettings').virtualNetwork.name]",
-               "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefix]",
-               "subnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.name]",
-               "subnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
                "vnetNewOrExisting": "[steps('infrastructureSettings').virtualNetwork.newOrExisting]",
+               "vnetName": "[steps('infrastructureSettings').virtualNetwork.name]",
                "vnetExistingRGName": "[steps('infrastructureSettings').virtualNetwork.resourceGroup]",
-               "privateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.startAddress]"
+               "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefix]",
+               "mgmtSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.name]",
+               "mgmtSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
+               "mgmtPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.startAddress]",
+               "externalSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.name]",
+               "externalSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.addressPrefix]",
+               "externalPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.startAddress]",
+               "internalSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.name]",
+               "internalSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.addressPrefix]",
+               "internalPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.startAddress]"
           }
      }
 }
