@@ -241,7 +241,7 @@
                                    "subnet1": {
                                         "label": "Management subnet",
                                         "defaultValue": {
-                                             "name": "mgmt-subnet",
+                                             "name": "subnet1",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
@@ -253,7 +253,7 @@
                                    "subnet2": {
                                         "label": "External subnet",
                                         "defaultValue": {
-                                             "name": "ext-subnet",
+                                             "name": "subnet2",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
@@ -265,7 +265,7 @@
                                    "subnet3": {
                                         "label": "Internal subnet",
                                         "defaultValue": {
-                                             "name": "int-subnet",
+                                             "name": "subnet3",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
