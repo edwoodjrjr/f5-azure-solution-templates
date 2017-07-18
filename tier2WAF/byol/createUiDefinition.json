@@ -239,9 +239,9 @@
                               },
                               "subnets": {
                                    "subnet1": {
-                                        "label": "Management Subnet",
+                                        "label": "Management subnet",
                                         "defaultValue": {
-                                             "name": "subnet1",
+                                             "name": "mgmt-subnet",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
@@ -251,9 +251,9 @@
                                         }
                                    },
                                    "subnet2": {
-                                        "label": "External Subnet",
+                                        "label": "External subnet",
                                         "defaultValue": {
-                                             "name": "subnet2",
+                                             "name": "ext-subnet",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
@@ -263,9 +263,9 @@
                                         }
                                    },
                                    "subnet3": {
-                                        "label": "Internal Subnet",
+                                        "label": "Internal subnet",
                                         "defaultValue": {
-                                             "name": "subnet3",
+                                             "name": "int-subnet",
                                              "addressPrefixSize": "/24"
                                         },
                                         "constraints": {
