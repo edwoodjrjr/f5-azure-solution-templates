@@ -22,6 +22,29 @@
                 "description": "A unique name for this deployment."
             }
         },
+        "bigIpVersion": {
+            "allowedValues": [
+                "13.0.021",
+                "12.1.24",
+                "latest"
+            ],
+            "defaultValue": "13.0.021",
+            "metadata": {
+                "description": "F5 BIG-IP version you want to use."
+            },
+            "type": "string"
+        },
+        "managedDisks": {
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "defaultValue": "yes",
+            "metadata": {
+                "description": "Use managed disks."
+            },
+            "type": "string"
+        },
         "numberOfInstances": {
             "type": "int",
             "defaultValue": 1,
@@ -334,12 +357,12 @@
         }
     },
     "variables": {
-        "apiVersionCompute": "2016-03-30",
+        "apiVersionCompute": "2016-04-30-preview",
 		"apiVersionNetwork": "2015-06-15",
 		"apiVersionStorage": "2015-06-15",
 		"apiVersionTemplate": "2015-01-01",
         "subscriptionID": "[subscription().subscriptionId]",
-        "imageName": "[concat('f5-waf-solution-', parameters('licensedBandwidth'),'-hourly')]",
+        "imageName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-best-hourly')]",
         "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), '.json')]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
         "subnetAddressArray": "[split(parameters('subnetAddressPrefix'),'.')]",
@@ -737,6 +760,9 @@
                 "displayName": "AvailabilitySet"
             },
             "name": "[variables('availabilitySetName')]",
+            "sku": {
+                "name": "Aligned"
+            },
             "type": "Microsoft.Compute/availabilitySets"
         },
         {
@@ -785,10 +811,12 @@
                 "parameters": {
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
+                    "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "imageName": { "value": "[variables('imageName')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
                     "storageAccountRG": { "value": "[variables('storageAccountRG')]" },
+                    "managedDisks": { "value": "[parameters('managedDisks')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },

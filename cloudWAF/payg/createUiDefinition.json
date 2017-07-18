@@ -823,7 +823,7 @@
                "adminUsername": "[steps('infrastructureSettings').adminUsername]",
                "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
                "licensedBandwidth": "[steps('infrastructureSettings').licensedBandwidth]",
-               "instanceType": "[coalesce(steps('infrastructureSettings').instanceTypeStandard, steps('infrastructureSettings').instanceTypePremium)]",
+               "instanceType": "[steps('infrastructureSettings').instanceType]",
                "imageName": "[steps('infrastructureSettings').imageName]",
                "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
                "managedDisks": "[steps('infrastructureSettings').managedDisks]",

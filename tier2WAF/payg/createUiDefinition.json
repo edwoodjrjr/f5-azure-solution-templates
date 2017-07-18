@@ -27,6 +27,25 @@
                               }
                          },
                          {
+                              "name": "bigIpVersion",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "BIG-IP Version",
+                              "defaultValue": "13.0.21",
+                              "toolTip": "F5 BIG-IP version you want to use.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "13.0.21",
+                                             "value": "13.0.21"
+                                        },
+                                        {
+                                             "label": "12.1.24",
+                                             "value": "12.1.24"
+                                        }
+                                   ]
+                              }
+                         },
+                         {
                               "name": "adminUsername",
                               "type": "Microsoft.Compute.UserNameTextBox",
                               "label": "F5 WAF Username",
@@ -95,77 +114,13 @@
                               }
                          },
                          {
-                             "name": "storageAccount",
-                              "type": "Microsoft.Storage.StorageAccountSelector",
-                              "label": "Storage Account",
-                              "toolTip": "Select a new or existing storage account for your WAF virtual machines. For new storage accounts, storage type will be determined by the previously selected virtual machine size. For existing storage accounts, you must ensure that the storage account is compatible with the selected virtual machine size.",
-                              "defaultValue": {
-                                   "name": "wafst",
-                                   "type": "Premium_LRS"
-                              },
-                              "constraints": {
-                                "allowedTypes": [
-                                    "Standard_LRS",
-                                    "Premium_LRS"
-                                ]
-                              },
-                              "visible": true
-                         },
-                         {
-                              "name": "instanceTypeStandard",
+                              "name": "instanceType",
                               "type": "Microsoft.Compute.SizeSelector",
                               "label": "Virtual machine size",
                               "toolTip": "The size of virtual machine to provision for each cluster node.",
                               "recommendedSizes": [
-                                   "Standard_A3"
-                              ],
-                              "constraints": {
-                                   "allowedSizes": [
-                                        "Standard_A3",
-                                        "Standard_A4",
-                                        "Standard_A5",
-                                        "Standard_A6",
-                                        "Standard_A7",
-                                        "Standard_A8",
-                                        "Standard_A9",
-                                        "Standard_D2",
-                                        "Standard_D3",
-                                        "Standard_D4",
-                                        "Standard_D11",
-                                        "Standard_D12",
-                                        "Standard_D13",
-                                        "Standard_D14",
-                                        "Standard_D2_v2",
-                                        "Standard_D3_v2",
-                                        "Standard_D4_v2",
-                                        "Standard_D5_v2",
-                                        "Standard_D11_v2",
-                                        "Standard_D12_v2",
-                                        "Standard_D13_v2",
-                                        "Standard_D14_v2",
-                                        "Standard_D15_v2",
-                                        "Standard_F2",
-                                        "Standard_F4",
-                                        "Standard_F8"
-                                   ]
-                              },
-                              "osPlatform": "Linux",
-                              "imageReference": {
-                                   "publisher": "f5-networks",
-                                   "offer": "f5-web-application-firewall",
-                                   "sku": "[concat('f5-waf-solution-', steps('infrastructureSettings').licensedBandwidth,'-hourly')]"
-                              },
-                              "count": "[steps('infrastructureSettings').numberOfInstances]",
-                              "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
-                         },
-                         {
-                              "name": "instanceTypePremium",
-                              "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Virtual machine size",
-                              "toolTip": "The size of virtual machine to provision for each cluster node.",
-                              "recommendedSizes": [
-                                   "Standard_DS2",
-                                   "Standard_DS2_v2"
+                                   "Standard_DS2_v2",
+                                   "Standard_DS3_v2"
                               ],
                               "constraints": {
                                    "allowedSizes": [
@@ -193,11 +148,46 @@
                               "osPlatform": "Linux",
                               "imageReference": {
                                    "publisher": "f5-networks",
-                                   "offer": "f5-web-application-firewall",
-                                   "sku": "[concat('f5-waf-solution-', steps('infrastructureSettings').licensedBandwidth,'-hourly')]"
+                                   "offer": "f5-big-ip-hourly",
+                                   "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-best-hourly')]"
                               },
-                              "count": "[steps('infrastructureSettings').numberOfInstances]",
-                              "visible": "[equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
+                              "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
+                              "visible": true
+                         },
+                         {
+                              "name": "managedDisks",
+                              "type": "Microsoft.Common.OptionsGroup",
+                              "label": "Use managed disks",
+                              "defaultValue": "Yes",
+                              "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own.",
+                              "constraints": {
+                                   "allowedValues": [
+                                        {
+                                             "label": "Yes",
+                                             "value": "yes"
+                                        },
+                                        {
+                                             "label": "No",
+                                             "value": "no"
+                                        }
+                                   ]
+                              }
+                         },
+                         {
+                             "name": "storageAccount",
+                              "type": "Microsoft.Storage.StorageAccountSelector",
+                              "label": "Storage Account",
+                              "toolTip": "Select a new or existing storage account for your BIG-IP virtual machines. For WAF solutions, only premium storage is allowed.",
+                              "defaultValue": {
+                                   "name": "wafst",
+                                   "type": "Premium_LRS"
+                              },
+                              "constraints": {
+                                "allowedTypes": [
+                                    "Premium_LRS"
+                                ]
+                              },
+                              "visible": "[equals(steps('infrastructureSettings').managedDisks, 'no')]"
                          },
                          {
                               "name": "publicIp",
@@ -575,7 +565,9 @@
                "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
                "numberOfInstances": "[int(steps('infrastructureSettings').numberOfInstances)]",
                "licensedBandwidth": "[steps('infrastructureSettings').licensedBandwidth]",
-               "instanceType": "[coalesce(steps('infrastructureSettings').instanceTypeStandard, steps('infrastructureSettings').instanceTypePremium)]",
+               "instanceType": "[steps('infrastructureSettings').instanceType]",
+               "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
+               "managedDisks": "[steps('infrastructureSettings').managedDisks]",
                "storageAccountNewOrExisting": "[steps('infrastructureSettings').storageAccount.newOrExisting]",
                "storageAccountExistingRGName": "[steps('infrastructureSettings').storageAccount.resourceGroup]",
                "storageAccountName": "[steps('infrastructureSettings').storageAccount.name]",

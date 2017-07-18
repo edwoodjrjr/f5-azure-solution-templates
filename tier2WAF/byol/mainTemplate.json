@@ -22,6 +22,29 @@
                 "description": "A unique name for this deployment."
             }
         },
+        "bigIpVersion": {
+            "allowedValues": [
+                "13.0.021",
+                "12.1.24",
+                "latest"
+            ],
+            "defaultValue": "13.0.021",
+            "metadata": {
+                "description": "F5 BIG-IP version you want to use."
+            },
+            "type": "string"
+        },
+        "managedDisks": {
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "defaultValue": "yes",
+            "metadata": {
+                "description": "Use managed disks."
+            },
+            "type": "string"
+        },
         "numberOfInstances": {
             "type": "int",
             "defaultValue": 1,
@@ -335,7 +358,7 @@
         }
     },
     "variables": {
-        "apiVersionCompute": "2016-03-30",
+        "apiVersionCompute": "2016-04-30-preview",
 		"apiVersionNetwork": "2015-06-15",
 		"apiVersionStorage": "2015-06-15",
 		"apiVersionTemplate": "2015-01-01",
@@ -355,13 +378,14 @@
         "publicIpID": "[resourceId(variables('publicIpRG'),'Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
         "loadBalancerName": "[concat(parameters('dnsLabel'),'-lb')]",
         "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
+        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
         "storageAccountRGArray": {
             "existing": "[parameters('storageAccountExistingRGName')]",
             "new": "[resourceGroup().name]"
         },
         "storageAccountRG": "[variables('storageAccountRGArray')[parameters('storageAccountNewOrExisting')]]",
+        "doStorage": "[concat(parameters('managedDisks'), parameters('storageAccountNewOrExisting'))]",
         "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
-        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
         "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-nsg'))]",
         "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
         "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
@@ -737,6 +761,9 @@
                 "displayName": "AvailabilitySet"
             },
             "name": "[variables('availabilitySetName')]",
+            "sku": {
+                "name": "Aligned"
+            },
             "type": "Microsoft.Compute/availabilitySets"
         },
         {
@@ -754,7 +781,7 @@
         {
             "name": "[parameters('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "condition": "[equals(parameters('storageAccountNewOrExisting'),'new')]",
+            "condition": "[equals(variables('doStorage'), 'nonew')]",
             "location": "[parameters('location')]",
             "tags": {
                 "displayName": "StorageAccount"
@@ -785,11 +812,13 @@
                 "parameters": {
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
+                    "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "licenseKey1": { "value": "[parameters('licenseKey1')]" },
                     "licenseKey2": { "value": "[parameters('licenseKey2')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
                     "storageAccountRG": { "value": "[variables('storageAccountRG')]" },
+                    "managedDisks": { "value": "[parameters('managedDisks')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },
