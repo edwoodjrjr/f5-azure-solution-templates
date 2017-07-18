@@ -9,6 +9,12 @@
                 "artifactsBaseUrl": ""
             }
         },
+        "location": {
+            "type":"string",
+            "metadata": {
+                "description": "The location of the deployment"
+            }
+        },
         "solutionDeploymentName": {
             "type": "string",
             "metadata": {
@@ -24,6 +30,17 @@
             "defaultValue": "13.0.021",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
+            },
+            "type": "string"
+        },
+        "managedDisks": {
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "defaultValue": "yes",
+            "metadata": {
+                "description": "Use managed disks."
             },
             "type": "string"
         },
@@ -276,11 +293,25 @@
                 "description": "Specify the publicly available URL of a custom ASM security policy in XML format. This policy will be applied in place of the standard High/Medium/Low policy as indicated above."
             }
         },
+        "vnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "metadata": {
+                "description": "New or Existing Virtual Network"
+            }
+        },
         "vnetName": {
             "type": "string",
-            "defaultValue": "Vnet",
+            "defaultValue": "waf-vnet",
             "metadata": {
                 "description": "Specify the virtual network name."
+            }
+        },
+        "vnetExistingRGName": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Existing Virtual Network name"
             }
         },
         "vnetAddressPrefix": {
@@ -290,37 +321,67 @@
                 "description": "Specify the virtual network address space."
             }
         },
-        "subnetName": {
+        "mgmtSubnetName": {
             "type": "string",
             "defaultValue": "subnet1",
             "metadata": {
                 "description": "Specify the virtual subnet name wher the BIG-IP will reside."
             }
         },
-        "subnetAddressPrefix": {
+        "mgmtSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0.1.0/24",
             "metadata": {
                 "description": "Specify the virtual subnet address space."
             }
         },
-        "vnetNewOrExisting": {
+        "mgmtPrivateIpAddressRangeStart": {
             "type": "string",
-            "defaultValue": "new",
-            "metadata": {
-                "description": "New or Existing Virtual Network"
-            }
-        },
-        "privateIpAddressRangeStart": {
-            "type": "string",
+            "defaultValue": "10.0.1.4",
             "metadata": {
                 "description": "Enter an IP address for the BIG-IP."
             }
         },
-        "vnetExistingRGName": {
+        "externalSubnetName": {
             "type": "string",
+            "defaultValue": "subnet2",
             "metadata": {
-                "description": "Existing Virtual Network name"
+                "description": "Specify the virtual subnet name wher the BIG-IP will reside."
+            }
+        },
+        "externalSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "Specify the virtual subnet address space."
+            }
+        },
+        "externalPrivateIpAddressRangeStart": {
+            "type": "string",
+            "defaultValue": "10.0.2.4",
+            "metadata": {
+                "description": "Enter an IP address for the BIG-IP."
+            }
+        },
+        "internalSubnetName": {
+            "type": "string",
+            "defaultValue": "subnet3",
+            "metadata": {
+                "description": "Specify the virtual subnet name wher the BIG-IP will reside."
+            }
+        },
+        "internalSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.3.0/24",
+            "metadata": {
+                "description": "Specify the virtual subnet address space."
+            }
+        },
+        "internalPrivateIpAddressRangeStart": {
+            "type": "string",
+            "defaultValue": "10.0.3.4",
+            "metadata": {
+                "description": "Enter an IP address for the BIG-IP."
             }
         },
         "restrictedSrcAddress": {
