@@ -72,6 +72,47 @@
                               "osPlatform": "Windows"
                          },
                          {
+                              "name": "instanceType",
+                              "type": "Microsoft.Compute.SizeSelector",
+                              "label": "Virtual machine size",
+                              "toolTip": "The size of virtual machine to provision for each cluster node.",
+                              "recommendedSizes": [
+                                   "Standard_DS2_v2",
+                                   "Standard_DS3_v2"
+                              ],
+                              "constraints": {
+                                   "allowedSizes": [
+                                        "Standard_DS2",
+                                        "Standard_DS3",
+                                        "Standard_DS4",
+                                        "Standard_DS11",
+                                        "Standard_DS12",
+                                        "Standard_DS13",
+                                        "Standard_DS14",
+                                        "Standard_DS2_v2",
+                                        "Standard_DS3_v2",
+                                        "Standard_DS4_v2",
+                                        "Standard_DS5_v2",
+                                        "Standard_DS11_v2",
+                                        "Standard_DS12_v2",
+                                        "Standard_DS13_v2",
+                                        "Standard_DS14_v2",
+                                        "Standard_DS15_v2",
+                                        "Standard_F2S",
+                                        "Standard_F4S",
+                                        "Standard_F8S"
+                                   ]
+                              },
+                              "osPlatform": "Linux",
+                              "imageReference": {
+                                   "publisher": "f5-networks",
+                                   "offer": "f5-big-ip",
+                                   "sku": "f5-bigip-virtual-edition-best-byol"
+                              },
+                              "count": "[steps('infrastructureSettings').numberOfInstances]",
+                              "visible": true
+                         },
+                         {
                              "name": "numberOfInstances",
                               "type": "Microsoft.Common.DropDown",
                               "label": "Number of WAFs",
@@ -112,47 +153,6 @@
                                    "validationMessage": "Only valid F5 license key tokens are allowed."
                               },
                               "visible": "[equals(int(steps('infrastructureSettings').numberOfInstances), 2)]"
-                         },
-                         {
-                              "name": "instanceType",
-                              "type": "Microsoft.Compute.SizeSelector",
-                              "label": "Virtual machine size",
-                              "toolTip": "The size of virtual machine to provision for each cluster node.",
-                              "recommendedSizes": [
-                                   "Standard_DS2_v2",
-                                   "Standard_DS3_v2"
-                              ],
-                              "constraints": {
-                                   "allowedSizes": [
-                                        "Standard_DS2",
-                                        "Standard_DS3",
-                                        "Standard_DS4",
-                                        "Standard_DS11",
-                                        "Standard_DS12",
-                                        "Standard_DS13",
-                                        "Standard_DS14",
-                                        "Standard_DS2_v2",
-                                        "Standard_DS3_v2",
-                                        "Standard_DS4_v2",
-                                        "Standard_DS5_v2",
-                                        "Standard_DS11_v2",
-                                        "Standard_DS12_v2",
-                                        "Standard_DS13_v2",
-                                        "Standard_DS14_v2",
-                                        "Standard_DS15_v2",
-                                        "Standard_F2S",
-                                        "Standard_F4S",
-                                        "Standard_F8S"
-                                   ]
-                              },
-                              "osPlatform": "Linux",
-                              "imageReference": {
-                                   "publisher": "f5-networks",
-                                   "offer": "f5-big-ip",
-                                   "sku": "f5-bigip-virtual-edition-best-byol"
-                              },
-                              "count": "[steps('infrastructureSettings').numberOfInstances]",
-                              "visible": true
                          },
                          {
                               "name": "managedDisks",
