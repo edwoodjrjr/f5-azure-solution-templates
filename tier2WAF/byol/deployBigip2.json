@@ -132,11 +132,11 @@
         },
         "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
         "mgmtSubnetPrivateAddress": "[concat(parameters('mgmtIpPrefix'), parameters('mgmtLastOctet'))]",
-        "extSubnetPrivateAddress": "[concat(parameters('extIpPrefix'), parameters('extLastOctet'))]",
-        "intSubnetPrivateAddress": "[concat(parameters('intIpPrefix'), parameters('intLastOctet'))]",
+        "extSubnetPrivateAddress": "[concat(parameters('externalIpPrefix'), parameters('externalLastOctet'))]",
+        "intSubnetPrivateAddress": "[concat(parameters('internalIpPrefix'), parameters('internalLastOctet'))]",
         "mgmtSubnetPrivateAddress1": "[concat(parameters('mgmtIpPrefix'),add(parameters('mgmtLastOctet'),1))]",
-        "extSubnetPrivateAddress1": "[concat(parameters('extIpPrefix'),add(parameters('extLastOctet'),1))]",
-        "intSubnetPrivateAddress1": "[concat(parameters('intIpPrefix'),add(parameters('intLastOctet'),1))]",
+        "extSubnetPrivateAddress1": "[concat(parameters('externalIpPrefix'),add(parameters('externalLastOctet'),1))]",
+        "intSubnetPrivateAddress1": "[concat(parameters('internalIpPrefix'),add(parameters('internalLastOctet'),1))]",
         "bigIpNicPortMap": {
             "1": {
                 "Port": "[parameters('bigIpVersion')]"
