@@ -118,7 +118,7 @@
                 "createOption": "FromImage",
                 "name":"[concat(variables('wafNamePrefix'),'osdisk',0)]",
                 "vhd": {
-                    "uri": "[concat(concat(reference(resourceId(parameters('storageAccountRG'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), variables('vhdNamePrefix'), 0, '.vhd')]"
+                    "uri": "[[concat(concat(reference(resourceId(parameters('storageAccountRG'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), variables('vhdNamePrefix'), 0, '.vhd')]]"
                 }
             },
             "no1": {
@@ -126,7 +126,7 @@
                 "createOption": "FromImage",
                 "name": "[concat(variables('wafNamePrefix'),'osdisk',1)]",
                 "vhd": {
-                    "uri": "[concat(concat(reference(resourceId(parameters('storageAccountRG'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), variables('vhdNamePrefix'), 1, '.vhd')]"
+                    "uri": "[[concat(concat(reference(resourceId(parameters('storageAccountRG'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), variables('vhdNamePrefix'), 1, '.vhd')]]"
                 }
             }
         },
