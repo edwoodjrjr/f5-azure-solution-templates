@@ -744,7 +744,7 @@
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[concat(variables('internalIpPrefix'),add(variables('internalLastOctet'),copyIndex()))]",
                             "subnet": {
-                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('externalSubnetName'))]"
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('internalSubnetName'))]"
                             }
                         }
                     }
@@ -889,6 +889,10 @@
                 "displayName": "AvailabilitySet"
             },
             "name": "[variables('availabilitySetName')]",
+            "properties": {
+                "PlatformUpdateDomainCount": "3",
+                "PlatformFaultDomainCount": "2"
+            },
             "sku": {
                 "name": "Aligned"
             },
