@@ -966,7 +966,7 @@
                     "internalNicNamePrefix": { "value": "[variables('internalNicNamePrefix')]" },
                     "internalIpPrefix": { "value": "[variables('internalIpPrefix')]" },
                     "internalLastOctet": { "value": "[variables('internalLastOctet')]" },
-                    "intSubnetRef": { "value": "[variables('inttSubnetRef')]" },
+                    "intSubnetRef": { "value": "[variables('intSubnetRef')]" },
                     "commandArgs": { "value": "[variables('commandArgs')]" }
                 }
             }
