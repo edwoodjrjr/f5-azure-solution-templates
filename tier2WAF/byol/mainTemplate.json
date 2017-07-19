@@ -60,14 +60,12 @@
                 "description": "The size of the Virtual Hardware Instance."
             },
             "allowedValues": [
-                "Standard_DS2",
                 "Standard_DS3",
                 "Standard_DS4",
                 "Standard_DS11",
                 "Standard_DS12",
                 "Standard_DS13",
                 "Standard_DS14",
-                "Standard_DS2_v2",
                 "Standard_DS3_v2",
                 "Standard_DS4_v2",
                 "Standard_DS5_v2",
@@ -76,7 +74,6 @@
                 "Standard_DS13_v2",
                 "Standard_DS14_v2",
                 "Standard_DS15_v2",
-                "Standard_F2S",
                 "Standard_F4S",
                 "Standard_F8S"
             ]
