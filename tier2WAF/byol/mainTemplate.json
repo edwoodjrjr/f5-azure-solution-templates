@@ -55,7 +55,7 @@
         },
         "instanceType": {
             "type": "string",
-            "defaultValue": "Standard_DS2",
+            "defaultValue": "Standard_DS3_v2",
             "metadata": {
                 "description": "The size of the Virtual Hardware Instance."
             },
