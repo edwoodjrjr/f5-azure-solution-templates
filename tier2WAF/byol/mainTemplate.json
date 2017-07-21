@@ -995,11 +995,11 @@
     "outputs": {
         "GUI-URL": {
             "type": "String",
-            "value": "[concat('https://', reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,':8443')]"
+            "value": "[concat('https://', parameters('mgmtPrivateIpAddressRangeStart'), ':443')]"
         },
         "SSH-URL": {
             "type": "String",
-            "value": "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
+            "value": "[concat(parameters('mgmtPrivateIpAddressRangeStart'),' 8022')]"
         }
     }
 }
