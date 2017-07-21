@@ -442,7 +442,7 @@ Server Traffic \(5s/1m/5m\): In:$si5s/$si1m/$si5m Out:$so5s/$so1m/$so5m"
           ########EventHub datagroup iCall Start########
           set ::icall_eventhub_datagroup {
      # get our self IP address
-     set selfip_config [lindex [tmsh::get_config net self self_1nic] 0]
+     set selfip_config [lindex [tmsh::get_config net self self_2nic] 0]
      set selfip [lindex [tmsh::get_field_value $selfip_config "address"] 0]
      set selfip [lindex [split $selfip "/"] 0]
 
