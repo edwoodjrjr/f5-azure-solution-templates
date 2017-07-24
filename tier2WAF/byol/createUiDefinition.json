@@ -287,7 +287,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": "[mul(int(steps('infrastructureSettings').numberOfInstances)), 2]",
+                                    "minAddressCount": "[mul(int(steps('infrastructureSettings').numberOfInstances), 2)]",
                                     "requireContiguousAddresses": true
                                 }
                             },
