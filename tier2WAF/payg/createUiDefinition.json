@@ -138,15 +138,15 @@
                             "allowedValues": [
                                 {
                                     "label": "25M",
-                                    "value": "25mbps"
+                                    "value": "25m"
                                 },
                                 {
                                     "label": "200M",
-                                    "value": "200mbps"
+                                    "value": "200m"
                                 },
                                 {
                                     "label": "1G",
-                                    "value": "1gbps"
+                                    "value": "1g"
                                 }
                             ]
                         }

@@ -151,11 +151,11 @@
         },
         "licensedBandwidth": {
             "type": "string",
-            "defaultValue": "200mbps",
+            "defaultValue": "200m",
             "allowedValues": [
-                "1gbps",
-                "200mbps",
-                "25mbps"
+                "1g",
+                "200m",
+                "25m"
             ],
             "metadata": {
                 "description": "The VM image to use for this deployment."
