@@ -719,7 +719,7 @@
                         "name": "ext-ipconfig-secondary",
                         "properties": {
                             "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex(2)))]",
+                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex(4)))]",
                             "subnet": {
                                 "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('externalSubnetName'))]"
                             },

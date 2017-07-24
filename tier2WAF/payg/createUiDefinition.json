@@ -251,7 +251,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 2,
+                                    "minAddressCount": "[steps('infrastructureSettings').numberOfInstances]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -263,7 +263,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 4,
+                                    "minAddressCount": "[mul(steps('infrastructureSettings').numberOfInstances), 2]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -275,7 +275,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 2,
+                                    "minAddressCount": "[steps('infrastructureSettings').numberOfInstances]",
                                     "requireContiguousAddresses": true
                                 }
                             }
