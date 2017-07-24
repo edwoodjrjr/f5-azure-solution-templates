@@ -47,7 +47,7 @@
         "numberOfInstances": {
             "type": "int",
             "defaultValue": 1,
-            "allowedValues": [ 1, 2 ],
+            "allowedValues": [ 1, 2, 3, 4 ],
             "metadata": {
                 "description": "The number of Web Application Firewalls that will be deployed in front of your application."
             }
@@ -967,6 +967,7 @@
                 "parameters": {
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
+                    "numberOfInstances": { "value": "[parameters('numberOfInstances')]" },
                     "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "imageName": { "value": "[variables('imageName')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },

@@ -8,6 +8,9 @@
         "location": {
             "type": "string"
         },
+        "numberOfInstances": {
+            "type": "int"
+        },
         "bigIpVersion": {
             "allowedValues": [
                 "13.0.021",
@@ -146,7 +149,7 @@
             "apiVersion": "[variables('apiVersionCompute')]",
             "type": "Microsoft.Compute/virtualMachines",
             "copy": {
-                "count": 2,
+                "count": "[parameters('numberOfInstances')]",
                 "name": "vmCopy"
             },
             "name": "[concat(variables('wafNamePrefix'), '-classic', copyIndex())]",

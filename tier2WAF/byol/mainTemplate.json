@@ -967,6 +967,7 @@
                 "parameters": {
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
+                    "numberOfInstances": { "value": "[parameters('numberOfInstances')]" },
                     "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "licenseKey1": { "value": "[parameters('licenseKey1')]" },
                     "licenseKey2": { "value": "[parameters('licenseKey2')]" },

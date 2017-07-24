@@ -8,6 +8,9 @@
         "location": {
             "type": "string"
         },
+        "numberOfInstances": {
+            "type": "int"
+        },
         "bigIpVersion": {
             "allowedValues": [
                 "13.0.021",
