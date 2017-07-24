@@ -47,7 +47,7 @@
         "numberOfInstances": {
             "type": "int",
             "defaultValue": 1,
-            "allowedValues": [ 1, 2 ],
+            "allowedValues": [ 1, 2, 3, 4 ],
             "metadata": {
                 "description": "The number of Web Application Firewalls that will be deployed in front of your application."
             }
