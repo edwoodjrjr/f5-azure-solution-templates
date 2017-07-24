@@ -20,34 +20,60 @@
                     "description": "Name of the Virtual Network"
                }
           },
+          "vnetExistingRGName": {
+               "type": "string",
+               "metadata": {
+                    "description": "Name of the Resource Group for the existing Virtual Network"
+               }
+          },
           "vnetAddressPrefix": {
                "type": "string",
                "metadata": {
                     "description": "Address Prefix for Virtual Network"
                }
           },
-          "subnetName": {
+          "mgmtSubnetName": {
                "type": "string",
                "metadata": {
-                    "description": "Name of first Subnet"
+                    "description": "Name of management Subnet"
                }
           },
-          "subnetAddressPrefix": {
+          "mgmtSubnetAddressPrefix": {
                "type": "string",
                "metadata": {
-                    "description": "Address Prefix for first Subnet"
+                    "description": "Address Prefix for management Subnet"
                }
           },
-          "vnetExistingRGName": {
+          "externalSubnetName": {
                "type": "string",
                "metadata": {
-                    "description": "Name of the Resource Group for the existing Virtual Network"
+                    "description": "Name of external Subnet"
+               }
+          },
+          "externalSubnetAddressPrefix": {
+               "type": "string",
+               "metadata": {
+                    "description": "Address Prefix for external Subnet"
+               }
+          },
+          "internalSubnetName": {
+               "type": "string",
+               "metadata": {
+                    "description": "Name of internal Subnet"
+               }
+          },
+          "internalSubnetAddressPrefix": {
+               "type": "string",
+               "metadata": {
+                    "description": "Address Prefix for internal Subnet"
                }
           }
      },
      "variables": {
           "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
-          "subnet1": "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]"
+          "subnet1": "[concat(variables('vnetID'),'/subnets/',parameters('mgmtSubnetName'))]",
+          "subnet2": "[concat(variables('vnetID'),'/subnets/',parameters('externalSubnetName'))]",
+          "subnet3": "[concat(variables('vnetID'),'/subnets/',parameters('internalSubnetName'))]"
      },
      "resources": [
           {
@@ -63,9 +89,21 @@
                     },
                     "subnets": [
                          {
-                              "name": "[parameters('subnetName')]",
+                              "name": "[parameters('mgmtSubnetName')]",
                               "properties": {
-                                   "addressPrefix": "[parameters('subnetAddressPrefix')]"
+                                   "addressPrefix": "[parameters('mgmtSubnetAddressPrefix')]"
+                              }
+                         },
+                         {
+                              "name": "[parameters('externalSubnetName')]",
+                              "properties": {
+                                   "addressPrefix": "[parameters('externalSubnetAddressPrefix')]"
+                              }
+                         },
+                         {
+                              "name": "[parameters('internalSubnetName')]",
+                              "properties": {
+                                   "addressPrefix": "[parameters('internalSubnetAddressPrefix')]"
                               }
                          }
                     ]

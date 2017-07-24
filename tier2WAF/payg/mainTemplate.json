@@ -25,8 +25,7 @@
         "bigIpVersion": {
             "allowedValues": [
                 "13.0.021",
-                "12.1.24",
-                "latest"
+                "12.1.24"
             ],
             "defaultValue": "13.0.021",
             "metadata": {
@@ -53,56 +52,19 @@
                 "description": "The number of Web Application Firewalls that will be deployed in front of your application."
             }
         },
-        "licensedBandwidth": {
-            "type": "string",
-            "defaultValue": "200mbps",
-            "allowedValues": [
-                "1gbps",
-                "200mbps",
-                "25mbps"
-            ],
-            "metadata": {
-                "description": "The VM image to use for this deployment."
-            }
-        },
         "instanceType": {
             "type": "string",
-            "defaultValue": "Standard_DS2",
+            "defaultValue": "Standard_DS3_v2",
             "metadata": {
                 "description": "The size of the Virtual Hardware Instance."
             },
             "allowedValues": [
-                "Standard_A3",
-                "Standard_A4",
-                "Standard_A5",
-                "Standard_A6",
-                "Standard_A7",
-                "Standard_A8",
-                "Standard_A9",
-                "Standard_D2",
-                "Standard_D3",
-                "Standard_D4",
-                "Standard_D11",
-                "Standard_D12",
-                "Standard_D13",
-                "Standard_D14",
-                "Standard_DS2",
                 "Standard_DS3",
                 "Standard_DS4",
                 "Standard_DS11",
                 "Standard_DS12",
                 "Standard_DS13",
                 "Standard_DS14",
-                "Standard_D2_v2",
-                "Standard_D3_v2",
-                "Standard_D4_v2",
-                "Standard_D5_v2",
-                "Standard_D11_v2",
-                "Standard_D12_v2",
-                "Standard_D13_v2",
-                "Standard_D14_v2",
-                "Standard_D15_v2",
-                "Standard_DS2_v2",
                 "Standard_DS3_v2",
                 "Standard_DS4_v2",
                 "Standard_DS5_v2",
@@ -111,10 +73,6 @@
                 "Standard_DS13_v2",
                 "Standard_DS14_v2",
                 "Standard_DS15_v2",
-                "Standard_F2",
-                "Standard_F4",
-                "Standard_F8",
-                "Standard_F2S",
                 "Standard_F4S",
                 "Standard_F8S"
             ]
@@ -141,16 +99,15 @@
             }
         },
         "storageAccountType": {
-               "type": "string",
-               "defaultValue": "Premium_LRS",
-               "metadata": {
-                    "description": "Storage account type."
-               },
-               "allowedValues": [
-                    "Premium_LRS",
-                    "Standard_LRS"
+            "type": "string",
+            "defaultValue": "Premium_LRS",
+            "metadata": {
+                "description": "Storage account type."
+            },
+            "allowedValues": [
+                "Premium_LRS"
             ]
-          },
+        },
         "adminUsername": {
             "type": "string",
             "defaultValue": "azureuser",
@@ -190,6 +147,18 @@
             "defaultValue": "dnslabel",
             "metadata": {
                 "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
+            }
+        },
+        "licensedBandwidth": {
+            "type": "string",
+            "defaultValue": "200mbps",
+            "allowedValues": [
+                "1gbps",
+                "200mbps",
+                "25mbps"
+            ],
+            "metadata": {
+                "description": "The VM image to use for this deployment."
             }
         },
         "applicationProtocols": {
@@ -299,11 +268,25 @@
                 "description": "Specify the publicly available URL of a custom ASM security policy in XML format. This policy will be applied in place of the standard High/Medium/Low policy as indicated above."
             }
         },
+        "vnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "metadata": {
+                "description": "New or Existing Virtual Network"
+            }
+        },
         "vnetName": {
             "type": "string",
             "defaultValue": "waf-vnet",
             "metadata": {
                 "description": "Specify the virtual network name."
+            }
+        },
+        "vnetExistingRGName": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "Existing Virtual Network name"
             }
         },
         "vnetAddressPrefix": {
@@ -313,39 +296,67 @@
                 "description": "Specify the virtual network address space."
             }
         },
-        "subnetName": {
+        "mgmtSubnetName": {
             "type": "string",
             "defaultValue": "subnet1",
             "metadata": {
                 "description": "Specify the virtual subnet name wher the BIG-IP will reside."
             }
         },
-        "subnetAddressPrefix": {
+        "mgmtSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0.1.0/24",
             "metadata": {
                 "description": "Specify the virtual subnet address space."
             }
         },
-        "vnetNewOrExisting": {
+        "mgmtPrivateIpAddressRangeStart": {
             "type": "string",
-            "defaultValue": "new",
-            "metadata": {
-                "description": "New or Existing Virtual Network"
-            }
-        },
-        "privateIpAddressRangeStart": {
-            "type": "string",
-            "defaultValue": "0.0.0.0",
+            "defaultValue": "10.0.1.4",
             "metadata": {
                 "description": "Enter an IP address for the BIG-IP."
             }
         },
-        "vnetExistingRGName": {
+        "externalSubnetName": {
             "type": "string",
-            "defaultValue": "NOT_SPECIFIED",
+            "defaultValue": "subnet2",
             "metadata": {
-                "description": "Existing Virtual Network name"
+                "description": "Specify the virtual subnet name wher the BIG-IP will reside."
+            }
+        },
+        "externalSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "Specify the virtual subnet address space."
+            }
+        },
+        "externalPrivateIpAddressRangeStart": {
+            "type": "string",
+            "defaultValue": "10.0.2.4",
+            "metadata": {
+                "description": "Enter an IP address for the BIG-IP."
+            }
+        },
+        "internalSubnetName": {
+            "type": "string",
+            "defaultValue": "subnet3",
+            "metadata": {
+                "description": "Specify the virtual subnet name wher the BIG-IP will reside."
+            }
+        },
+        "internalSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.3.0/24",
+            "metadata": {
+                "description": "Specify the virtual subnet address space."
+            }
+        },
+        "internalPrivateIpAddressRangeStart": {
+            "type": "string",
+            "defaultValue": "10.0.3.4",
+            "metadata": {
+                "description": "Enter an IP address for the BIG-IP."
             }
         },
         "restrictedSrcAddress": {
@@ -358,18 +369,34 @@
     },
     "variables": {
         "apiVersionCompute": "2016-04-30-preview",
-		"apiVersionNetwork": "2015-06-15",
-		"apiVersionStorage": "2015-06-15",
-		"apiVersionTemplate": "2015-01-01",
+        "apiVersionNetwork": "2015-06-15",
+        "apiVersionStorage": "2015-06-15",
+        "apiVersionTemplate": "2015-01-01",
         "subscriptionID": "[subscription().subscriptionId]",
-        "imageName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-best-hourly')]",
-        "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), '.json')]",
+        "imageName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'),'-best-hourly')]",
+        "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), 'managed', parameters('managedDisks'), '.json')]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
-        "subnetAddressArray": "[split(parameters('subnetAddressPrefix'),'.')]",
-        "privateAddressArray": "[split(parameters('privateIpAddressRangeStart'),'.')]",
-        "ipPrefix": "[concat(variables('privateAddressArray')[0],'.',variables('privateAddressArray')[1],'.',variables('privateAddressArray')[2],'.')]",
-        "lastOctet": "[int(variables('privateAddressArray')[3])]",
-        "nicNamePrefix": "[concat(parameters('dnsLabel'),'-nic')]",
+        "mgmtPublicIPAddressName": "[concat(parameters('dnsLabel'), '-mgmt-pip')]",
+        "mgmtNicNamePrefix": "[concat(parameters('dnsLabel'),'-mgmt')]",
+        "mgmtSubnetAddressArray": "[split(parameters('mgmtSubnetAddressPrefix'),'.')]",
+        "mgmtPrivateAddressArray": "[split(parameters('mgmtPrivateIpAddressRangeStart'),'.')]",
+        "mgmtIpPrefix": "[concat(variables('mgmtPrivateAddressArray')[0],'.',variables('mgmtPrivateAddressArray')[1],'.',variables('mgmtPrivateAddressArray')[2],'.')]",
+        "mgmtLastOctet": "[int(variables('mgmtPrivateAddressArray')[3])]",
+        "externalNicNamePrefix": "[concat(parameters('dnsLabel'),'-ext')]",
+        "externalSubnetDestination": "[split(parameters('externalSubnetAddressPrefix'),'/')]",
+        "externalSubnetDestinationAddress": "[variables('externalSubnetDestination')[0]]",
+        "externalSubnetDestinationMask": "[variables('externalSubnetDestination')[1]]",
+        "externalSubnetAddressArray": "[split(parameters('externalSubnetAddressPrefix'),'.')]",
+        "externalPrivateAddressArray": "[split(parameters('externalPrivateIpAddressRangeStart'),'.')]",
+        "externalIpPrefix": "[concat(variables('externalPrivateAddressArray')[0],'.',variables('externalPrivateAddressArray')[1],'.',variables('externalPrivateAddressArray')[2],'.')]",
+        "externalLastOctet": "[int(variables('externalPrivateAddressArray')[3])]",
+        "extSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetExistingRGName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('externalSubnetName'))]",
+        "internalNicNamePrefix": "[concat(parameters('dnsLabel'),'-int')]",
+        "internalSubnetAddressArray": "[split(parameters('internalSubnetAddressPrefix'),'.')]",
+        "internalPrivateAddressArray": "[split(parameters('internalPrivateIpAddressRangeStart'),'.')]",
+        "internalIpPrefix": "[concat(variables('internalPrivateAddressArray')[0],'.',variables('internalPrivateAddressArray')[1],'.',variables('internalPrivateAddressArray')[2],'.')]",
+        "internalLastOctet": "[int(variables('internalPrivateAddressArray')[3])]",
+        "intSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetExistingRGName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('internalSubnetName'))]",
         "publicIpRGArray": {
             "existing": "[parameters('publicIpExistingRGName')]",
             "new": "[resourceGroup().name]"
@@ -378,14 +405,20 @@
         "publicIpID": "[resourceId(variables('publicIpRG'),'Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
         "loadBalancerName": "[concat(parameters('dnsLabel'),'-lb')]",
         "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
+        "availabilitySetArray": {
+            "yes": "Aligned",
+            "no": "Classic"
+        },
+        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
         "storageAccountRGArray": {
             "existing": "[parameters('storageAccountExistingRGName')]",
             "new": "[resourceGroup().name]"
         },
         "storageAccountRG": "[variables('storageAccountRGArray')[parameters('storageAccountNewOrExisting')]]",
+        "doStorage": "[concat(parameters('managedDisks'), parameters('storageAccountNewOrExisting'))]",
         "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
-        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
-        "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-nsg'))]",
+        "mgmtNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-mgmt-nsg'))]",
+        "extNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-ext-nsg'))]",
         "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
         "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
         "guiMgtID": "[concat(variables('lbID'),'/inboundNatRules/guimgt')]",
@@ -462,7 +495,7 @@
             }
         },
         "appType": "[variables('appTypeMap')[parameters('applicationType')].type]",
-        "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
+        "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -e ', variables('externalSubnetDestinationAddress'), ' -f  ', variables('externalSubnetDestinationMask'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
     },
     "resources": [
         {
@@ -483,6 +516,26 @@
             }
         },
         {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "mgmtPublicIpCopy"
+            },
+            "name": "[concat(variables('mgmtPublicIPAddressName'), copyIndex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "PublicIPAddress"
+            },
+            "properties": {
+                "dnsSettings": {
+                    "domainNameLabel": "[concat(parameters('dnsLabel'), '-mgmt-', copyIndex())]"
+                },
+                "idleTimeoutInMinutes": 30,
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
             "apiVersion": "[variables('apiVersionTemplate')]",
             "name": "linkedVnetTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -496,67 +549,21 @@
                     "location": { "value": "[parameters('location')]" },
                     "apiVersionNetwork": { "value": "[variables('apiVersionNetwork')]" },
                     "vnetName": { "value": "[parameters('vnetName')]" },
+                    "vnetExistingRGName": { "value": "[parameters('vnetExistingRGName')]" },
                     "vnetAddressPrefix": { "value": "[parameters('vnetAddressPrefix')]" },
-                    "subnetName": { "value": "[parameters('subnetName')]" },
-                    "subnetAddressPrefix": { "value": "[parameters('subnetAddressPrefix')]" },
-                    "vnetExistingRGName": { "value": "[parameters('vnetExistingRGName')]" }
+                    "mgmtSubnetName": { "value": "[parameters('mgmtSubnetName')]" },
+                    "mgmtSubnetAddressPrefix": { "value": "[parameters('mgmtSubnetAddressPrefix')]" },
+                    "externalSubnetName": { "value": "[parameters('externalSubnetName')]" },
+                    "externalSubnetAddressPrefix": { "value": "[parameters('externalSubnetAddressPrefix')]" },
+                    "internalSubnetName": { "value": "[parameters('internalSubnetName')]" },
+                    "internalSubnetAddressPrefix": { "value": "[parameters('internalSubnetAddressPrefix')]" }
                 }
             }
         },
         {
             "apiVersion": "[variables('apiVersionNetwork')]",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('nicNamePrefix'),copyindex())]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "displayName": "NetworkInterface"
-            },
-            "dependsOn": [
-                "linkedVnetTemplate",
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/guimgt',copyindex())]",
-                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/sshmgt',copyindex())]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('dnsLabel'),'-nsg')]"
-            ],
-            "copy": {
-                "count": "[parameters('numberOfInstances')]",
-                "name": "niccopy"
-            },
-            "properties": {
-                "networkSecurityGroup": {
-                    "id": "[variables('nsgID')]"
-                },
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[concat(variables('ipPrefix'),add(variables('lastOctet'),copyIndex()))]",
-                            "subnet": {
-                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('subnetName'))]"
-                            },
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[concat(variables('lbID'), '/backendAddressPools/', 'loadBalancerBackEnd')]"
-                                }
-                            ],
-                            "loadBalancerInboundNatRules": [
-                                {
-                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'guimgt',copyIndex())]"
-                                },
-                                {
-                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'sshmgt',copyIndex())]"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "[variables('apiVersionNetwork')]",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[concat(parameters('dnsLabel'), '-nsg')]",
+            "name": "[concat(parameters('dnsLabel'), '-mgmt-nsg')]",
             "location": "[parameters('location')]",
             "tags": {
                 "displayName": "NetworkSecurityGroup"
@@ -590,7 +597,20 @@
                             "direction": "Inbound",
                             "access": "Allow"
                         }
-                    },
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[concat(parameters('dnsLabel'), '-ext-nsg')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkSecurityGroup"
+            },
+            "properties": {
+                "securityRules": [
                     {
                         "name": "app_allow_880",
                         "properties": {
@@ -617,6 +637,136 @@
                             "protocol": "TCP",
                             "direction": "Inbound",
                             "access": "Allow"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('mgmtNicNamePrefix'),copyindex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkInterface"
+            },
+            "dependsOn": [
+                "linkedVnetTemplate",
+                "mgmtPublicIpCopy",
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('dnsLabel'),'-mgmt-nsg')]"
+            ],
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "mgmtNicCopy"
+            },
+            "properties": {
+                "networkSecurityGroup": {
+                    "id": "[variables('mgmtNsgID')]"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "mgmt-ipconfig",
+                        "properties": {
+                            "PublicIpAddress": {
+                                "Id": "[resourceId('Microsoft.Network/publicIPAddresses/', concat(variables('mgmtPublicIPAddressName'), copyIndex()))]"
+                            },
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[concat(variables('mgmtIpPrefix'),add(variables('mgmtLastOctet'),copyIndex()))]",
+                            "subnet": {
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('mgmtSubnetName'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('externalNicNamePrefix'),copyindex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkInterface"
+            },
+            "dependsOn": [
+                "linkedVnetTemplate",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/guimgt',copyindex())]",
+                "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'),'/inboundNatRules/sshmgt',copyindex())]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('dnsLabel'),'-ext-nsg')]"
+            ],
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "extNicCopy"
+            },
+            "properties": {
+                "networkSecurityGroup": {
+                    "id": "[variables('extNsgID')]"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "ext-ipconfig-primary",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex()))]",
+                            "subnet": {
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('externalSubnetName'))]"
+                            },
+                            "primary": true
+                        }
+                    },
+                    {
+                        "name": "ext-ipconfig-secondary",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex(2)))]",
+                            "subnet": {
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('externalSubnetName'))]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(variables('lbID'), '/backendAddressPools/', 'loadBalancerBackEnd')]"
+                                }
+                            ],
+                            "loadBalancerInboundNatRules": [
+                                {
+                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'guimgt',copyIndex())]"
+                                },
+                                {
+                                    "id": "[concat(variables('lbID'), '/inboundNatRules/', 'sshmgt',copyIndex())]"
+                                }
+                            ],
+                            "primary": false
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionNetwork')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('internalNicNamePrefix'),copyindex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "NetworkInterface"
+            },
+            "dependsOn": [
+                "linkedVnetTemplate"
+            ],
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "intNicCopy"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "int-ipconfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[concat(variables('internalIpPrefix'),add(variables('internalLastOctet'),copyIndex()))]",
+                            "subnet": {
+                                "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('internalSubnetName'))]"
+                            }
                         }
                     }
                 ]
@@ -760,8 +910,12 @@
                 "displayName": "AvailabilitySet"
             },
             "name": "[variables('availabilitySetName')]",
+            "properties": {
+                "PlatformUpdateDomainCount": "3",
+                "PlatformFaultDomainCount": "2"
+            },
             "sku": {
-                "name": "Aligned"
+                "name": "[variables('availabilitySetArray')[parameters('managedDisks')]]"
             },
             "type": "Microsoft.Compute/availabilitySets"
         },
@@ -780,7 +934,7 @@
         {
             "name": "[parameters('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "condition": "[equals(parameters('storageAccountNewOrExisting'),'new')]",
+            "condition": "[equals(variables('doStorage'), 'nonew')]",
             "location": "[parameters('location')]",
             "tags": {
                 "displayName": "StorageAccount"
@@ -796,7 +950,9 @@
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "linkedVnetTemplate",
-                "niccopy",
+                "mgmtNicCopy",
+                "extNicCopy",
+                "intNicCopy",
                 "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
                 "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
@@ -816,13 +972,20 @@
                     "instanceType": { "value": "[parameters('instanceType')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
                     "storageAccountRG": { "value": "[variables('storageAccountRG')]" },
-                    "managedDisks": { "value": "[parameters('managedDisks')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },
-                    "nicNamePrefix": { "value": "[variables('nicNamePrefix')]" },
-                    "ipPrefix": { "value": "[variables('ipPrefix')]" },
-                    "lastOctet": { "value": "[variables('lastOctet')]" },
+                    "mgmtNicNamePrefix": { "value": "[variables('mgmtNicNamePrefix')]" },
+                    "mgmtIpPrefix": { "value": "[variables('mgmtIpPrefix')]" },
+                    "mgmtLastOctet": { "value": "[variables('mgmtLastOctet')]" },
+                    "externalNicNamePrefix": { "value": "[variables('externalNicNamePrefix')]" },
+                    "externalIpPrefix": { "value": "[variables('externalIpPrefix')]" },
+                    "externalLastOctet": { "value": "[variables('externalLastOctet')]" },
+                    "extSubnetRef": { "value": "[variables('extSubnetRef')]" },
+                    "internalNicNamePrefix": { "value": "[variables('internalNicNamePrefix')]" },
+                    "internalIpPrefix": { "value": "[variables('internalIpPrefix')]" },
+                    "internalLastOctet": { "value": "[variables('internalLastOctet')]" },
+                    "intSubnetRef": { "value": "[variables('intSubnetRef')]" },
                     "commandArgs": { "value": "[variables('commandArgs')]" }
                 }
             }
@@ -831,11 +994,11 @@
     "outputs": {
         "GUI-URL": {
             "type": "String",
-            "value": "[concat('https://', reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,':8443')]"
+            "value": "[concat('https://', parameters('mgmtPrivateIpAddressRangeStart'), ':443')]"
         },
         "SSH-URL": {
             "type": "String",
-            "value": "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
+            "value": "[concat(parameters('mgmtPrivateIpAddressRangeStart'),' 8022')]"
         }
     }
 }
