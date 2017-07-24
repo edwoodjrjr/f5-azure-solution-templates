@@ -156,6 +156,20 @@
                 "description": "The license token for the second F5 Web Application Firewall (if applicable)."
             }
         },
+        "licenseKey3": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The license token for the third F5 Web Application Firewall (if applicable)."
+            }
+        },
+        "licenseKey4": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The license token for the fourth F5 Web Application Firewall (if applicable)."
+            }
+        },
         "applicationProtocols": {
             "type": "string",
             "defaultValue": "http",

@@ -162,6 +162,20 @@
                 "description": "The license token for the second F5 Web Application Firewall (if applicable)."
             }
         },
+        "licenseKey3": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The license token for the third F5 Web Application Firewall (if applicable)."
+            }
+        },
+        "licenseKey4": {
+            "type": "string",
+            "defaultValue": "NOT_SPECIFIED",
+            "metadata": {
+                "description": "The license token for the fourth F5 Web Application Firewall (if applicable)."
+            }
+        },
         "applicationProtocols": {
             "type": "string",
             "defaultValue": "http-https",
@@ -719,7 +733,7 @@
                         "name": "ext-ipconfig-secondary",
                         "properties": {
                             "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex(2)))]",
+                            "privateIPAddress": "[concat(variables('externalIpPrefix'),add(variables('externalLastOctet'),copyIndex(4)))]",
                             "subnet": {
                                 "id": "[concat(reference('linkedVnetTemplate').outputs.vnetID.value,'/subnets/',parameters('externalSubnetName'))]"
                             },
@@ -971,6 +985,8 @@
                     "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "licenseKey1": { "value": "[parameters('licenseKey1')]" },
                     "licenseKey2": { "value": "[parameters('licenseKey2')]" },
+                    "licenseKey3": { "value": "[parameters('licenseKey3')]" },
+                    "licenseKey4": { "value": "[parameters('licenseKey4')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
                     "storageAccountRG": { "value": "[variables('storageAccountRG')]" },

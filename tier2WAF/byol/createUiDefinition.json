@@ -124,6 +124,14 @@
                                 {
                                     "label": "2",
                                     "value": "2"
+                                },
+                                {
+                                    "label": "3",
+                                    "value": "3"
+                                },
+                                {
+                                    "label": "4",
+                                    "value": "4"
                                 }
                             ]
                         }
@@ -149,7 +157,31 @@
                             "required": false,
                             "validationMessage": "Only valid F5 license key tokens are allowed."
                         },
-                        "visible": "[equals(int(steps('infrastructureSettings').numberOfInstances), 2)]"
+                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 2)]"
+                    },
+                    {
+                        "name": "licenseKey3",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "License Token 3",
+                        "toolTip": "BYOL Token for the third F5 WAF node.",
+                        "constraints": {
+                            "regex": "((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{7}))$",
+                            "required": false,
+                            "validationMessage": "Only valid F5 license key tokens are allowed."
+                        },
+                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 3)]"
+                    },
+                    {
+                        "name": "licenseKey4",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "License Token 4",
+                        "toolTip": "BYOL Token for the fourth F5 WAF node.",
+                        "constraints": {
+                            "regex": "((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{5}))(-)((?:[A-Z]{7}))$",
+                            "required": false,
+                            "validationMessage": "Only valid F5 license key tokens are allowed."
+                        },
+                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 4)]"
                     },
                     {
                         "name": "managedDisks",
@@ -243,7 +275,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 2,
+                                    "minAddressCount": "[steps('infrastructureSettings').numberOfInstances]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -255,7 +287,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 4,
+                                    "minAddressCount": "[mul(steps('infrastructureSettings').numberOfInstances), 2]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -267,7 +299,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": 2,
+                                    "minAddressCount": "[steps('infrastructureSettings').numberOfInstances]",
                                     "requireContiguousAddresses": true
                                 }
                             }
@@ -598,6 +630,8 @@
             "dnsLabel": "[steps('infrastructureSettings').publicIp.domainNameLabel]",
             "licenseKey1": "[steps('infrastructureSettings').licenseKey1]",
             "licenseKey2": "[steps('infrastructureSettings').licenseKey2]",
+            "licenseKey3": "[steps('infrastructureSettings').licenseKey3]",
+            "licenseKey4": "[steps('infrastructureSettings').licenseKey4]",
             "applicationProtocols": "[steps('appSettings').applicationProtocols]",
             "applicationAddress": "[steps('appSettings').applicationAddress]",
             "applicationPort": "[steps('appSettings').applicationPort]",

@@ -37,6 +37,12 @@
         "licenseKey2": {
             "type": "string"
         },
+        "licenseKey3": {
+            "type": "string"
+        },
+        "licenseKey4": {
+            "type": "string"
+        },
         "adminUsername": {
             "type": "string"
         },
