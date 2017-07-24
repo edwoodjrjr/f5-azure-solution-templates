@@ -828,7 +828,8 @@
                             "protocol": "Tcp",
                             "frontendPort": "[parameters('applicationPort')]",
                             "backendPort": 880,
-                            "idleTimeoutInMinutes": 15
+                            "loadDistribution": "SourceIPProtocol",
+                            "idleTimeoutInMinutes": 30
                         }
                     },
                     {
@@ -846,7 +847,8 @@
                             "protocol": "Tcp",
                             "frontendPort": "[parameters('applicationSecurePort')]",
                             "backendPort": 8445,
-                            "idleTimeoutInMinutes": 15
+                            "loadDistribution": "SourceIPProtocol",
+                            "idleTimeoutInMinutes": 30
                         }
                     }
                 ],
