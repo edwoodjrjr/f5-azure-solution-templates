@@ -115,11 +115,10 @@
                         "label": "Virtual machine size",
                         "toolTip": "The size of virtual machine to provision for each cluster node.",
                         "recommendedSizes": [
-                            "Standard_A3"
+                            "Standard_A4"
                         ],
                         "constraints": {
                             "allowedSizes": [
-                                "Standard_A3",
                                 "Standard_A4",
                                 "Standard_A5",
                                 "Standard_A6",
