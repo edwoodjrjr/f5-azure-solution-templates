@@ -72,7 +72,7 @@
                         "osPlatform": "Windows"
                     },
                     {
-                        "name": "instanceType",
+                        "name": "instanceTypePremium",
                         "type": "Microsoft.Compute.SizeSelector",
                         "label": "Virtual machine size",
                         "toolTip": "The size of virtual machine to provision for each cluster node.",
@@ -107,7 +107,54 @@
                             "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth,'-best-hourly')]"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
-                        "visible": true
+                        "visible": "[or(equals(steps('infrastructureSettings').managedDisks, 'yes'), equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS'))]"
+                    },
+                    {
+                        "name": "instanceTypeStandard",
+                        "type": "Microsoft.Compute.SizeSelector",
+                        "label": "Virtual machine size",
+                        "toolTip": "The size of virtual machine to provision for each cluster node.",
+                        "recommendedSizes": [
+                            "Standard_A3"
+                        ],
+                        "constraints": {
+                            "allowedSizes": [
+                                "Standard_A3",
+                                        "Standard_A4",
+                                        "Standard_A5",
+                                        "Standard_A6",
+                                        "Standard_A7",
+                                        "Standard_A8",
+                                        "Standard_A9",
+                                        "Standard_D2",
+                                        "Standard_D3",
+                                        "Standard_D4",
+                                        "Standard_D11",
+                                        "Standard_D12",
+                                        "Standard_D13",
+                                        "Standard_D14",
+                                        "Standard_D2_v2",
+                                        "Standard_D3_v2",
+                                        "Standard_D4_v2",
+                                        "Standard_D5_v2",
+                                        "Standard_D11_v2",
+                                        "Standard_D12_v2",
+                                        "Standard_D13_v2",
+                                        "Standard_D14_v2",
+                                        "Standard_D15_v2",
+                                        "Standard_F2",
+                                        "Standard_F4",
+                                        "Standard_F8"
+                            ]
+                        },
+                        "osPlatform": "Linux",
+                        "imageReference": {
+                            "publisher": "f5-networks",
+                            "offer": "f5-big-ip-hourly",
+                            "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth,'-best-hourly')]"
+                        },
+                        "count": "[steps('infrastructureSettings').numberOfInstances]",
+                        "visible": "[and(equals(steps('infrastructureSettings').managedDisks, 'no'), equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS'))]"
                     },
                     {
                         "name": "numberOfInstances",
@@ -189,7 +236,8 @@
                         },
                         "constraints": {
                             "allowedTypes": [
-                                "Premium_LRS"
+                                "Premium_LRS",
+                                "Standard_LRS"
                             ]
                         },
                         "visible": "[equals(steps('infrastructureSettings').managedDisks, 'no')]"
@@ -593,7 +641,7 @@
             "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
             "managedDisks": "[steps('infrastructureSettings').managedDisks]",
             "numberOfInstances": "[int(steps('infrastructureSettings').numberOfInstances)]",
-            "instanceType": "[steps('infrastructureSettings').instanceType]",
+            "instanceType": "[coalesce(steps('infrastructureSettings').instanceTypeStandard, steps('infrastructureSettings').instanceTypePremium)]",
             "storageAccountNewOrExisting": "[steps('infrastructureSettings').storageAccount.newOrExisting]",
             "storageAccountExistingRGName": "[steps('infrastructureSettings').storageAccount.resourceGroup]",
             "storageAccountName": "[steps('infrastructureSettings').storageAccount.name]",
