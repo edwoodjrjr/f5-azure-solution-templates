@@ -107,7 +107,7 @@
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
-                        "visible": "[or(equals(steps('infrastructureSettings').managedDisks, 'yes'), equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS')]"
+                        "visible": "[or(equals(steps('infrastructureSettings').managedDisks, 'yes'), equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS'))]"
                     },
                     {
                         "name": "instanceTypeStandard",
@@ -154,7 +154,7 @@
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
-                        "visible": "[and(equals(steps('infrastructureSettings').managedDisks, 'no'), equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS')]"
+                        "visible": "[and(equals(steps('infrastructureSettings').managedDisks, 'no'), equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS'))]"
                     },
                     {
                         "name": "numberOfInstances",
