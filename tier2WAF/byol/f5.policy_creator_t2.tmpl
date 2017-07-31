@@ -43,7 +43,7 @@ sys application template /Common/f5.policy_creator_t2 {
 				low { set blocking_mode "enabled" ; set asm_name $deployment-$type-$unique_level ; set asm_url "${asm_policy_location}/asm-policy-${type}-${unique_level}.xml" }
 				medium { set blocking_mode "enabled" ; set asm_name $deployment-$type-$unique_level ; set asm_url "${asm_policy_location}/asm-policy-${type}-${unique_level}.xml" }
 				high { set blocking_mode "enabled" ; set asm_name $deployment-$type-$unique_level ; set asm_url "${asm_policy_location}/asm-policy-${type}-${unique_level}.xml" }
-                    off { set blocking_mode "disabled" ; set asm_name $deployment-$type-$unique_level ; set asm_url "${asm_policy_location}/asm-policy-${type}-${unique_level}.xml" }
+                off { set blocking_mode "disabled" ; set asm_name $deployment-$type-$unique_level ; set asm_url "${asm_policy_location}/asm-policy-${type}-${unique_level}.xml" }
 				default { set blocking_mode "enabled" ; set asm_name "$deployment-custom-asm-policy" ; set asm_url $custom_asm_policy }
 			}
 
@@ -86,10 +86,11 @@ sys application template /Common/f5.policy_creator_t2 {
 	#Set variables, if they dont exist then use defaults
 	set deployment [expr { [info exists ::variables__deployment] ? "$::variables__deployment" : "$app" }]
 	set type [expr { [info exists ::variables__type] ? "$::variables__type" : "linux" }]
-	set level [expr { [info exists ::variables__level] ? "$::variables__level" : "high" }]
+	set level [expr { [info exists ::waf__level] ? "$::waf__level" : "high" }]
 	set l7dos_level [expr { [info exists ::variables__l7dos_level] ? "$::variables__l7dos_level" : "$level" }]
 	set asm_policy_location [expr { [info exists ::variables__asm_policy_location] ? "$::variables__asm_policy_location" : "/var/lib/waagent/custom-script/download/0" }]
-	set custom_asm_policy [expr { [info exists ::variables__custom_asm_policy] ? "$::variables__custom_asm_policy" : "none" }]
+	set custom_asm_policy [expr { [info exists ::waf__custom_asm_policy] ? "$::waf__custom_asm_policy" : "none" }]
+    set reset [expr { [info exists ::waf__reset] ? "$::waf__reset" : "yes" }]
 
 	#Set Explicit Flags for what to deploy, must be true or false is passing, if not passed will default to false
 	set do_asm [expr { [info exists ::variables__do_asm] ? "$::variables__do_asm" : "false" }]
@@ -101,8 +102,10 @@ sys application template /Common/f5.policy_creator_t2 {
 	#Signal that we are starting...
 	puts "Starting cloud policy helper iApp for $deployment Deploying... ASM: $do_asm L7DOS: $do_l7dos URI Rewrite: $do_uri_rewrite"
 
-	#Run proc to download and deploy ASM
-    if {$do_asm} { deploy_asm $deployment $type $level $asm_policy_location $custom_asm_policy }
+    #Run proc to download and deploy ASM
+    if {[catch {set asm_check [tmsh::get_config asm policy /Common/$deployment-$type-$level-security_policy]}]}{set asm_check ""}
+
+    if {$do_asm && ($asm_check == "" || ($asm_check != "" && $reset == "yes"))} { deploy_asm $deployment $type $level $asm_policy_location $custom_asm_policy }
 
 	#Bot categories for l7 dos, perhaps later we can customize actions based on user input
 	set bot_categories "
@@ -256,11 +259,37 @@ sys application template /Common/f5.policy_creator_t2 {
                 return [expr {[iapp::tmos_version >= 13.0] ? "yes" : "no"}]
             }
         }
+        message welcome "Use this iApp template to reconfigure the blocking level of the WAF policy."
+     }
+
+     section waf  {
+        choice  level display "xxlarge" default "medium" {
+            "High" => "high",
+            "Medium" => "medium",
+            "Low" => "low",
+            "Off" => "off",
+            "Custom" => "custom"
+        }
+        optional ( level == "custom" ) {
+            string custom_asm_policy display "xxlarge" required
+        }
+        optional ( level != "custom" ) {
+            choice reset display "xxlarge" default "yes" {
+                "No, do not reset the policy" => "no",
+                "Yes, reset the policy" => "yes"
+            }
+        }
      }
 
 	text {
 
-		intro "Policy Creator iApp(Cloud)"
+        intro "Policy Creator iApp (Cloud)"
+        intro.welcome "Update WAF Policy"
+
+        waf "WAF Options"
+        waf.level "Select the WAF blocking level:"
+        waf.custom_asm_policy "Enter the URL for the custom security policy that is accessible by this WAF:"
+        waf.reset "Would you like to reset the selected policy to default settings?"
 
 	}
             }
