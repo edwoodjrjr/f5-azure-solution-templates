@@ -76,9 +76,9 @@
         },
         "imageName": {
             "allowedValues": [
-                "Good",
-                "Better",
-                "Best"
+                "good",
+                "better",
+                "best"
             ],
             "defaultValue": "Good",
             "metadata": {
@@ -89,8 +89,7 @@
         "bigIpVersion": {
             "allowedValues": [
                 "13.0.021",
-                "12.1.24",
-                "latest"
+                "12.1.24"
             ],
             "defaultValue": "13.0.021",
             "metadata": {
@@ -316,7 +315,7 @@
             "metadata": {
                 "description": "Email address for scale event notifications."
             },
-            "defaultValue": "OPTIONAL", 
+            "defaultValue": "OPTIONAL",
             "type": "string"
         },
         "tenantId": {
