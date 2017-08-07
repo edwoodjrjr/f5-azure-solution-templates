@@ -41,7 +41,7 @@ else
 fi
 
 # disable eventhub datagroup icall handler
-response_code=$(curl -sku admin:$(passwd) -w "%{http_code}" -X PUT -H "Content-Type: application/json" https://localhost:$dfl_mgmt_port/mgmt/tm/sys/icall/handler/periodic/eventhub_datagroup -d '{"interval": "300",  "script": "eventhub_datagroup"}' -o /dev/null)
+response_code=$(curl -sku admin:$(passwd) -w "%{http_code}" -X PUT -H "Content-Type: application/json" https://localhost:$dfl_mgmt_port/mgmt/tm/sys/icall/handler/periodic/eventhub_datagroup -d '{"interval": "1800",  "script": "eventhub_datagroup"}' -o /dev/null)
 
 if [[ $response_code != 200  ]]; then
      echo "Failed to update eventhub iCall handler with response code '"$response_code"'"
