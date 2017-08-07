@@ -35,8 +35,8 @@
                               "constraints": {
                                    "allowedValues": [
                                         {
-                                             "label": "13.0.21",
-                                             "value": "13.0.21"
+                                             "label": "13.0.021",
+                                             "value": "13.0.021"
                                         },
                                         {
                                              "label": "12.1.24",
