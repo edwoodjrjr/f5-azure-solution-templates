@@ -30,7 +30,7 @@
                               "name": "bigIpVersion",
                               "type": "Microsoft.Common.OptionsGroup",
                               "label": "BIG-IP Version",
-                              "defaultValue": "13.0.21",
+                              "defaultValue": "13.0.021",
                               "toolTip": "F5 BIG-IP version you want to use.",
                               "constraints": {
                                    "allowedValues": [

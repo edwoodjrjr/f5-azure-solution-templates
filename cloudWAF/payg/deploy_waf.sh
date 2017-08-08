@@ -171,5 +171,12 @@ if [[ $mode == "https-offload" ]]; then
      fi
 fi
 
+# save the config
+response_code=$(curl -sk -u $user:$(passwd) -w "%{http_code}" -X POST -H "Content-Type: application/json" https://localhost:$dfl_mgmt_port/mgmt/tm/sys/config -d '{"command": "save"}' -o /dev/null)
+
+if [[ $response_code != 200  ]]; then
+     echo "Failed to save the configuration with response code '"$response_code"'"
+fi
+
 echo "Deployment complete."
 exit

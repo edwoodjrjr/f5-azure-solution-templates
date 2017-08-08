@@ -264,15 +264,36 @@
             "type": "string"
         },
         "applicationType": {
-            "allowedValues": [
-                "Windows",
-                "Linux"
-            ],
-            "defaultValue": "Linux",
+            "type": "string",
+            "defaultValue": "apache",
             "metadata": {
                 "description": "Is your application running on a Linux OS or a Windows OS?"
             },
-            "type": "string"
+            "allowedValues": [
+                "apache",
+                "iis",
+                "nginx",
+                "magento",
+                "woo",
+                "big",
+                "volusion",
+                "miva",
+                "shopify",
+                "demandware",
+                "os",
+                "shop",
+                "wordpress",
+                "drupal",
+                "joomla",
+                "blogger",
+                "vbulletin",
+                "expression",
+                "dnn",
+                "adobecq",
+                "ektron",
+                "sharepoint",
+                "cms"
+            ]
         },
         "applicationServiceFqdn": {
             "defaultValue": "NOT_SPECIFIED",
@@ -534,7 +555,79 @@
         "lbTcpProbeIdHttps": "[concat(variables('lbID'),'/probes/',variables('lbTcpProbeNameHttps'))]",
         "httpBackendPort": 880,
         "httpsBackendPort": 8445,
-        "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(parameters('applicationType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
+        "appTypeMap": {
+            "iis": {
+                "type": "windows"
+            },
+            "apache": {
+                "type": "linux"
+            },
+            "nginx": {
+                "type": "linux"
+            },
+            "magento": {
+                "type": "linux"
+            },
+            "woo": {
+                "type": "linux"
+            },
+            "big": {
+                "type": "linux"
+            },
+            "volusion": {
+                "type": "linux"
+            },
+            "miva": {
+                "type": "linux"
+            },
+            "shopify": {
+                "type": "linux"
+            },
+            "demandware": {
+                "type": "linux"
+            },
+            "os": {
+                "type": "linux"
+            },
+            "shop": {
+                "type": "linux"
+            },
+            "wordpress": {
+                "type": "linux"
+            },
+            "drupal": {
+                "type": "linux"
+            },
+            "joomla": {
+                "type": "linux"
+            },
+            "blogger": {
+                "type": "linux"
+            },
+            "vbulletin": {
+                "type": "linux"
+            },
+            "expression": {
+                "type": "linux"
+            },
+            "dnn": {
+                "type": "linux"
+            },
+            "adobecq": {
+                "type": "linux"
+            },
+            "ektron": {
+                "type": "linux"
+            },
+            "sharepoint": {
+                "type": "windows"
+            },
+            "cms": {
+                "type": "linux"
+            }
+        },
+        "appType": "[variables('appTypeMap')[parameters('applicationType')].type]",
+        "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
     },
     "resources": [
         {
