@@ -532,8 +532,7 @@
                     "vnetAddressPrefix": { "value": "[parameters('vnetAddressPrefix')]" },
                     "subnetName": { "value": "[parameters('subnetName')]" },
                     "subnetAddressPrefix": { "value": "[parameters('subnetAddressPrefix')]" },
-                    "vnetExistingRGName": { "value": "[parameters('vnetExistingRGName')]" },
-                    "nsgID": { "value": "[variables('nsgID')]" }
+                    "vnetExistingRGName": { "value": "[parameters('vnetExistingRGName')]" }
                 }
             }
         },
