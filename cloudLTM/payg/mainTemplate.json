@@ -691,6 +691,9 @@
                                             }
                                         }
                                     ],
+                                    "networkSecurityGroup": {
+                                         "id": "[variables('nsgID')]"
+                                     },
                                     "primary": "true"
                                 }
                             }
