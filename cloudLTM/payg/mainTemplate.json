@@ -805,7 +805,7 @@
         },
         "SSH-URL": {
             "type": "string",
-            "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
+            "value": "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
         }
     }
 }
