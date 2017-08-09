@@ -801,11 +801,11 @@
     "outputs": {
         "GUI-URL": {
             "type": "string",
-            "value": "[concat('https://',reference(variables('publicIpID')).dnsSettings.fqdn,':50101', ' - 50200')]"
+            "value": "[concat('https://', reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,':50101', ' - 50200')]"
         },
         "SSH-URL": {
             "type": "string",
-            "value": "[concat(reference(variables('publicIpID')).dnsSettings.fqdn,' ',50001, ' - 50100')]"
+            "[concat(reference(concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', variables('publicIpRG'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('publicIpName')), variables('apiVersionNetwork')).ipAddress,' 8022')]"
         }
     }
 }
