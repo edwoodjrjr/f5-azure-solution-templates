@@ -19,7 +19,7 @@
                               "type": "Microsoft.Common.TextBox",
                               "label": "Deployment Name",
                               "toolTip": "A friendly name for this deployment.",
-                              "defaultValue": "F5waf",
+                              "defaultValue": "F5ltm",
                               "constraints": {
                                    "required": true,
                                    "regex": "^[a-z0-9A-Z]{1,10}$",
