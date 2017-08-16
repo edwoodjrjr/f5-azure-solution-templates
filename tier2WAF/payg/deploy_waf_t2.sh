@@ -51,9 +51,11 @@ else
 fi
 
 # install iApp templates
+template_location="/var/lib/waagent/custom-script/download/0"
+
 for template in f5.http.v1.2.0rc7.tmpl f5.policy_creator_t2.tmpl f5.asm_log_creator_t2.tmpl
 do
-     cp $template /config/$template
+     cp $template_location/$template /config/$template
      response_code=$(curl -sku $user:$(passwd) -w "%{http_code}" -X POST -H "Content-Type: application/json" https://localhost:$dfl_mgmt_port/mgmt/tm/sys/config -d '{"command": "load","name": "merge","options": [ { "file": "/config/'"$template"'" } ] }' -o /dev/null)
      if [[ $response_code != 200  ]]; then
           echo "Failed to install iApp template; exiting with response code '"$response_code"'"
@@ -96,8 +98,6 @@ if [[ $level == "custom" ]]; then
 fi
 
 # deploy policies
-#copy security polices
-cp asm-policy* /config/cloud/
 # profile name
 l7dos_name="/Common/$deployment-l7dos"
 deployment_name="$deployment-policy"
