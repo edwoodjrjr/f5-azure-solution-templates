@@ -125,7 +125,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "wafst",
+            "defaultValue": "ltmst",
             "metadata": {
                 "description": "Unique name for the new Storage Account."
             }
@@ -177,7 +177,7 @@
         },
         "vnetName": {
             "type": "string",
-            "defaultValue": "waf-vnet",
+            "defaultValue": "ltm-vnet",
             "metadata": {
                 "description": "Specify the virtual network name."
             }

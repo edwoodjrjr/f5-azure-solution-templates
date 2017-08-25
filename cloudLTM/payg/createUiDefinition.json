@@ -129,7 +129,7 @@
                          {
                               "name": "adminUsername",
                               "type": "Microsoft.Compute.UserNameTextBox",
-                              "label": "F5 WAF Username",
+                              "label": "F5 LTM Username",
                               "defaultValue": "azureuser",
                               "toolTip": "Administrative username for the Azure virtual machine(s).",
                               "osPlatform": "Windows"
@@ -138,7 +138,7 @@
                               "name": "adminPassword",
                               "type": "Microsoft.Compute.CredentialsCombo",
                               "label": {
-                                   "password": "F5 WAF Password",
+                                   "password": "F5 LTM Password",
                                    "confirmPassword": "Confirm Password"
                               },
                               "toolTip": {
@@ -218,7 +218,7 @@
                               "label": "Storage Account",
                               "toolTip": "Select a new or existing storage account for your BIG-IP virtual machines. For autoscale solutions, only premium storage is allowed.",
                               "defaultValue": {
-                                   "name": "wafst",
+                                   "name": "ltmst",
                                    "type": "Premium_LRS"
                               },
                               "constraints": {
@@ -266,7 +266,7 @@
                                    "subnets": "Select an existing subnet or use the template to create a new one."
                               },
                               "defaultValue": {
-                                   "name": "waf-vnet",
+                                   "name": "ltm-vnet",
                                    "addressPrefixSize": "/16"
 
                               },

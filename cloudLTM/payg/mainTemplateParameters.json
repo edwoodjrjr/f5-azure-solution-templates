@@ -123,7 +123,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "wafst",
+            "defaultValue": "ltmst",
             "metadata": {
                 "description": "Unique name for the new Storage Account."
             }
