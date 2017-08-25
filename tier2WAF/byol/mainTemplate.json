@@ -414,6 +414,7 @@
         "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), 'managed', parameters('managedDisks'), '.json')]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
         "mgmtPublicIPAddressName": "[concat(parameters('dnsLabel'), '-mgmt-pip')]",
+        "mgmtPublicIPAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('mgmtPublicIPAddressName'))]",
         "mgmtNicNamePrefix": "[concat(parameters('dnsLabel'),'-mgmt')]",
         "mgmtSubnetAddressArray": "[split(parameters('mgmtSubnetAddressPrefix'),'.')]",
         "mgmtPrivateAddressArray": "[split(parameters('mgmtPrivateIpAddressRangeStart'),'.')]",
@@ -1037,11 +1038,11 @@
     "outputs": {
         "GUI-URL": {
             "type": "String",
-            "value": "[concat('https://', parameters('mgmtPrivateIpAddressRangeStart'), ':443')]"
+            "value": "[concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).ipAddress, ':443')]"
         },
         "SSH-URL": {
             "type": "String",
-            "value": "[concat(parameters('mgmtPrivateIpAddressRangeStart'),' 8022')]"
+            "value": "[concat(reference(concat(variables('mgmtPublicIPAddressId'), '0')).ipAddress,' ',22)]"
         }
     }
 }
