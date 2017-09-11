@@ -480,7 +480,7 @@
                 "Port": 8443
             }
         },
-        "apiVersionCompute": "2016-04-30-preview",
+        "apiVersionCompute": "2017-03-30",
         "apiVersionNetwork": "2016-06-01",
         "apiVersionStorage": "2015-06-15",
         "apiVersionInsights": "2015-04-01",
