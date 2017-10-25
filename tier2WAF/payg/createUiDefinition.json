@@ -240,7 +240,18 @@
                             ]
                         },
                         "visible": "[equals(steps('infrastructureSettings').managedDisks, 'no')]"
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "networkSettings",
+                "label": "Network Settings",
+                "subLabel": {
+                    "preValidation": "Configure Network Settings",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Network Settings",
+                "elements": [
                     {
                         "name": "publicIp",
                         "type": "Microsoft.Network.PublicIpAddressCombo",
@@ -647,10 +658,10 @@
             "storageAccountType": "[steps('infrastructureSettings').storageAccount.type]",
             "adminUsername": "[steps('infrastructureSettings').adminUsername]",
             "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
-            "publicIpNewOrExisting": "[steps('infrastructureSettings').publicIp.newOrExistingOrNone]",
-            "publicIpExistingRGName": "[steps('infrastructureSettings').publicIp.resourceGroup]",
-            "publicIpName": "[steps('infrastructureSettings').publicIp.name]",
-            "dnsLabel": "[steps('infrastructureSettings').publicIp.domainNameLabel]",
+            "publicIpNewOrExisting": "[steps('networkSettings').publicIp.newOrExistingOrNone]",
+            "publicIpExistingRGName": "[steps('networkSettings').publicIp.resourceGroup]",
+            "publicIpName": "[steps('networkSettings').publicIp.name]",
+            "dnsLabel": "[steps('networkSettings').publicIp.domainNameLabel]",
             "licensedBandwidth": "[steps('infrastructureSettings').licensedBandwidth]",
             "applicationProtocols": "[steps('appSettings').applicationProtocols]",
             "applicationAddress": "[steps('appSettings').applicationAddress]",
@@ -662,20 +673,20 @@
             "applicationServiceFqdn": "[steps('appSettings').applicationServiceFqdn]",
             "blockingLevel": "[steps('appSettings').blockingLevel]",
             "customPolicy": "[steps('appSettings').customPolicy]",
-            "vnetNewOrExisting": "[steps('infrastructureSettings').virtualNetwork.newOrExisting]",
-            "vnetName": "[steps('infrastructureSettings').virtualNetwork.name]",
-            "vnetExistingRGName": "[steps('infrastructureSettings').virtualNetwork.resourceGroup]",
-            "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefix]",
-            "mgmtSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.name]",
-            "mgmtSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
-            "mgmtPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.startAddress]",
-            "externalSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.name]",
-            "externalSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.addressPrefix]",
-            "externalPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet2.startAddress]",
-            "internalSubnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.name]",
-            "internalSubnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.addressPrefix]",
-            "internalPrivateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet3.startAddress]",
-            "restrictedSrcAddress": "[steps('infrastructureSettings').restrictedSrcAddress]"
+            "vnetNewOrExisting": "[steps('networkSettings').virtualNetwork.newOrExisting]",
+            "vnetName": "[steps('networkSettings').virtualNetwork.name]",
+            "vnetExistingRGName": "[steps('networkSettings').virtualNetwork.resourceGroup]",
+            "vnetAddressPrefix": "[steps('networkSettings').virtualNetwork.addressPrefix]",
+            "mgmtSubnetName": "[steps('networkSettings').virtualNetwork.subnets.subnet1.name]",
+            "mgmtSubnetAddressPrefix": "[steps('networkSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
+            "mgmtPrivateIpAddressRangeStart": "[steps('networkSettings').virtualNetwork.subnets.subnet1.startAddress]",
+            "externalSubnetName": "[steps('networkSettings').virtualNetwork.subnets.subnet2.name]",
+            "externalSubnetAddressPrefix": "[steps('networkSettings').virtualNetwork.subnets.subnet2.addressPrefix]",
+            "externalPrivateIpAddressRangeStart": "[steps('networkSettings').virtualNetwork.subnets.subnet2.startAddress]",
+            "internalSubnetName": "[steps('networkSettings').virtualNetwork.subnets.subnet3.name]",
+            "internalSubnetAddressPrefix": "[steps('networkSettings').virtualNetwork.subnets.subnet3.addressPrefix]",
+            "internalPrivateIpAddressRangeStart": "[steps('networkSettings').virtualNetwork.subnets.subnet3.startAddress]",
+            "restrictedSrcAddress": "[steps('networkSettings').restrictedSrcAddress]"
         }
     }
 }

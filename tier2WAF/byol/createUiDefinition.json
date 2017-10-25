@@ -6,6 +6,44 @@
         ],
         "steps": [
             {
+                "name": "instanceCount",
+                "label": "Number of Instances",
+                "subLabel": {
+                    "preValidation": "Choose the number of BIG-IP VE instances",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Number of Instances",
+                "elements": [
+                    {
+                        "name": "numberOfInstances",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Number of WAFs",
+                        "defaultValue": "1",
+                        "toolTip": "The number of individual F5 WAFs (nodes) to provision for this cluster.",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "1",
+                                    "value": "1"
+                                },
+                                {
+                                    "label": "2",
+                                    "value": "2"
+                                },
+                                {
+                                    "label": "3",
+                                    "value": "3"
+                                },
+                                {
+                                    "label": "4",
+                                    "value": "4"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
                 "name": "infrastructureSettings",
                 "label": "Infrastructure Settings",
                 "subLabel": {
@@ -106,7 +144,7 @@
                             "offer": "f5-big-ip",
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
-                        "count": "[steps('infrastructureSettings').numberOfInstances]",
+                        "count": "[steps('instanceCount').numberOfInstances]",
                         "visible": "[or(equals(steps('infrastructureSettings').managedDisks, 'yes'), equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS'))]"
                     },
                     {
@@ -152,35 +190,8 @@
                             "offer": "f5-big-ip",
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
-                        "count": "[steps('infrastructureSettings').numberOfInstances]",
+                        "count": "[steps('instanceCount').numberOfInstances]",
                         "visible": "[and(equals(steps('infrastructureSettings').managedDisks, 'no'), equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS'))]"
-                    },
-                    {
-                        "name": "numberOfInstances",
-                        "type": "Microsoft.Common.DropDown",
-                        "label": "Number of WAFs",
-                        "defaultValue": "1",
-                        "toolTip": "The number of individual F5 WAFs (nodes) to provision for this cluster.",
-                        "constraints": {
-                            "allowedValues": [
-                                {
-                                    "label": "1",
-                                    "value": "1"
-                                },
-                                {
-                                    "label": "2",
-                                    "value": "2"
-                                },
-                                {
-                                    "label": "3",
-                                    "value": "3"
-                                },
-                                {
-                                    "label": "4",
-                                    "value": "4"
-                                }
-                            ]
-                        }
                     },
                     {
                         "name": "licenseKey1",
@@ -203,7 +214,7 @@
                             "required": false,
                             "validationMessage": "Only valid F5 license key tokens are allowed."
                         },
-                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 2)]"
+                        "visible": "[greaterOrEquals(int(steps('instanceCount').numberOfInstances), 2)]"
                     },
                     {
                         "name": "licenseKey3",
@@ -215,7 +226,7 @@
                             "required": false,
                             "validationMessage": "Only valid F5 license key tokens are allowed."
                         },
-                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 3)]"
+                        "visible": "[greaterOrEquals(int(steps('instanceCount').numberOfInstances), 3)]"
                     },
                     {
                         "name": "licenseKey4",
@@ -227,7 +238,7 @@
                             "required": false,
                             "validationMessage": "Only valid F5 license key tokens are allowed."
                         },
-                        "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 4)]"
+                        "visible": "[greaterOrEquals(int(steps('instanceCount').numberOfInstances), 4)]"
                     },
                     {
                         "name": "managedDisks",
@@ -322,7 +333,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": "[int(steps('infrastructureSettings').numberOfInstances)]",
+                                    "minAddressCount": "[int(steps('instanceCount').numberOfInstances)]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -334,7 +345,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": "[mul(int(steps('infrastructureSettings').numberOfInstances), 2)]",
+                                    "minAddressCount": "[mul(int(steps('instanceCount').numberOfInstances), 2)]",
                                     "requireContiguousAddresses": true
                                 }
                             },
@@ -346,7 +357,7 @@
                                 },
                                 "constraints": {
                                     "minAddressPrefixSize": "/28",
-                                    "minAddressCount": "[int(steps('infrastructureSettings').numberOfInstances)]",
+                                    "minAddressCount": "[int(steps('instanceCount').numberOfInstances)]",
                                     "requireContiguousAddresses": true
                                 }
                             }
@@ -663,7 +674,7 @@
             "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",
             "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
             "managedDisks": "[steps('infrastructureSettings').managedDisks]",
-            "numberOfInstances": "[int(steps('infrastructureSettings').numberOfInstances)]",
+            "numberOfInstances": "[int(steps('instanceCount').numberOfInstances)]",
             "instanceType": "[coalesce(steps('infrastructureSettings').instanceTypeStandard, steps('infrastructureSettings').instanceTypePremium)]",
             "storageAccountNewOrExisting": "[steps('infrastructureSettings').storageAccount.newOrExisting]",
             "storageAccountExistingRGName": "[steps('infrastructureSettings').storageAccount.resourceGroup]",
