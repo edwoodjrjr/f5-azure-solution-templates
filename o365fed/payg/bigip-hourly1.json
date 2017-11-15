@@ -269,7 +269,7 @@
             "publisher": "f5-networks",
             "offer": "f5-big-ip-hourly",
             "sku": "[parameters('imageName')]",
-            "version": "12.1.24"
+            "version": "12.1.2200"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",

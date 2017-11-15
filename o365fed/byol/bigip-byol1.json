@@ -275,7 +275,7 @@
             "publisher": "f5-networks",
             "offer": "f5-big-ip",
             "sku": "f5-bigip-virtual-edition-best-byol",
-            "version": "12.1.24"
+            "version": "12.1.2200"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
@@ -312,7 +312,7 @@
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
         "type": "CustomScript",
-        "autoUpgradeMinorVersion": true,          
+        "autoUpgradeMinorVersion": true,
         "typeHandlerVersion": "2.0",
         "settings": {
           "fileUris": [
