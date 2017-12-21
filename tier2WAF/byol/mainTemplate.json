@@ -167,7 +167,6 @@
         },
         "dnsLabel": {
             "type": "string",
-            "defaultValue": "dnslabel",
             "metadata": {
                 "description": "Unique DNS name for the Public IP used to access the Web Application Firewalls for management."
             }
