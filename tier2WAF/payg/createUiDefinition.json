@@ -231,7 +231,7 @@
                         "label": "Storage Account",
                         "toolTip": "Select a new or existing storage account for your BIG-IP virtual machines. For WAF solutions, only premium storage is allowed.",
                         "defaultValue": {
-                            "name": "[concat(uniquestring(concat(resourceGroup().id, 'wafst')), 'wafst')]",
+                            "name": "wafst",
                             "type": "Premium_LRS"
                         },
                         "constraints": {
