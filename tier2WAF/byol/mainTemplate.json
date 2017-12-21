@@ -115,6 +115,7 @@
         },
         "storageAccountName": {
             "type": "string",
+            "defaultValue": "[concat(uniquestring(parameters('dnsLabel')), 'wafst')]",
             "metadata": {
                 "description": "Unique name for the new Storage Account."
             }
