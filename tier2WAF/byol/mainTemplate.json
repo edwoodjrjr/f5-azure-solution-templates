@@ -428,6 +428,7 @@
         "externalIpPrefix": "[concat(variables('externalPrivateAddressArray')[0],'.',variables('externalPrivateAddressArray')[1],'.',variables('externalPrivateAddressArray')[2],'.')]",
         "externalLastOctet": "[int(variables('externalPrivateAddressArray')[3])]",
         "extSubnetRef": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', parameters('vnetExistingRGName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('externalSubnetName'))]",
+        "internalNicNamePrefix": "[concat(parameters('dnsLabel'),'-int')]",
         "internalSubnetAddressArray": "[split(parameters('internalSubnetAddressPrefix'),'.')]",
         "internalPrivateAddressArray": "[split(parameters('internalPrivateIpAddressRangeStart'),'.')]",
         "internalIpPrefix": "[concat(variables('internalPrivateAddressArray')[0],'.',variables('internalPrivateAddressArray')[1],'.',variables('internalPrivateAddressArray')[2],'.')]",
