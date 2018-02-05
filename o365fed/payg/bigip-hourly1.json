@@ -250,7 +250,7 @@
       "plan": {
         "name": "[parameters('imageName')]",
         "publisher": "f5-networks",
-        "product": "f5-big-ip-hourly"
+        "product": "f5-big-ip-best"
       },
       "properties": {
         "availabilitySet": {
@@ -267,9 +267,9 @@
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
-            "offer": "f5-big-ip-hourly",
+            "offer": "f5-big-ip-best",
             "sku": "[parameters('imageName')]",
-            "version": "12.1.2200"
+            "version": "12.1.22193"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
