@@ -24,10 +24,11 @@
         },
         "bigIpVersion": {
             "allowedValues": [
-                "13.0.0300",
-                "12.1.2200"
+                "13.1.0200",
+                "13.0.03118",
+                "12.1.22193"
             ],
-            "defaultValue": "13.0.0300",
+            "defaultValue": "13.1.0200",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
@@ -410,7 +411,6 @@
 		"apiVersionStorage": "2017-10-01",
 		"apiVersionTemplate": "2017-08-01",
         "subscriptionID": "[subscription().subscriptionId]",
-        "bigipTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip', parameters('numberOfInstances'), 'managed', parameters('managedDisks'), '.json')]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
         "mgmtPublicIPAddressName": "[concat(parameters('dnsLabel'), '-mgmt-pip')]",
         "mgmtPublicIPAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('mgmtPublicIPAddressName'))]",
@@ -994,13 +994,14 @@
             "properties": {
                 "mode": "incremental",
                 "templateLink": {
-                    "uri": "[variables('bigipTemplateLink')]",
+                    "uri": "/deployBigip.json",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
                     "numberOfInstances": { "value": "[parameters('numberOfInstances')]" },
+                    "managedDisks": { "value": "[parameters('managedDisks')]" },
                     "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "licenseKey1": { "value": "[parameters('licenseKey1')]" },
                     "licenseKey2": { "value": "[parameters('licenseKey2')]" },
