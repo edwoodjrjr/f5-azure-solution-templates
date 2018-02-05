@@ -206,10 +206,10 @@
     }
   },
   "variables": {
-    "apiVersionCompute": "2016-03-30",
-    "apiVersionNetwork": "2015-06-15",
-    "apiVersionStorage": "2015-06-15",
-    "linkTemplateApiVersion": "2015-01-01",
+    "apiVersionCompute": "2017-12-01",
+    "apiVersionNetwork": "2017-11-01",
+    "apiVersionStorage": "2017-10-01",
+    "linkTemplateApiVersion": "2017-08-01",
     "entityId": "[concat('https://',trim(parameters('dnsFqdn')),'/idp/f5/')]",
     "vnetLink": "[concat(parameters('baseUrl'),'/',parameters('vnetNewOrExisting'),'vnet.json')]",
     "bigipNamePrefix": "[concat(parameters('dnsLabel'),'-bigip')]",
@@ -237,7 +237,7 @@
     "lastOctet": "[variables('instanceIPBase').lastOctet]",
     "appPort": 6443,
     "newStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'st')), 'st')]",
-    "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",  
+    "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
     "nicNamePrefix": "bigip-nic",
     "nicStop": "[concat(variables('nicNamePrefix'),parameters('numberOfInstances'))]",
     "scriptName": "o365FedDeploy.sh",
@@ -412,28 +412,32 @@
   },
   "resources": [
     {
-          "name": "[variables('diagStorageAccountName')]",
-          "type": "Microsoft.Storage/storageAccounts",
-          "location": "[parameters('location')]",
-          "tags": {
-               "displayName": "StorageAccount"
-          },
-          "apiVersion": "[variables('apiVersionStorage')]",
-          "properties": {
-               "accountType": "Standard_LRS" 
-          }
-     },
-     {
-          "name": "[variables('newStorageAccountName')]",
-          "type": "Microsoft.Storage/storageAccounts",
-          "location": "[parameters('location')]",
-          "tags": {
-               "displayName": "StorageAccount"
-          },
-          "apiVersion": "[variables('apiVersionStorage')]",
-          "properties": {
-               "accountType": "[variables('instanceTypeMap')[parameters('instanceType')].storageAccountType]" 
-          }
+      "name": "[variables('diagStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('location')]",
+      "tags": {
+           "displayName": "StorageAccount"
+      },
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "kind": "Storage",
+      "sku": {
+          "name": "Standard_LRS",
+          "tier": "Standard"
+      }
+ },
+ {
+      "name": "[variables('newStorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('location')]",
+      "tags": {
+           "displayName": "StorageAccount"
+      },
+      "apiVersion": "[variables('apiVersionStorage')]",
+      "kind": "Storage",
+        "sku": {
+            "name": "[variables('instanceTypeMap')[parameters('instanceType')].storageAccountType]",
+            "tier": "[replace(variables('instanceTypeMap')[parameters('instanceType')].storageAccountType, '_LRS', ' ')]"
+        }
      },
     {
       "apiVersion": "2015-01-01",

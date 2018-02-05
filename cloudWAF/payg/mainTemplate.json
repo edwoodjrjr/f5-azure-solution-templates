@@ -484,11 +484,11 @@
                 "Port": 8443
             }
         },
-        "apiVersionCompute": "2017-03-30",
-        "apiVersionNetwork": "2016-06-01",
-        "apiVersionStorage": "2015-06-15",
+        "apiVersionCompute": "2017-12-01",
+		"apiVersionNetwork": "2017-11-01",
+		"apiVersionStorage": "2017-10-01",
+		"apiVersionTemplate": "2017-08-01",
         "apiVersionInsights": "2015-04-01",
-        "apiVersionTemplate": "2015-01-01",
         "singleQuote": "'",
         "f5Tag": "82e08e16-fc62-4bf0-8916-e1c02dc871cd",
         "f5TemplateTag": "cloud_waf_solution",
@@ -868,8 +868,10 @@
                 "displayName": "StorageAccount"
             },
             "apiVersion": "[variables('apiVersionStorage')]",
-            "properties": {
-                "accountType": "Standard_LRS"
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
             }
         },
         {
@@ -881,8 +883,10 @@
                 "displayName": "StorageAccount"
             },
             "apiVersion": "[variables('apiVersionStorage')]",
-            "properties": {
-                "accountType": "[parameters('storageAccountType')]"
+            "kind": "Storage",
+            "sku": {
+                "name": "[parameters('storageAccountType')]",
+                "tier": "[replace(parameters('storageAccountType'),'_LRS', ' ')]"
             }
         },
         {
