@@ -1,0 +1,630 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "baseUrl": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "numberOfInstances": {
+            "type": "int"
+        },
+        "managedDisks": {
+            "type": "string"
+        },
+        "bigIpVersion": {
+            "allowedValues": [
+                "13.1.0200",
+                "13.0.03118",
+                "12.1.22193"
+            ],
+            "defaultValue": "13.1.0200",
+            "metadata": {
+                "description": "F5 BIG-IP version you want to use."
+            },
+            "type": "string"
+        },
+        "instanceType": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccountRG": {
+            "type": "string"
+        },
+        "licenseKey1": {
+            "type": "string"
+        },
+        "licenseKey2": {
+            "type": "string",
+            "default": "NOT_SPECIFIED"
+        },
+        "licenseKey3": {
+            "type": "string",
+            "default": "NOT_SPECIFIED"
+        },
+        "licenseKey4": {
+            "type": "string",
+            "default": "NOT_SPECIFIED"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "dnsLabel": {
+            "type": "string"
+        },
+        "mgmtNicNamePrefix": {
+            "type": "string"
+        },
+        "mgmtIpPrefix": {
+            "type": "string"
+        },
+        "mgmtLastOctet": {
+            "type": "int"
+        },
+        "externalNicNamePrefix": {
+            "type": "string"
+        },
+        "externalIpPrefix": {
+            "type": "string"
+        },
+        "externalLastOctet": {
+            "type": "int"
+        },
+        "extSubnetRef": {
+            "type": "string"
+        },
+        "internalNicNamePrefix": {
+            "type": "string"
+        },
+        "internalIpPrefix": {
+            "type": "string"
+        },
+        "internalLastOctet": {
+            "type": "int"
+        },
+        "intSubnetRef": {
+            "type": "string"
+        },
+        "commandArgs": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "apiVersionStorage": "2017-10-01",
+        "apiVersionCompute": "2017-12-01",
+        "apiVersionNetwork": "2017-11-01",
+        "f5Tag": "82e08e16-fc62-4bf0-8916-e1c02dc871cd",
+        "f5TemplateTag": "tier2_waf_solution",
+        "f5CloudLibsTag": "v3.2.1",
+        "f5CloudIappsTag": "v1.0.2",
+        "singleQuote": "'",
+        "verifyHash": "[concat(variables('singleQuote'), 'cli script /Common/verifyHash {\nproc script::run {} {\n        if {[catch {\n            set hashes(f5-cloud-libs.tar.gz) 8103cc640a41ad327fe103463e262ba5f700df51f9b8304723b2cf33bfd5c80e4a1bb7869f7b466dddd6f6e9351286e0024c0b212d29dc55b849d15558f66369\n            set hashes(f5-cloud-libs-aws.tar.gz) 6689f940fa4863dda289a16b73b64284efc5f88a7aad3e6f574d9928704ef587728765bbfc39454172cd9624f31096f5335432ec7eb3bff67aaf1313b5d6553d\n            set hashes(f5-cloud-libs-azure.tar.gz) a4ff4a9af058ce6058159531fd7bca07eb8808cdd1b1e13de0e1324ec7e4692211991ecaa58dc36021c6c88c7783837d480584393753c3dfc2fddf623781e3a9\n            set hashes(asm-policy-linux.tar.gz) 63b5c2a51ca09c43bd89af3773bbab87c71a6e7f6ad9410b229b4e0a1c483d46f1a9fff39d9944041b02ee9260724027414de592e99f4c2475415323e18a72e0\n            set hashes(f5.http.v1.2.0rc4.tmpl) 47c19a83ebfc7bd1e9e9c35f3424945ef8694aa437eedd17b6a387788d4db1396fefe445199b497064d76967b0d50238154190ca0bd73941298fc257df4dc034\n            set hashes(f5.http.v1.2.0rc6.tmpl) 811b14bffaab5ed0365f0106bb5ce5e4ec22385655ea3ac04de2a39bd9944f51e3714619dae7ca43662c956b5212228858f0592672a2579d4a87769186e2cbfe\n            set hashes(f5.http.v1.2.0rc7.tmpl) 21f413342e9a7a281a0f0e1301e745aa86af21a697d2e6fdc21dd279734936631e92f34bf1c2d2504c201f56ccd75c5c13baa2fe7653213689ec3c9e27dff77d\n            set hashes(f5.aws_advanced_ha.v1.3.0rc1.tmpl) 9e55149c010c1d395abdae3c3d2cb83ec13d31ed39424695e88680cf3ed5a013d626b326711d3d40ef2df46b72d414b4cb8e4f445ea0738dcbd25c4c843ac39d\n            set hashes(f5.aws_advanced_ha.v1.4.0rc1.tmpl) de068455257412a949f1eadccaee8506347e04fd69bfb645001b76f200127668e4a06be2bbb94e10fefc215cfc3665b07945e6d733cbe1a4fa1b88e881590396\n            set hashes(asm-policy.tar.gz) 2d39ec60d006d05d8a1567a1d8aae722419e8b062ad77d6d9a31652971e5e67bc4043d81671ba2a8b12dd229ea46d205144f75374ed4cae58cefa8f9ab6533e6\n            set hashes(deploy_waf.sh) 4c125f7cbc4d701cf50f03de479ebe99a08c2b2c3fa6aae3e229eb3f0bba98bb513d630368229c98e7c5c907e6a3168ece2f8f576267514bad4f6730ea14d454\n            set hashes(f5.policy_creator.tmpl) 54d265e0a573d3ae99864adf4e054b293644e48a54de1e19e8a6826aa32ab03bd04c7255fd9c980c3673e9cd326b0ced513665a91367add1866875e5ef3c4e3a\n            set hashes(f5.service_discovery.tmpl) 8d7491accdb1818f09353cd5b03d317ccd87e6801ac25b47aa49984a0f4ca313e8f3ecc1c9c904ce01c89dfeeacd3487655c8d45cc43f83c2ccd54d71f4f7d5f\n\n            set file_path [lindex $tmsh::argv 1]\n            set file_name [file tail $file_path]\n\n            if {![info exists hashes($file_name)]} {\n                tmsh::log err \"No hash found for $file_name\"\n                exit 1\n            }\n\n            set expected_hash $hashes($file_name)\n            set computed_hash [lindex [exec /usr/bin/openssl dgst -r -sha512 $file_path] 0]\n            if { $expected_hash eq $computed_hash } {\n                exit 0\n            }\n            tmsh::log err \"Hash does not match for $file_path\"\n            exit 1\n        }]} {\n            tmsh::log err {Unexpected error in verifyHash}\n            exit 1\n        }\n    }\n    script-signature G9wcG/3mhfzusezkV4k7pp7kh4Hjg6DQZD0HgCBmqj/EDwf51u8zuPA708oTgsKNZXt16Maly5c+3Fss9pMVK/1htELOy97OT4dxLYofodVKGqq+UAuNJzQ80/HV7ZMewtpEpgWLSV51L6DToACFUHLDWSRsf134p/y55MJNcLdD6v21XTBOL2AFdqsI9G6vOOc3Io4j7sVeA/7Pbke8hMvVx02b8L5lipMxnLU7MlSquD1X3Bi0E19bVeeyry3hpwnRH7A3jIw2g9CH2Unnyvl3nP0lkrZVJvSexDnt9id0HPOsgevXCfhhC1HfNYtfGjD9wRgJXHTo4ufh6rIIgA==\n    signing-key /Common/f5-irule\n}', variables('singleQuote'))]",
+        "installCloudLibs": "[concat(variables('singleQuote'), '#!/bin/bash\necho about to execute\nchecks=0\nwhile [ $checks -lt 120 ]; do echo checking mcpd\n/usr/bin/tmsh -a show sys mcp-state field-fmt | grep -q running\nif [ $? == 0 ]; then\necho mcpd ready\nbreak\nfi\necho mcpd not ready yet\nlet checks=checks+1\nsleep 1\ndone\necho loading verifyHash script\n/usr/bin/tmsh load sys config merge file /config/verifyHash\nif [ $? != 0 ]; then\necho cannot validate signature of /config/verifyHash\nexit 1\nfi\necho loaded verifyHash\nconfig_loc=\"/config/cloud/\"\nhashed_file_list=\"${config_loc}f5-cloud-libs.tar.gz\"\nfor file in $hashed_file_list; do\necho \"verifying $file\"\n/usr/bin/tmsh run cli script verifyHash $file\nif [ $? != 0 ]; then\necho \"$file is not valid\"\nexit 1\nfi\necho \"verified $file\"\ndone\necho \"expanding $hashed_file_list\"\ntar xvfz /config/cloud/f5-cloud-libs.tar.gz -C /config/cloud/node_modules\ntouch /config/cloud/cloudLibsReady', variables('singleQuote'))]",
+        "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
+        "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
+        "vhdNamePrefix": "[uniqueString(resourceGroup().id, deployment().name, parameters('dnsLabel'))]",
+        "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
+        "mgmtSubnetPrivateAddress": "[concat(parameters('mgmtIpPrefix'), parameters('mgmtLastOctet'))]",
+        "extSubnetPrivateAddress": "[concat(parameters('externalIpPrefix'), parameters('externalLastOctet'))]",
+        "intSubnetPrivateAddress": "[concat(parameters('internalIpPrefix'), parameters('internalLastOctet'))]",
+        "mgmtSubnetPrivateAddress1": "[concat(parameters('mgmtIpPrefix'),add(parameters('mgmtLastOctet'),1))]",
+        "extSubnetPrivateAddress1": "[concat(parameters('externalIpPrefix'),add(parameters('externalLastOctet'),1))]",
+        "intSubnetPrivateAddress1": "[concat(parameters('internalIpPrefix'),add(parameters('internalLastOctet'),1))]",
+        "mgmtSubnetPrivateAddress2": "[concat(parameters('mgmtIpPrefix'),add(parameters('mgmtLastOctet'),2))]",
+        "extSubnetPrivateAddress2": "[concat(parameters('externalIpPrefix'),add(parameters('externalLastOctet'),2))]",
+        "intSubnetPrivateAddress2": "[concat(parameters('internalIpPrefix'),add(parameters('internalLastOctet'),2))]",
+        "mgmtSubnetPrivateAddress3": "[concat(parameters('mgmtIpPrefix'),add(parameters('mgmtLastOctet'),3))]",
+        "extSubnetPrivateAddress3": "[concat(parameters('externalIpPrefix'),add(parameters('externalLastOctet'),3))]",
+        "intSubnetPrivateAddress3": "[concat(parameters('internalIpPrefix'),add(parameters('internalLastOctet'),3))]",
+        "mgmtRouteGw": "`tmsh list sys management-route default gateway | grep gateway | sed 's/gateway //;s/ //g'`",
+        "routeCmdArray": {
+            "12.1.22193": "[concat('route add 168.63.129.16 gw ', variables('mgmtRouteGw'), ' eth0')]",
+            "13.0.03118": "route",
+            "13.1.0200": "route"
+        },
+        "bigIpNicPortMap": {
+            "1": {
+                "Port": "[parameters('bigIpVersion')]"
+            },
+            "2": {
+                "Port": "443"
+            },
+            "3": {
+                "Port": "443"
+            },
+            "4": {
+                "Port": "443"
+            },
+            "5": {
+                "Port": "443"
+            },
+            "6": {
+                "Port": "443"
+            }
+        },
+        "bigIpVersionPortMap": {
+            "12.1.22193": {
+                "Port": 443
+            },
+            "13.0.03118": {
+                "Port": 8443
+            },
+            "13.1.0200": {
+                "Port": 8443
+            },
+            "443": {
+                "Port": 443
+            },
+            "latest": {
+                "Port": 8443
+            }
+        },
+        "bigIpNicPortValue": "[variables('bigIpNicPortMap')['3'].Port]",
+        "bigIpMgmtPort": "[variables('bigIpVersionPortMap')[variables('bigIpNicPortValue')].Port]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "condition": "[equals(parameters('managedDisks'), 'no')]",
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "vmCopy"
+            },
+            "name": "[concat(variables('wafNamePrefix'), '-classic', copyIndex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "VirtualMachine"
+            },
+            "plan": {
+                "name": "f5-bigip-virtual-edition-best-byol",
+                "publisher": "f5-networks",
+                "product": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip']"
+            },
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('instanceType')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('wafNamePrefix'),0)]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "f5-networks",
+                        "offer": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip']",
+                        "sku": "f5-bigip-virtual-edition-best-byol",
+                        "version": "[parameters('bigIpVersion')]"
+                    },
+                    "osDisk": {
+                        "caching": "ReadOnly",
+                        "createOption": "FromImage",
+                        "name":"[concat(variables('wafNamePrefix'),'osdisk',copyIndex())]",
+                        "vhd": {
+                            "uri": "[concat(concat(reference(resourceId(parameters('storageAccountRG'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob'], 'vhds/'), variables('vhdNamePrefix'), copyIndex(), '.vhd')]"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('mgmtNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('externalNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('diagStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob']]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "condition": "[equals(parameters('managedDisks'), 'yes')]",
+            "copy": {
+                "count": "[parameters('numberOfInstances')]",
+                "name": "vmCopy"
+            },
+            "name": "[concat(variables('wafNamePrefix'), '-managed', copyIndex())]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "VirtualMachine"
+            },
+            "plan": {
+                "name": "f5-bigip-virtual-edition-best-byol",
+                "publisher": "f5-networks",
+                "product": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip']"
+            },
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('instanceType')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('wafNamePrefix'),copyIndex())]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "f5-networks",
+                        "offer": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip']",
+                        "sku": "f5-bigip-virtual-edition-best-byol",
+                        "version": "[parameters('bigIpVersion')]"
+                    },
+                    "osDisk": {
+                        "caching": "ReadOnly",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('mgmtNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('externalNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[concat(resourceId('Microsoft.Network/networkInterfaces',parameters('internalNicNamePrefix')),copyIndex())]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('diagStorageAccountName')), variables('apiVersionStorage')).primaryEndpoints['blob']]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[equals(parameters('managedDisks'), 'no')]",
+            "name": "[concat(variables('wafNamePrefix'), '-classic', 0, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-classic', 0)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 0, '.azuresecurity.com'), ' --license ', parameters('licenseKey1'), ' --ntp pool.ntp.org --tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --create-group --device-group Sync --sync-type sync-failover --device ', concat(variables('wafNamePrefix'), 0, '.azuresecurity.com'), ' --network-failover --auto-sync --save-on-auto-sync --asm-sync; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/runScript.js --output /var/log/deployScript.log --log-level debug --file /config/cloud/deploy_waf_t2.sh --cl-args ', variables('singleQuote'), parameters('commandArgs'), variables('singleQuote'), '; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress'), ';  if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'no'), lessOrEquals(parameters('numberOfInstances'), 2)]",
+            "name": "[concat(variables('wafNamePrefix'), '-classic', 1, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-classic', 1)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 1, '.azuresecurity.com'), ' --license ', parameters('licenseKey2'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress1'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress1'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress1'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'no'), lessOrEquals(parameters('numberOfInstances'), 3)]",
+            "name": "[concat(variables('wafNamePrefix'), '-classic', 2, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-classic', 2)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 2, '.azuresecurity.com'), ' --license ', parameters('licenseKey3'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress2'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress2'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress2'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'no'), lessOrEquals(parameters('numberOfInstances'), 4)]",
+            "name": "[concat(variables('wafNamePrefix'), '-classic', 3, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-classic', 3)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 3, '.azuresecurity.com'), ' --license ', parameters('licenseKey4'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress3'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress3'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress3'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[equals(parameters('managedDisks'), 'yes')]",
+            "name": "[concat(variables('wafNamePrefix'), '-managed', 0, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-managed', 0)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 0, '.azuresecurity.com'), ' --license ', parameters('licenseKey1'), ' --ntp pool.ntp.org --tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --create-group --device-group Sync --sync-type sync-failover --device ', concat(variables('wafNamePrefix'), 0, '.azuresecurity.com'), ' --network-failover --auto-sync --save-on-auto-sync --asm-sync; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/runScript.js --output /var/log/deployScript.log --log-level debug --file /config/cloud/deploy_waf_t2.sh --cl-args ', variables('singleQuote'), parameters('commandArgs'), variables('singleQuote'), '; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress'), ';  if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'yes'), lessOrEquals(parameters('numberOfInstances'), 2)]",
+            "name": "[concat(variables('wafNamePrefix'), '-managed', 1, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-managed', 1)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 1, '.azuresecurity.com'), ' --license ', parameters('licenseKey2'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress1'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress1'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress1'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress1'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'yes'), lessOrEquals(parameters('numberOfInstances'), 3)]",
+            "name": "[concat(variables('wafNamePrefix'), '-managed', 2, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-managed', 2)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 2, '.azuresecurity.com'), ' --license ', parameters('licenseKey3'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress2'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress2'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress2'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress2'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "condition": "[and(equals(parameters('managedDisks'), 'yes'), lessOrEquals(parameters('numberOfInstances'), 4)]",
+            "name": "[concat(variables('wafNamePrefix'), '-managed', 3, '/start')]",
+            "apiVersion": "[variables('apiVersionCompute')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/',variables('wafNamePrefix'), '-managed', 3)]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion":"true",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('baseUrl'), '/f5-cloud-libs/', variables('f5CloudLibsTag'), '/dist/f5-cloud-libs.tar.gz')]",
+                        "[concat(parameters('baseUrl'), '/f5.add_asc_app.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5-cloud-iapps/', variables('f5CloudIappsTag'), '/f5-service-discovery/f5.service_discovery.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/deploy_waf_t2.sh')]",
+                        "[concat(parameters('baseUrl'), '/f5.policy_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.asm_log_creator_t2.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/f5.http.v1.2.0rc7.tmpl')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-linux-off.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-high.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-medium.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-low.xml')]",
+                        "[concat(parameters('baseUrl'), '/asm-policy-windows-off.xml')]"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('mkdir /config/cloud && cp *.xml *.tmpl f5-cloud-libs.tar.gz* deploy_waf_t2.sh /config/cloud; mkdir -p /config/cloud/node_modules; BIG_IP_CREDENTIALS_FILE=/config/mypass; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; /usr/bin/install -b -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; IFS=', variables('singleQuote'), '%', variables('singleQuote'), '; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' >> $BIG_IP_CREDENTIALS_FILE; unset IFS; bash /config/installCloudLibs.sh; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/onboard.js --output /var/log/onboard.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' --ssl-port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --hostname ', concat(variables('wafNamePrefix'), 3, '.azuresecurity.com'), ' --license ', parameters('licenseKey4'), ' --ntp --ntp pool.ntp.org--tz UTC --db tmm.maxremoteloglength:2048 --module ltm:nominal --module asm:nominal; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/network.js --output /var/log/network.log --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --vlan name:external,nic:1.1 --vlan name:internal,nic:1.2 --self-ip name:self_2nic,address:', variables('extSubnetPrivateAddress3'), skip(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:external --self-ip name:self_3nic,address:', variables('intSubnetPrivateAddress3'), skip(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, indexOf(reference(parameters('intSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '/')), ',vlan:internal --route name:external_route,gw:', concat(take(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, add(lastIndexOf(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.'), 1)), add(int(take(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], indexOf(split(reference(parameters('extSubnetRef'), variables('apiVersionNetwork')).addressPrefix, '.')[3], '/'))), 1)), ',network:default --log-level debug; /usr/bin/f5-rest-node /config/cloud/node_modules/f5-cloud-libs/scripts/cluster.js --output /var/log/cluster.log --log-level debug --host ', variables('mgmtSubnetPrivateAddress3'), ' --port ', variables('bigIpMgmtPort'), ' -u admin --password-url file:///config/mypass --config-sync-ip ', variables('intSubnetPrivateAddress3'), ' --join-group --device-group Sync --sync --remote-host ', variables('mgmtSubnetPrivateAddress'), ' --remote-user admin --remote-password-url file:///config/mypass', '; if [[ $? == 0 ]]; then tmsh load sys application template f5.service_discovery.tmpl; tmsh load sys application template f5.add_asc_app.tmpl; ', variables('routeCmdArray')[parameters('bigIpVersion')], '; else exit 1; fi')]"
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
