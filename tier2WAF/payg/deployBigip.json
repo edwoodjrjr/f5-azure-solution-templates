@@ -174,7 +174,7 @@
             "plan": {
                 "name": "[parameters('imageName')]",
                 "publisher": "f5-networks",
-                "product": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip-hourly']"
+                "product": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-hourly', 'f5-big-ip-best']"
             },
             "properties": {
                 "availabilitySet": {
@@ -191,7 +191,7 @@
                 "storageProfile": {
                     "imageReference": {
                         "publisher": "f5-networks",
-                        "offer": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-best', 'f5-big-ip-hourly']",
+                        "offer": "[if(or(equals(parameters('bigIpVersion'), '12.1.22193'), equals(parameters('bigIpVersion'), '13.0.03118')), 'f5-big-ip-hourly', 'f5-big-ip-best']",
                         "sku": "[parameters('imageName')]",
                         "version": "[parameters('bigIpVersion')]"
                     },

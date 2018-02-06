@@ -251,7 +251,7 @@
       "plan": {
         "name": "[parameters('imageName')]",
         "publisher": "f5-networks",
-        "product": "f5-big-ip-best"
+        "product": "f5-big-ip"
       },
       "properties": {
         "availabilitySet": {
@@ -268,7 +268,7 @@
         "storageProfile": {
           "imageReference": {
             "publisher": "f5-networks",
-            "offer": "f5-big-ip-best",
+            "offer": "f5-big-ip",
             "sku": "[parameters('imageName')]",
             "version": "12.1.22193"
           },
