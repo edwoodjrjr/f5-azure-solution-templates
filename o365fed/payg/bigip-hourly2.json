@@ -270,7 +270,7 @@
             "publisher": "f5-networks",
             "offer": "f5-big-ip",
             "sku": "[parameters('imageName')]",
-            "version": "12.1.22193"
+            "version": "12.1.2200"
           },
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
