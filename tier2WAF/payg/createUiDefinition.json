@@ -108,7 +108,7 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "f5-networks",
-                            "offer": "[if(or(equals(steps('infrastructureSettings').bigIpVersion, '12.1.2200'), equals(steps('infrastructureSettings').bigIpVersion, '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best')]",
+                            "offer": "f5-big-ip-best",
                             "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth,'-best-hourly')]"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
@@ -154,7 +154,7 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "f5-networks",
-                            "offer": "f5-big-ip-hourly",
+                            "offer": "f5-big-ip-best",
                             "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth,'-best-hourly')]"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
