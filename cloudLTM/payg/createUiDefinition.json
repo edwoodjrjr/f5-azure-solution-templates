@@ -191,7 +191,7 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "f5-networks",
-                            "offer": "[if(or(equals(steps('infrastructureSettings').bigIpVersion, '12.1.2200'), equals(steps('infrastructureSettings').bigIpVersion, '13.0.0300')), 'f5-big-ip-hourly', concat('f5-big-ip-', steps('infrastructureSettings').imageName)]",
+                            "offer": "f5-big-ip-best",
                             "sku": "[concat('f5-bigip-virtual-edition-', steps('infrastructureSettings').licensedBandwidth, '-', steps('infrastructureSettings').imageName,'-hourly')]"
                         },
                         "count": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",

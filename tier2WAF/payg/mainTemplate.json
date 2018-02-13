@@ -398,6 +398,7 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "imageName": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'),'-best-hourly')]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
+        "bigIpTemplateLink": "[concat(parameters('baseUrl'), '/deployBigip.json')]",
         "mgmtPublicIPAddressName": "[concat(parameters('dnsLabel'), '-mgmt-pip')]",
         "mgmtPublicIPAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('mgmtPublicIPAddressName'))]",
         "mgmtNicNamePrefix": "[concat(parameters('dnsLabel'),'-mgmt')]",
@@ -980,7 +981,7 @@
             "properties": {
                 "mode": "incremental",
                 "templateLink": {
-                    "uri": "/deployBigip.json",
+                    "uri": "[variables('bigIpTemplateLink')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
