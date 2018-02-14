@@ -272,7 +272,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "condition": "[lessOrEquals(parameters('numberOfInstances'), 2)]",
+            "condition": "[greaterOrEquals(parameters('numberOfInstances'), 2)]",
             "name": "[concat(variables('wafNamePrefix'), 1, '/start')]",
             "apiVersion": "[variables('apiVersionCompute')]",
             "location": "[parameters('location')]",
@@ -310,7 +310,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "condition": "[lessOrEquals(parameters('numberOfInstances'), 3)]",
+            "condition": "[greaterOrEquals(parameters('numberOfInstances'), 3)]",
             "name": "[concat(variables('wafNamePrefix'), 2, '/start')]",
             "apiVersion": "[variables('apiVersionCompute')]",
             "location": "[parameters('location')]",
@@ -348,7 +348,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "condition": "[lessOrEquals(parameters('numberOfInstances'), 4)]",
+            "condition": "[greaterOrEquals(parameters('numberOfInstances'), 4)]",
             "name": "[concat(variables('wafNamePrefix'), 3, '/start')]",
             "apiVersion": "[variables('apiVersionCompute')]",
             "location": "[parameters('location')]",
