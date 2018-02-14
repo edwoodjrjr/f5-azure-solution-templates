@@ -994,6 +994,7 @@
                     "instanceType": { "value": "[parameters('instanceType')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
                     "storageAccountRG": { "value": "[parameters('storageAccountExistingRGName')]" },
+                    "storageAccountId": { "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },
