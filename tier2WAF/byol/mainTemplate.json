@@ -443,8 +443,6 @@
             "no": "Classic"
         },
         "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
-        "doStorage": "[concat(parameters('managedDisks'), parameters('storageAccountNewOrExisting'))]",
-        "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
         "mgmtNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-mgmt-nsg'))]",
         "extNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-ext-nsg'))]",
         "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
@@ -950,35 +948,6 @@
             "type": "Microsoft.Compute/availabilitySets"
         },
         {
-            "name": "[variables('diagStorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "location": "[parameters('location')]",
-            "tags": {
-                "displayName": "StorageAccount"
-            },
-            "apiVersion": "[variables('apiVersionStorage')]",
-            "kind": "Storage",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            }
-        },
-        {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "condition": "[equals(variables('doStorage'), 'nonew')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "displayName": "StorageAccount"
-            },
-            "apiVersion": "[variables('apiVersionStorage')]",
-            "kind": "Storage",
-            "sku": {
-                "name": "[parameters('storageAccountType')]",
-                "tier": "[replace(parameters('storageAccountType'),'_LRS', ' ')]"
-            }
-        },
-        {
             "apiVersion": "[variables('apiVersionTemplate')]",
             "name": "linkedBigIpTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -989,8 +958,6 @@
                 "intNicCopy",
                 "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
                 "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', variables('diagStorageAccountName'))]"
             ],
             "properties": {
                 "mode": "incremental",
@@ -1009,9 +976,10 @@
                     "licenseKey3": { "value": "[parameters('licenseKey3')]" },
                     "licenseKey4": { "value": "[parameters('licenseKey4')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },
+                    "storageAccountNewOrExisting": { "value": "[parameters('storageAccountNewOrExisting')]" },
                     "storageAccountName": { "value": "[parameters('storageAccountName')]" },
+                    "storageAccountType": { "value": "[parameters('storageAccountType')]" },
                     "storageAccountRG": { "value": "[parameters('storageAccountExistingRGName')]" },
-                    "storageAccountId": { "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },
