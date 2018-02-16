@@ -112,7 +112,7 @@
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
-                        "visible": "[or(equals(steps('infrastructureSettings').managedDisks, 'yes'), equals(steps('infrastructureSettings').storageAccount.type, 'Premium_LRS'))]"
+                        "visible": "[equals(steps('infrastructureSettings').storageType, 'Premium_LRS')]"
                     },
                     {
                         "name": "instanceTypeStandard",
@@ -158,7 +158,7 @@
                             "sku": "f5-bigip-virtual-edition-best-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
-                        "visible": "[and(equals(steps('infrastructureSettings').managedDisks, 'no'), equals(steps('infrastructureSettings').storageAccount.type, 'Standard_LRS'))]"
+                        "visible": "[equals(steps('infrastructureSettings').storageType, 'Standard_LRS')]"
                     },
                     {
                         "name": "numberOfInstances",
@@ -235,40 +235,23 @@
                         "visible": "[greaterOrEquals(int(steps('infrastructureSettings').numberOfInstances), 4)]"
                     },
                     {
-                        "name": "managedDisks",
-                        "type": "Microsoft.Common.OptionsGroup",
-                        "label": "Use managed disks",
-                        "defaultValue": "Yes",
-                        "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own.",
+                        "name": "storageType",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Storage Type",
+                        "toolTip": "Select the storage type for your BIG-IP virtual machines.",
+                        "defaultValue": "Premium_LRS",
                         "constraints": {
                             "allowedValues": [
                                 {
-                                    "label": "Yes",
-                                    "value": "yes"
+                                    "label": "Premium_LRS",
+                                    "value": "Premium_LRS"
                                 },
                                 {
-                                    "label": "No",
-                                    "value": "no"
+                                    "label": "Standard_LRS",
+                                    "value": "Standard_LRS"
                                 }
                             ]
                         }
-                    },
-                    {
-                        "name": "storageAccount",
-                        "type": "Microsoft.Storage.StorageAccountSelector",
-                        "label": "Storage Account",
-                        "toolTip": "Select a new or existing storage account for your BIG-IP virtual machines. For WAF solutions, only premium storage is allowed.",
-                        "defaultValue": {
-                            "name": "wafst",
-                            "type": "Premium_LRS"
-                        },
-                        "constraints": {
-                            "allowedTypes": [
-                                "Premium_LRS",
-                                "Standard_LRS"
-                            ]
-                        },
-                        "visible": "[equals(steps('infrastructureSettings').managedDisks, 'no')]"
                     }
                 ]
             },
@@ -678,13 +661,9 @@
             "location": "[location()]",
             "solutionDeploymentName": "[steps('infrastructureSettings').solutionDeploymentName]",
             "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
-            "managedDisks": "[steps('infrastructureSettings').managedDisks]",
             "numberOfInstances": "[int(steps('infrastructureSettings').numberOfInstances)]",
             "instanceType": "[coalesce(steps('infrastructureSettings').instanceTypeStandard, steps('infrastructureSettings').instanceTypePremium)]",
-            "storageAccountNewOrExisting": "[steps('infrastructureSettings').storageAccount.newOrExisting]",
-            "storageAccountExistingRGName": "[steps('infrastructureSettings').storageAccount.resourceGroup]",
-            "storageAccountName": "[steps('infrastructureSettings').storageAccount.name]",
-            "storageAccountType": "[steps('infrastructureSettings').storageAccount.type]",
+            "storageType": "[steps('infrastructureSettings').storageType]",
             "adminUsername": "[steps('infrastructureSettings').adminUsername]",
             "adminPassword": "[steps('infrastructureSettings').adminPassword.password]",
             "publicIpNewOrExisting": "[steps('networkSettings').publicIp.newOrExistingOrNone]",

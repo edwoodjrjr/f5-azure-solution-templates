@@ -11,9 +11,6 @@
         "numberOfInstances": {
             "type": "int"
         },
-        "managedDisks": {
-            "type": "string"
-        },
         "bigIpVersion": {
             "allowedValues": [
                 "13.1.0200",
@@ -29,16 +26,7 @@
         "instanceType": {
             "type": "string"
         },
-        "storageAccountNewOrExisting": {
-            "type": "string"
-        },
-        "storageAccountName": {
-            "type": "string"
-        },
-        "storageAccountType": {
-            "type": "string"
-        },
-        "storageAccountRG": {
+        "storageType": {
             "type": "string"
         },
         "licenseKey1": {
@@ -116,8 +104,6 @@
         "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
         "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
         "vhdNamePrefix": "[uniqueString(resourceGroup().id, deployment().name, parameters('dnsLabel'))]",
-        "doStorage": "[concat(parameters('managedDisks'), parameters('storageAccountNewOrExisting'))]",
-        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
         "diagStorageAccountName": "[concat(uniquestring(concat(resourceGroup().id, 'diag')), 'diag')]",
         "mgmtSubnetPrivateAddress": "[concat(parameters('mgmtIpPrefix'), parameters('mgmtLastOctet'))]",
         "extSubnetPrivateAddress": "[concat(parameters('externalIpPrefix'), parameters('externalLastOctet'))]",
@@ -193,21 +179,6 @@
             }
         },
         {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "condition": "[equals(variables('doStorage'), 'nonew')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "displayName": "StorageAccount"
-            },
-            "apiVersion": "[variables('apiVersionStorage')]",
-            "kind": "Storage",
-            "sku": {
-                "name": "[parameters('storageAccountType')]",
-                "tier": "[replace(parameters('storageAccountType'),'_LRS', ' ')]"
-            }
-        },
-        {
             "apiVersion": "[variables('apiVersionCompute')]",
             "type": "Microsoft.Compute/virtualMachines",
             "copy": {
@@ -215,7 +186,6 @@
                 "name": "vmCopy"
             },
             "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', variables('diagStorageAccountName'))]"
             ],
             "name": "[concat(variables('wafNamePrefix'), copyIndex())]",
@@ -250,9 +220,9 @@
                     "osDisk": {
                         "caching": "ReadOnly",
                         "createOption": "FromImage",
-                        "name":"[concat(variables('wafNamePrefix'),'osdisk',copyIndex())]",
-                        "vhd": "[if(equals(parameters('managedDisks'), 'no'), json(concat('{\"uri\": \"', concat(reference(variables('storageAccountId'), variables('apiVersionStorage')).primaryEndpoints.blob, variables('wafNamePrefix'), 'osdisk', copyIndex(), '.vhd'), '\"}')), json('null'))]",
-                        "managedDisk": "[if(equals(parameters('managedDisks'), 'yes'), json(concat('{\"storageAccountType\": \"Premium_LRS\"}')), json('null'))]"
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('storageType')]"
+                        }
                     }
                 },
                 "networkProfile": {

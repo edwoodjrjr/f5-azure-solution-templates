@@ -34,17 +34,6 @@
             },
             "type": "string"
         },
-        "managedDisks": {
-            "allowedValues": [
-                "yes",
-                "no"
-            ],
-            "defaultValue": "yes",
-            "metadata": {
-                "description": "Use managed disks."
-            },
-            "type": "string"
-        },
         "numberOfInstances": {
             "type": "int",
             "defaultValue": 1,
@@ -100,32 +89,11 @@
                 "Standard_F8"
             ]
         },
-        "storageAccountNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "metadata": {
-                "description": "New or Existing Storage Account"
-            }
-        },
-        "storageAccountExistingRGName": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().name]",
-            "metadata": {
-                "description": "Existing Storage Account Resource Group name"
-            }
-        },
-        "storageAccountName": {
-            "type": "string",
-            "defaultValue": "[concat(uniquestring(concat(resourceGroup().id, 'waf')), 'waf')]",
-            "metadata": {
-                "description": "Unique name for the new Storage Account."
-            }
-        },
-        "storageAccountType": {
+        "storageType": {
                "type": "string",
                "defaultValue": "Premium_LRS",
                "metadata": {
-                    "description": "Storage account type."
+                    "description": "Storage type."
                },
                "allowedValues": [
                     "Premium_LRS",
@@ -438,10 +406,6 @@
         "publicIpID": "[resourceId(parameters('publicIpExistingRGName'),'Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
         "loadBalancerName": "[concat(parameters('dnsLabel'),'-lb')]",
         "availabilitySetName": "[concat(parameters('dnsLabel'),'-as')]",
-        "availabilitySetArray": {
-            "yes": "Aligned",
-            "no": "Classic"
-        },
         "wafNamePrefix": "[concat(parameters('dnsLabel'),'-waf')]",
         "mgmtNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-mgmt-nsg'))]",
         "extNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-ext-nsg'))]",
@@ -943,7 +907,7 @@
                 "PlatformFaultDomainCount": "2"
             },
             "sku": {
-                "name": "[variables('availabilitySetArray')[parameters('managedDisks')]]"
+                "name": "Aligned"
             },
             "type": "Microsoft.Compute/availabilitySets"
         },
@@ -969,17 +933,13 @@
                     "baseUrl": { "value": "[parameters('baseUrl')]" },
                     "location": { "value": "[parameters('location')]" },
                     "numberOfInstances": { "value": "[parameters('numberOfInstances')]" },
-                    "managedDisks": { "value": "[parameters('managedDisks')]" },
                     "bigIpVersion": { "value": "[parameters('bigIpVersion')]" },
                     "licenseKey1": { "value": "[parameters('licenseKey1')]" },
                     "licenseKey2": { "value": "[parameters('licenseKey2')]" },
                     "licenseKey3": { "value": "[parameters('licenseKey3')]" },
                     "licenseKey4": { "value": "[parameters('licenseKey4')]" },
                     "instanceType": { "value": "[parameters('instanceType')]" },
-                    "storageAccountNewOrExisting": { "value": "[parameters('storageAccountNewOrExisting')]" },
-                    "storageAccountName": { "value": "[parameters('storageAccountName')]" },
-                    "storageAccountType": { "value": "[parameters('storageAccountType')]" },
-                    "storageAccountRG": { "value": "[parameters('storageAccountExistingRGName')]" },
+                    "storageType": { "value": "[parameters('storageType')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "dnsLabel": { "value": "[parameters('dnsLabel')]" },

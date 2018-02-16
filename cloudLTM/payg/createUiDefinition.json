@@ -198,41 +198,6 @@
                         "visible": true
                     },
                     {
-                        "name": "managedDisks",
-                        "type": "Microsoft.Common.OptionsGroup",
-                        "label": "Use managed disks",
-                        "defaultValue": "Yes",
-                        "toolTip": "Enable this feature to have Azure automatically manage the availability of disks to provide data redundancy and fault tolerance, without creating and managing storage accounts on your own.",
-                        "constraints": {
-                            "allowedValues": [
-                                {
-                                    "label": "Yes",
-                                    "value": "yes"
-                                },
-                                {
-                                    "label": "No",
-                                    "value": "no"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "name": "storageAccount",
-                        "type": "Microsoft.Storage.StorageAccountSelector",
-                        "label": "Storage Account",
-                        "toolTip": "Select a new or existing storage account for your BIG-IP virtual machines. For autoscale solutions, only premium storage is allowed.",
-                        "defaultValue": {
-                            "name": "ltmst",
-                            "type": "Premium_LRS"
-                        },
-                        "constraints": {
-                            "allowedTypes": [
-                                "Premium_LRS"
-                            ]
-                        },
-                        "visible": "[equals(steps('infrastructureSettings').managedDisks, 'no')]"
-                    },
-                    {
                         "name": "publicIp",
                         "type": "Microsoft.Network.PublicIpAddressCombo",
                         "label": {
@@ -295,6 +260,25 @@
                             }
                         },
                         "visible": true
+                    },
+                    {
+                        "name": "storageType",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Storage Type",
+                        "toolTip": "Select the storage type for your BIG-IP virtual machines.",
+                        "defaultValue": "Premium_LRS",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Premium_LRS",
+                                    "value": "Premium_LRS"
+                                },
+                                {
+                                    "label": "Standard_LRS",
+                                    "value": "Standard_LRS"
+                                }
+                            ]
+                        }
                     },
                     {
                         "name": "restrictedSrcAddress",
@@ -2411,11 +2395,7 @@
             "instanceType": "[steps('infrastructureSettings').instanceType]",
             "imageName": "[steps('infrastructureSettings').imageName]",
             "bigIpVersion": "[steps('infrastructureSettings').bigIpVersion]",
-            "managedDisks": "[steps('infrastructureSettings').managedDisks]",
-            "storageAccountNewOrExisting": "[steps('infrastructureSettings').storageAccount.newOrExisting]",
-            "storageAccountExistingRGName": "[steps('infrastructureSettings').storageAccount.resourceGroup]",
-            "storageAccountName": "[steps('infrastructureSettings').storageAccount.name]",
-            "storageAccountType": "[steps('infrastructureSettings').storageAccount.type]",
+            "storageType": "[steps('infrastructureSettings').storageType]",
             "publicIpNewOrExisting": "[steps('infrastructureSettings').publicIp.newOrExistingOrNone]",
             "publicIpExistingRGName": "[steps('infrastructureSettings').publicIp.resourceGroup]",
             "publicIpName": "[steps('infrastructureSettings').publicIp.name]",

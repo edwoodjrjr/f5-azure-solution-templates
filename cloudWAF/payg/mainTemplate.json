@@ -97,49 +97,6 @@
             },
             "type": "string"
         },
-        "managedDisks": {
-            "allowedValues": [
-                "yes",
-                "no"
-            ],
-            "defaultValue": "yes",
-            "metadata": {
-                "description": "Use managed disks."
-            },
-            "type": "string"
-        },
-        "storageAccountNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "metadata": {
-                "description": "New or Existing Storage Account"
-            }
-        },
-        "storageAccountExistingRGName": {
-            "type": "string",
-            "defaultValue": "NOT_SPECIFIED",
-            "metadata": {
-                "description": "Existing Storage Account Resoure Group name"
-            }
-        },
-        "storageAccountName": {
-            "type": "string",
-            "defaultValue": "wafst",
-            "metadata": {
-                "description": "Unique name for the new Storage Account."
-            }
-        },
-        "storageAccountType": {
-            "type": "string",
-            "defaultValue": "Premium_LRS",
-            "metadata": {
-                "description": "Storage account type."
-            },
-            "allowedValues": [
-                "Premium_LRS",
-                "Standard_LRS"
-            ]
-        },
         "publicIpNewOrExisting": {
             "type": "string",
             "defaultValue": "new",
@@ -500,7 +457,7 @@
         "dnsLabel": "[toLower(parameters('dnsLabel'))]",
         "imageNameToLower": "[toLower(parameters('imageName'))]",
         "skuToUse": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-', variables('imageNameToLower'),'-hourly')]",
-        "offerToUse": "[if(or(equals(parameters('bigIpVersion'), '12.1.2200'), equals(parameters('bigIpVersion'), '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best']",
+        "offerToUse": "[if(or(equals(parameters('bigIpVersion'), '12.1.2200'), equals(parameters('bigIpVersion'), '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best')]",
         "publicIpRGArray": {
             "existing": "[parameters('publicIpExistingRGName')]",
             "new": "[resourceGroup().name]"
@@ -509,29 +466,6 @@
         "publicIpID": "[resourceId(variables('publicIpRG'),'Microsoft.Network/publicIPAddresses',parameters('publicIpName'))]",
         "bigIpNicPortValue": "[variables('bigIpNicPortMap')['1'].Port]",
         "bigIpMgmtPort": 8443,
-        "storageAccountRGArray": {
-            "existing": "[parameters('storageAccountExistingRGName')]",
-            "new": "[resourceGroup().name]"
-        },
-        "storageAccountRG": "[variables('storageAccountRGArray')[parameters('storageAccountNewOrExisting')]]",
-        "doStorage": "[concat(parameters('managedDisks'), parameters('storageAccountNewOrExisting'))]",
-        "osDiskArray": {
-            "yes": {
-                "caching": "ReadOnly",
-                "createOption": "FromImage",
-                "managedDisk": {
-                    "storageAccountType": "Premium_LRS"
-                }
-            },
-            "no": {
-                "caching": "ReadOnly",
-                "createOption": "FromImage",
-                "name": "vmssosdisk",
-                "vhdContainers": [
-                    "[concat('https://', parameters('storageAccountName'), '.blob.core.windows.net/vmss1')]"
-                ]
-            }
-        },
         "diagStorageAccountName": "[concat(uniqueString(resourceGroup().id, deployment().name), 'data000')]",
         "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(variables('dnsLabel'),'-mgmt-nsg'))]",
         "vnetTemplateLink": "[concat(parameters('baseUrl'), '/', parameters('vnetNewOrExisting'),'Vnet.json')]",
@@ -875,25 +809,9 @@
             }
         },
         {
-            "name": "[parameters('storageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "condition": "[equals(variables('doStorage'), 'nonew')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "displayName": "StorageAccount"
-            },
-            "apiVersion": "[variables('apiVersionStorage')]",
-            "kind": "Storage",
-            "sku": {
-                "name": "[parameters('storageAccountType')]",
-                "tier": "[replace(parameters('storageAccountType'),'_LRS', ' ')]"
-            }
-        },
-        {
             "apiVersion": "[variables('apiVersionCompute')]",
             "dependsOn": [
                 "linkedVnetTemplate",
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', variables('diagStorageAccountName'))]",
                 "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]"
             ],
@@ -916,7 +834,7 @@
                                 "name": "main",
                                 "properties": {
                                     "protectedSettings": {
-                                        "commandToExecute": "[concat('mkdir -p /config/cloud/node_modules; cp asm-policy.tar.gz deploy_waf.sh *.tmpl /config/cloud; AZURE_CREDENTIALS_FILE=/config/cloud/azCredentials; BIG_IP_CREDENTIALS_FILE=/config/cloud/passwd; /usr/bin/install -m 400 /dev/null $AZURE_CREDENTIALS_FILE; /usr/bin/install -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' > $BIG_IP_CREDENTIALS_FILE; echo ', variables('singleQuote'), '{\"clientId\": \"', parameters('clientId'), '\", \"tenantId\": \"', parameters('tenantId'), '\", \"secret\": \"', parameters('servicePrincipalSecret'), '\", \"subscriptionId\": \"', variables('subscriptionID'), '\", \"storageAccount\": \"', variables('diagStorageAccountName'), '\", \"storageKey\": \"', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName')), variables('apiVersionStorage')).key1, '\"}', variables('singleQuote'), ' > $AZURE_CREDENTIALS_FILE; cp f5-cloud-libs*.tar.gz* /config/cloud; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; bash /config/installCloudLibs.sh; bash /config/cloud/node_modules/f5-cloud-libs/node_modules/f5-cloud-libs-azure/scripts/autoscalewaf.sh --resourceGroup ', resourceGroup().name, ' --vmssName ', variables('vmssName'), ' --userName ', parameters('adminUsername'), ' --password $BIG_IP_CREDENTIALS_FILE --azureSecretFile $AZURE_CREDENTIALS_FILE --managementPort ', variables('bigIpMgmtPort'), ' --ntpServer ', parameters('ntpServer'), ' --timeZone UTC --wafScriptArgs ', variables('singleQuote'), variables('commandArgs'), variables('singleQuote'), '; if [[ $? == 0 ]]; then tmsh modify cm device-group Sync asm-sync enabled; tmsh load sys application template f5.service_discovery.tmpl; else exit 1; fi', '; if grep -i \"PUT failed\" /var/log/waagent.log -q; then echo \"Killing waagent exthandler, daemon should restart it\"; pkill -f \"python -u /usr/sbin/waagent -run-exthandlers\"; fi')]"
+                                        "commandToExecute": "[concat('mkdir -p /config/cloud/node_modules; cp asm-policy.tar.gz deploy_waf.sh *.tmpl /config/cloud; AZURE_CREDENTIALS_FILE=/config/cloud/azCredentials; BIG_IP_CREDENTIALS_FILE=/config/cloud/passwd; /usr/bin/install -m 400 /dev/null $AZURE_CREDENTIALS_FILE; /usr/bin/install -m 400 /dev/null $BIG_IP_CREDENTIALS_FILE; echo ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' > $BIG_IP_CREDENTIALS_FILE; echo ', variables('singleQuote'), '{\"clientId\": \"', parameters('clientId'), '\", \"tenantId\": \"', parameters('tenantId'), '\", \"secret\": \"', parameters('servicePrincipalSecret'), '\", \"subscriptionId\": \"', variables('subscriptionID'), '\", \"storageAccount\": \"', variables('diagStorageAccountName'), '\", \"storageKey\": \"', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccountName')), variables('apiVersionStorage')).keys[0].value, '\"}', variables('singleQuote'), ' > $AZURE_CREDENTIALS_FILE; cp f5-cloud-libs*.tar.gz* /config/cloud; /usr/bin/install -b -m 755 /dev/null /config/verifyHash; /usr/bin/install -b -m 755 /dev/null /config/installCloudLibs.sh; echo -e ', variables('verifyHash'), ' >> /config/verifyHash; echo -e ', variables('installCloudLibs'), ' >> /config/installCloudLibs.sh; bash /config/installCloudLibs.sh; bash /config/cloud/node_modules/f5-cloud-libs/node_modules/f5-cloud-libs-azure/scripts/autoscalewaf.sh --resourceGroup ', resourceGroup().name, ' --vmssName ', variables('vmssName'), ' --userName ', parameters('adminUsername'), ' --password $BIG_IP_CREDENTIALS_FILE --azureSecretFile $AZURE_CREDENTIALS_FILE --managementPort ', variables('bigIpMgmtPort'), ' --ntpServer ', parameters('ntpServer'), ' --timeZone UTC --wafScriptArgs ', variables('singleQuote'), variables('commandArgs'), variables('singleQuote'), '; if [[ $? == 0 ]]; then tmsh modify cm device-group Sync asm-sync enabled; tmsh load sys application template f5.service_discovery.tmpl; else exit 1; fi', '; if grep -i \"PUT failed\" /var/log/waagent.log -q; then echo \"Killing waagent exthandler, daemon should restart it\"; pkill -f \"python -u /usr/sbin/waagent -run-exthandlers\"; fi')]"
                                     },
                                     "publisher": "Microsoft.Azure.Extensions",
                                     "settings": {
@@ -984,7 +902,13 @@
                             "sku": "[variables('skuToUse')]",
                             "version": "[parameters('bigIpVersion')]"
                         },
-                        "osDisk": "[variables('osDiskArray')[parameters('managedDisks')]]"
+                        "osDisk": {
+                            "caching": "ReadOnly",
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                        }
                     }
                 }
             },
