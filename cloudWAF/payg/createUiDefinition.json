@@ -570,220 +570,284 @@
                     ]
                },
                {
-                    "name": "autoscaleSettings",
-                    "label": "Autoscale Settings",
-                    "subLabel": {
-                         "preValidation": "Configure Autoscale Settings",
-                         "postValidation": "Done"
-                    },
-                    "bladeTitle": "Autoscale Settings",
-                    "elements": [
-                        {
-                            "name": "vmScaleSetMaxCount",
-                             "type": "Microsoft.Common.DropDown",
-                             "label": "VM Scale Set Maximum Count",
-                             "defaultValue": "[string(add(int(steps('infrastructureSettings').vmScaleSetMinCount), 2))]",
-                             "toolTip": "The maximum number of BIG-IP VEs that can be deployed into the VM Scale Set.",
-                             "constraints": {
-                                  "allowedValues": [
-                                      {
-                                           "label": "2",
-                                           "value": "2"
-                                      },
-                                      {
-                                           "label": "3",
-                                           "value": "3"
-                                      },
-                                      {
-                                           "label": "4",
-                                           "value": "4"
-                                      },
-                                      {
-                                           "label": "5",
-                                           "value": "5"
-                                      },
-                                      {
-                                           "label": "6",
-                                           "value": "6"
-                                      },
-                                      {
-                                           "label": "7",
-                                           "value": "7"
-                                      },
-                                      {
-                                           "label": "8",
-                                           "value": "8"
-                                      }
-                                  ]
-                             }
-                        },
-                        {
-                            "name": "scaleOutThroughput",
-                             "type": "Microsoft.Common.DropDown",
-                             "label": "VM Scale Set Scale Out Throughput",
-                             "defaultValue": "90",
-                             "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale Out event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
-                             "constraints": {
-                                  "allowedValues": [
-                                      {
-                                           "label": "50",
-                                           "value": "50"
-                                      },
-                                      {
-                                           "label": "55",
-                                           "value": "55"
-                                      },
-                                      {
-                                           "label": "60",
-                                           "value": "60"
-                                      },
-                                      {
-                                           "label": "65",
-                                           "value": "65"
-                                      },
-                                      {
-                                           "label": "70",
-                                           "value": "70"
-                                      },
-                                      {
-                                           "label": "75",
-                                           "value": "75"
-                                      },
-                                      {
-                                           "label": "80",
-                                           "value": "80"
-                                      },
-                                      {
-                                           "label": "85",
-                                           "value": "85"
-                                      },
-                                      {
-                                           "label": "90",
-                                           "value": "90"
-                                      },
-                                      {
-                                           "label": "95",
-                                           "value": "95"
-                                      }
-                                  ]
-                             }
-                        },
-                        {
-                            "name": "scaleInThroughput",
-                             "type": "Microsoft.Common.DropDown",
-                             "label": "VM Scale Set Scale In Throughput",
-                             "defaultValue": "10",
-                             "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale In event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
-                             "constraints": {
-                                  "allowedValues": [
-                                      {
-                                           "label": "5",
-                                           "value": "5"
-                                      },
-                                      {
-                                           "label": "10",
-                                           "value": "10"
-                                      },
-                                      {
-                                           "label": "15",
-                                           "value": "15"
-                                      },
-                                      {
-                                           "label": "20",
-                                           "value": "20"
-                                      },
-                                      {
-                                           "label": "25",
-                                           "value": "25"
-                                      },
-                                      {
-                                           "label": "30",
-                                           "value": "30"
-                                      },
-                                      {
-                                           "label": "35",
-                                           "value": "35"
-                                      },
-                                      {
-                                           "label": "40",
-                                           "value": "40"
-                                      },
-                                      {
-                                           "label": "45",
-                                           "value": "45"
-                                      }
-                                  ]
-                             }
-                        },
-                        {
-                            "name": "scaleTimeWindow",
-                             "type": "Microsoft.Common.DropDown",
-                             "label": "VM Scale Set Scale Time Window",
-                             "defaultValue": "10",
-                             "toolTip": "The time window required to trigger a scale event (in and out). This is used to determine the amount of time needed for a threshold to be breached, as well as to prevent excessive scaling events (flapping).",
-                             "constraints": {
-                                  "allowedValues": [
-                                      {
-                                           "label": "5",
-                                           "value": "5"
-                                      },
-                                      {
-                                           "label": "10",
-                                           "value": "10"
-                                      },
-                                      {
-                                           "label": "15",
-                                           "value": "15"
-                                      },
-                                      {
-                                           "label": "30",
-                                           "value": "30"
-                                      }
-                                  ]
-                             }
-                        },
-                        {
-                              "name": "tenantId",
-                              "type": "Microsoft.Common.TextBox",
-                              "label": "Tenant ID",
-                              "toolTip": "Your Azure service principal application tenant ID.",
-                              "constraints": {
-                                   "required": true,
-                                   "validationMessage": "Please provide a valid tenant ID for your service prinicipal application."
-                              }
-                         },
-                         {
-                               "name": "clientId",
-                               "type": "Microsoft.Common.TextBox",
-                               "label": "Client ID",
-                               "toolTip": "Your Azure service principal application client ID.",
-                               "constraints": {
-                                    "required": true,
-                                    "validationMessage": "Please provide a valid client ID for your service prinicipal application."
-                               }
-                          },
-                          {
-                                "name": "servicePrincipalSecret",
-                                "type": "Microsoft.Common.TextBox",
-                                "label": "Secret",
-                                "toolTip": "Your Azure service principal application secret.",
-                                "constraints": {
-                                     "required": true,
-                                     "validationMessage": "Please provide a valid secret key for your service prinicipal application."
-                                }
-                           },
-                           {
-                                 "name": "customEmail",
-                                 "type": "Microsoft.Common.TextBox",
-                                 "label": "Email for Scale Event Notifications",
-                                 "toolTip": "An email address that will receive notifications of scale events.",
-                                 "constraints": {
-                                     "regex": ".+\\@.+\\..+",
-                                      "required": false,
-                                      "validationMessage": "Please provide a valid email address."
-                                 }
-                            }
-                    ]
+                   "name": "autoscaleSettings",
+                   "label": "Autoscale Settings",
+                   "subLabel": {
+                       "preValidation": "Configure Autoscale Settings",
+                       "postValidation": "Done"
+                   },
+                   "bladeTitle": "Autoscale Settings",
+                   "elements": [
+                       {
+                           "name": "vmScaleSetMaxCount",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "VM Scale Set Maximum Count",
+                           "defaultValue": "[string(add(int(steps('infrastructureSettings').vmScaleSetMinCount), 2))]",
+                           "toolTip": "The maximum number of BIG-IP VEs that can be deployed into the VM Scale Set.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "2",
+                                       "value": "2"
+                                   },
+                                   {
+                                       "label": "3",
+                                       "value": "3"
+                                   },
+                                   {
+                                       "label": "4",
+                                       "value": "4"
+                                   },
+                                   {
+                                       "label": "5",
+                                       "value": "5"
+                                   },
+                                   {
+                                       "label": "6",
+                                       "value": "6"
+                                   },
+                                   {
+                                       "label": "7",
+                                       "value": "7"
+                                   },
+                                   {
+                                       "label": "8",
+                                       "value": "8"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "autoScaleMetric",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "Auto Scale Metric",
+                           "defaultValue": "Host_Throughput",
+                           "toolTip": "Select the metric on which auto scale events should be triggered. The following parameters determine individual settings for the scaling rules based on the metric you choose. Note: Custom BIG-IP metrics (for use by additional autoscale rules or for device visibility) are sent to Application Insights regardless of the metric you select.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "F5_TMM_CPU",
+                                       "value": "F5_TMM_CPU"
+                                   },
+                                   {
+                                       "label": "F5_TMM_Traffic",
+                                       "value": "F5_TMM_Traffic"
+                                   },
+                                   {
+                                       "label": "Host_Throughput",
+                                       "value": "Host_Throughput"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "appInsights",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "App Insights",
+                           "defaultValue": "CREATE_NEW",
+                           "toolTip": "Enter the name of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility. If the Application Insights environment is in a different Resource Group than this deployment, specify it as **app_insights_name;app_insights_rg**).  If you do not have an Application Insights environment, leave the default (CREATE_NEW) and the template will create one. Note: By default, the new Application Insights environment will be created in **East US**, if necessary you can specify a different region as **CREATE_NEW:app_insights_region**).",
+                           "constraints": {
+                               "required": true
+                           }
+                       },
+                       {
+                           "name": "calculatedBandwidth",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "Calculated Bandwidth",
+                           "defaultValue": "200m",
+                           "toolTip": "Specify the amount of bandwidth (in Mbps) that should be used to base the throughput percentage calculation on for scale events. For PAYG, we recommend this matches the parameter **licensedBandwidth**, or at minimum is a lower value. See [Scaling Thresholds](#scaling-thresholds) for more information.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "10m",
+                                       "value": "10m"
+                                   },
+                                   {
+                                       "label": "25m",
+                                       "value": "25m"
+                                   },
+                                   {
+                                       "label": "100m",
+                                       "value": "100m"
+                                   },
+                                   {
+                                       "label": "200m",
+                                       "value": "200m"
+                                   },
+                                   {
+                                       "label": "1g",
+                                       "value": "1g"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "scaleOutThreshold",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "VM Scale Set Scale Out Threshold",
+                           "defaultValue": "90",
+                           "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale Out event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "50",
+                                       "value": "50"
+                                   },
+                                   {
+                                       "label": "55",
+                                       "value": "55"
+                                   },
+                                   {
+                                       "label": "60",
+                                       "value": "60"
+                                   },
+                                   {
+                                       "label": "65",
+                                       "value": "65"
+                                   },
+                                   {
+                                       "label": "70",
+                                       "value": "70"
+                                   },
+                                   {
+                                       "label": "75",
+                                       "value": "75"
+                                   },
+                                   {
+                                       "label": "80",
+                                       "value": "80"
+                                   },
+                                   {
+                                       "label": "85",
+                                       "value": "85"
+                                   },
+                                   {
+                                       "label": "90",
+                                       "value": "90"
+                                   },
+                                   {
+                                       "label": "95",
+                                       "value": "95"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "scaleInThreshold",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "VM Scale Set Scale In Threshold",
+                           "defaultValue": "10",
+                           "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale In event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "5",
+                                       "value": "5"
+                                   },
+                                   {
+                                       "label": "10",
+                                       "value": "10"
+                                   },
+                                   {
+                                       "label": "15",
+                                       "value": "15"
+                                   },
+                                   {
+                                       "label": "20",
+                                       "value": "20"
+                                   },
+                                   {
+                                       "label": "25",
+                                       "value": "25"
+                                   },
+                                   {
+                                       "label": "30",
+                                       "value": "30"
+                                   },
+                                   {
+                                       "label": "35",
+                                       "value": "35"
+                                   },
+                                   {
+                                       "label": "40",
+                                       "value": "40"
+                                   },
+                                   {
+                                       "label": "45",
+                                       "value": "45"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "scaleTimeWindow",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "VM Scale Set Scale Time Window",
+                           "defaultValue": "10",
+                           "toolTip": "The time window required to trigger a scale event (in and out). This is used to determine the amount of time needed for a threshold to be breached, as well as to prevent excessive scaling events (flapping).",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "5",
+                                       "value": "5"
+                                   },
+                                   {
+                                       "label": "10",
+                                       "value": "10"
+                                   },
+                                   {
+                                       "label": "15",
+                                       "value": "15"
+                                   },
+                                   {
+                                       "label": "30",
+                                       "value": "30"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "tenantId",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "Tenant ID",
+                           "toolTip": "Your Azure service principal application tenant ID.",
+                           "constraints": {
+                               "required": true,
+                               "validationMessage": "Please provide a valid tenant ID for your service prinicipal application."
+                           }
+                       },
+                       {
+                           "name": "clientId",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "Client ID",
+                           "toolTip": "Your Azure service principal application client ID.",
+                           "constraints": {
+                               "required": true,
+                               "validationMessage": "Please provide a valid client ID for your service prinicipal application."
+                           }
+                       },
+                       {
+                           "name": "servicePrincipalSecret",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "Secret",
+                           "toolTip": "Your Azure service principal application secret.",
+                           "constraints": {
+                               "required": true,
+                               "validationMessage": "Please provide a valid secret key for your service prinicipal application."
+                           }
+                       },
+                       {
+                           "name": "customEmail",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "Email for Scale Event Notifications",
+                           "toolTip": "An email address that will receive notifications of scale events.",
+                           "constraints": {
+                               "regex": ".+\\@.+\\..+",
+                               "required": false,
+                               "validationMessage": "Please provide a valid email address."
+                           }
+                       }
+                   ]
                }
           ],
           "outputs": {
@@ -820,8 +884,11 @@
                "sslPswd": "[steps('appSettings').sslPswd]",
                "vmScaleSetMinCount": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                "vmScaleSetMaxCount": "[int(steps('autoscaleSettings').vmScaleSetMaxCount)]",
-               "scaleOutThroughput": "[int(steps('autoscaleSettings').scaleOutThroughput)]",
-               "scaleInThroughput": "[int(steps('autoscaleSettings').scaleInThroughput)]",
+               "autoScaleMetric": "[steps('autoscaleSettings').autoScaleMetric]",
+               "appInsights": "[steps('autoscaleSettings').appInsights]",
+               "calculatedBandwidth": "[steps('autoscaleSettings').calculatedBandwidth]",
+               "scaleOutThreshold": "[int(steps('autoscaleSettings').scaleOutThreshold)]",
+               "scaleInThreshold": "[int(steps('autoscaleSettings').scaleInThreshold)]",
                "scaleTimeWindow": "[int(steps('autoscaleSettings').scaleTimeWindow)]",
                "customEmail": "[steps('autoscaleSettings').customEmail]",
                "tenantId": "[steps('autoscaleSettings').tenantId]",

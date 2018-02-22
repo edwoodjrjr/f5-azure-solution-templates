@@ -2218,9 +2218,73 @@
                         }
                     },
                     {
-                        "name": "scaleOutThroughput",
+                        "name": "autoScaleMetric",
                         "type": "Microsoft.Common.DropDown",
-                        "label": "VM Scale Set Scale Out Throughput",
+                        "label": "Auto Scale Metric",
+                        "defaultValue": "Host_Throughput",
+                        "toolTip": "Select the metric on which auto scale events should be triggered. The following parameters determine individual settings for the scaling rules based on the metric you choose. Note: Custom BIG-IP metrics (for use by additional autoscale rules or for device visibility) are sent to Application Insights regardless of the metric you select.",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "F5_TMM_CPU",
+                                    "value": "F5_TMM_CPU"
+                                },
+                                {
+                                    "label": "F5_TMM_Traffic",
+                                    "value": "F5_TMM_Traffic"
+                                },
+                                {
+                                    "label": "Host_Throughput",
+                                    "value": "Host_Throughput"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "appInsights",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "App Insights",
+                        "defaultValue": "CREATE_NEW",
+                        "toolTip": "Enter the name of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility. If the Application Insights environment is in a different Resource Group than this deployment, specify it as **app_insights_name;app_insights_rg**).  If you do not have an Application Insights environment, leave the default (CREATE_NEW) and the template will create one. Note: By default, the new Application Insights environment will be created in **East US**, if necessary you can specify a different region as **CREATE_NEW:app_insights_region**).",
+                        "constraints": {
+                            "required": true
+                        }
+                    },
+                    {
+                        "name": "calculatedBandwidth",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Calculated Bandwidth",
+                        "defaultValue": "200m",
+                        "toolTip": "Specify the amount of bandwidth (in Mbps) that should be used to base the throughput percentage calculation on for scale events. For PAYG, we recommend this matches the parameter **licensedBandwidth**, or at minimum is a lower value. See [Scaling Thresholds](#scaling-thresholds) for more information.",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "10m",
+                                    "value": "10m"
+                                },
+                                {
+                                    "label": "25m",
+                                    "value": "25m"
+                                },
+                                {
+                                    "label": "100m",
+                                    "value": "100m"
+                                },
+                                {
+                                    "label": "200m",
+                                    "value": "200m"
+                                },
+                                {
+                                    "label": "1g",
+                                    "value": "1g"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "scaleOutThreshold",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "VM Scale Set Scale Out Threshold",
                         "defaultValue": "90",
                         "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale Out event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
                         "constraints": {
@@ -2269,9 +2333,9 @@
                         }
                     },
                     {
-                        "name": "scaleInThroughput",
+                        "name": "scaleInThreshold",
                         "type": "Microsoft.Common.DropDown",
-                        "label": "VM Scale Set Scale In Throughput",
+                        "label": "VM Scale Set Scale In Threshold",
                         "defaultValue": "10",
                         "toolTip": "The percentage of 'Network Out' throughput that triggers a Scale In event.  This is factored as a percentage of the F5 PAYG image bandwidth (Mbps) size you choose.",
                         "constraints": {
@@ -2412,8 +2476,11 @@
             "timeZone": "[steps('infrastructureSettings').timeZone]",
             "vmScaleSetMinCount": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
             "vmScaleSetMaxCount": "[int(steps('autoscaleSettings').vmScaleSetMaxCount)]",
-            "scaleOutThroughput": "[int(steps('autoscaleSettings').scaleOutThroughput)]",
-            "scaleInThroughput": "[int(steps('autoscaleSettings').scaleInThroughput)]",
+            "autoScaleMetric": "[steps('autoscaleSettings').autoScaleMetric]",
+            "appInsights": "[steps('autoscaleSettings').appInsights]",
+            "calculatedBandwidth": "[steps('autoscaleSettings').calculatedBandwidth]",
+            "scaleOutThreshold": "[int(steps('autoscaleSettings').scaleOutThreshold)]",
+            "scaleInThreshold": "[int(steps('autoscaleSettings').scaleInThreshold)]",
             "scaleTimeWindow": "[int(steps('autoscaleSettings').scaleTimeWindow)]",
             "customEmail": "[steps('autoscaleSettings').customEmail]",
             "tenantId": "[steps('autoscaleSettings').tenantId]",
