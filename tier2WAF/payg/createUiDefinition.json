@@ -660,7 +660,7 @@
             "vnetNewOrExisting": "[steps('networkSettings').virtualNetwork.newOrExisting]",
             "vnetName": "[steps('networkSettings').virtualNetwork.name]",
             "vnetExistingRGName": "[steps('networkSettings').virtualNetwork.resourceGroup]",
-            "vnetAddressPrefix": "[steps('networkSettings').virtualNetwork.addressPrefix]",
+            "vnetAddressPrefix": "[steps('networkSettings').virtualNetwork.addressPrefixes]",
             "mgmtSubnetName": "[steps('networkSettings').virtualNetwork.subnets.subnet1.name]",
             "mgmtSubnetAddressPrefix": "[steps('networkSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
             "mgmtPrivateIpAddressRangeStart": "[steps('networkSettings').virtualNetwork.subnets.subnet1.startAddress]",

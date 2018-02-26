@@ -641,14 +641,69 @@
                            }
                        },
                        {
-                           "name": "appInsights",
+                           "name": "appInsightsNewOrExisting",
+                           "type": "Microsoft.Common.OptionsGroup",
+                           "label": "New or Existing App Insights",
+                           "defaultValue": "New",
+                           "toolTip": "Choose a new or existing Application Insights environment.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "New",
+                                       "value": "new"
+                                   },
+                                   {
+                                       "label": "Existing",
+                                       "value": "existing"
+                                   }
+                               ]
+                           }
+                       },
+                       {
+                           "name": "appInsightsName",
                            "type": "Microsoft.Common.TextBox",
-                           "label": "App Insights",
-                           "defaultValue": "CREATE_NEW",
-                           "toolTip": "Enter the name of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility. If the Application Insights environment is in a different Resource Group than this deployment, specify it as **app_insights_name;app_insights_rg**).  If you do not have an Application Insights environment, leave the default (CREATE_NEW) and the template will create one. Note: By default, the new Application Insights environment will be created in **East US**, if necessary you can specify a different region as **CREATE_NEW:app_insights_region**).",
+                           "label": "App Insights Name",
+                           "defaultValue": "myAppInsights",
+                           "toolTip": "Enter the name of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
                            "constraints": {
                                "required": true
-                           }
+                           },
+                           "visible": "[equals(steps('autoscaleSettings').appInsightsNewOrExisting, 'existing')]"
+                       },
+                       {
+                           "name": "appInsightsGroup",
+                           "type": "Microsoft.Common.TextBox",
+                           "label": "App Insights Group",
+                           "defaultValue": "[resourceGroup().name]",
+                           "toolTip": "Enter the resource group of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
+                           "constraints": {
+                               "required": true
+                           },
+                           "visible": "[equals(steps('autoscaleSettings').appInsightsNewOrExisting, 'existing')]"
+                       },
+                       {
+                           "name": "appInsightsLocation",
+                           "type": "Microsoft.Common.DropDown",
+                           "label": "App Insights Location",
+                           "defaultValue": "East US",
+                           "toolTip": "Choose the Azure region of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
+                           "constraints": {
+                               "allowedValues": [
+                                   {
+                                       "label": "East US",
+                                       "value": "eastus"
+                                   },
+                                   {
+                                       "label": "South Central US",
+                                       "value": "southcentralus"
+                                   },
+                                   {
+                                       "label": "West US 2",
+                                       "value": "westus2"
+                                   }
+                               ]
+                           },
+                           "visible": "[equals(steps('autoscaleSettings').appInsightsNewOrExisting, 'new')]"
                        },
                        {
                            "name": "calculatedBandwidth",
@@ -813,6 +868,7 @@
                            "toolTip": "Your Azure service principal application tenant ID.",
                            "constraints": {
                                "required": true,
+                               "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i",
                                "validationMessage": "Please provide a valid tenant ID for your service prinicipal application."
                            }
                        },
@@ -823,6 +879,7 @@
                            "toolTip": "Your Azure service principal application client ID.",
                            "constraints": {
                                "required": true,
+                               "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i",
                                "validationMessage": "Please provide a valid client ID for your service prinicipal application."
                            }
                        },
@@ -833,6 +890,7 @@
                            "toolTip": "Your Azure service principal application secret.",
                            "constraints": {
                                "required": true,
+                               "regex": "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$",
                                "validationMessage": "Please provide a valid secret key for your service prinicipal application."
                            }
                        },
@@ -866,7 +924,7 @@
                "vnetNewOrExisting": "[steps('infrastructureSettings').virtualNetwork.newOrExisting]",
                "vnetName": "[steps('infrastructureSettings').virtualNetwork.name]",
                "vnetExistingRGName": "[steps('infrastructureSettings').virtualNetwork.resourceGroup]",
-               "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefix]",
+               "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefixes]",
                "subnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.name]",
                "subnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
                "privateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.startAddress]",
@@ -885,7 +943,10 @@
                "vmScaleSetMinCount": "[int(steps('infrastructureSettings').vmScaleSetMinCount)]",
                "vmScaleSetMaxCount": "[int(steps('autoscaleSettings').vmScaleSetMaxCount)]",
                "autoScaleMetric": "[steps('autoscaleSettings').autoScaleMetric]",
-               "appInsights": "[steps('autoscaleSettings').appInsights]",
+               "appInsightsNewOrExisting": "[steps('autoscaleSettings').appInsightsNewOrExisting]",
+               "appInsightsName": "[steps('autoscaleSettings').appInsightsName]",
+               "appInsightsGroup": "[steps('autoscaleSettings').appInsightsGroup]",
+               "appInsightsLocation": "[steps('autoscaleSettings').appInsightsLocation]",
                "calculatedBandwidth": "[steps('autoscaleSettings').calculatedBandwidth]",
                "scaleOutThreshold": "[int(steps('autoscaleSettings').scaleOutThreshold)]",
                "scaleInThreshold": "[int(steps('autoscaleSettings').scaleInThreshold)]",

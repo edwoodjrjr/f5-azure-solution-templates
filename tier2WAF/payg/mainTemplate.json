@@ -281,8 +281,8 @@
             }
         },
         "vnetAddressPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16",
+            "type": "array",
+            "defaultValue": "[10.0.0.0/16]",
             "metadata": {
                 "description": "Specify the virtual network address space."
             }

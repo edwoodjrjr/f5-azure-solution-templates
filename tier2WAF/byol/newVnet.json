@@ -27,7 +27,7 @@
                }
           },
           "vnetAddressPrefix": {
-               "type": "string",
+               "type": "array",
                "metadata": {
                     "description": "Address Prefix for Virtual Network"
                }
@@ -84,7 +84,7 @@
                "properties": {
                     "addressSpace": {
                          "addressPrefixes": [
-                              "[parameters('vnetAddressPrefix')]"
+                              "[parameters('vnetAddressPrefix')[0]]"
                          ]
                     },
                     "subnets": [
