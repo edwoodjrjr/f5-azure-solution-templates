@@ -674,7 +674,6 @@
                            "name": "appInsightsGroup",
                            "type": "Microsoft.Common.TextBox",
                            "label": "App Insights Group",
-                           "defaultValue": "[resourceGroup().name]",
                            "toolTip": "Enter the resource group of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
                            "constraints": {
                                "required": true
@@ -868,7 +867,7 @@
                            "toolTip": "Your Azure service principal application tenant ID.",
                            "constraints": {
                                "required": true,
-                               "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i",
+                               "regex": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
                                "validationMessage": "Please provide a valid tenant ID for your service prinicipal application."
                            }
                        },
@@ -879,7 +878,7 @@
                            "toolTip": "Your Azure service principal application client ID.",
                            "constraints": {
                                "required": true,
-                               "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i",
+                               "regex": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
                                "validationMessage": "Please provide a valid client ID for your service prinicipal application."
                            }
                        },
