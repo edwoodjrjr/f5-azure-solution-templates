@@ -34,15 +34,15 @@
         },
         "licenseKey2": {
             "type": "string",
-            "default": "NOT_SPECIFIED"
+            "defaultValue": "NOT_SPECIFIED"
         },
         "licenseKey3": {
             "type": "string",
-            "default": "NOT_SPECIFIED"
+            "defaultValue": "NOT_SPECIFIED"
         },
         "licenseKey4": {
             "type": "string",
-            "default": "NOT_SPECIFIED"
+            "defaultValue": "NOT_SPECIFIED"
         },
         "adminUsername": {
             "type": "string"
