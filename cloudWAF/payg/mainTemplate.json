@@ -87,8 +87,7 @@
         "bigIpVersion": {
             "allowedValues": [
                 "13.1.0200",
-                "13.0.0300",
-                "12.1.2200"
+                "12.1.303000"
             ],
             "defaultValue": "13.1.0200",
             "metadata": {
@@ -475,11 +474,8 @@
             }
         },
         "bigIpVersionPortMap": {
-            "12.1.2200": {
+            "12.1.303000": {
                 "Port": 443
-            },
-            "13.0.0300": {
-                "Port": 8443
             },
             "13.1.0200": {
                 "Port": 8443
@@ -509,7 +505,7 @@
         "dnsLabel": "[toLower(parameters('dnsLabel'))]",
         "imageNameToLower": "[toLower(parameters('imageName'))]",
         "skuToUse": "[concat('f5-bigip-virtual-edition-', parameters('licensedBandwidth'), '-', variables('imageNameToLower'),'-hourly')]",
-        "offerToUse": "[if(or(equals(parameters('bigIpVersion'), '12.1.2200'), equals(parameters('bigIpVersion'), '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best')]",
+        "offerToUse": "f5-big-ip-best",
         "publicIpRGArray": {
             "existing": "[parameters('publicIpExistingRGName')]",
             "new": "[resourceGroup().name]"
