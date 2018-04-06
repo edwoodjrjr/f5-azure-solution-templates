@@ -616,9 +616,6 @@
     },
     {
       "apiVersion": "[variables('apiVersionNetwork')]",
-      "tags": {
-        "displayName": "InboundNATRulesSSH"
-      },
       "type": "Microsoft.Network/loadBalancers/inboundNatRules",
       "name": "[concat(variables('loadBalancerName'),'/sshmgt', copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -641,9 +638,6 @@
     },
     {
       "apiVersion": "[variables('apiVersionNetwork')]",
-      "tags": {
-        "displayName": "InboundNATRulesGUI"
-      },
       "type": "Microsoft.Network/loadBalancers/inboundNatRules",
       "name": "[concat(variables('loadBalancerName'),'/guimgt', copyIndex(1))]",
       "location": "[parameters('location')]",
