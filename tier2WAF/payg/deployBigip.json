@@ -14,8 +14,7 @@
         "bigIpVersion": {
             "allowedValues": [
                 "13.1.0200",
-                "13.0.0300",
-                "12.1.2200"
+                "12.1.303000"
             ],
             "defaultValue": "13.1.0200",
             "metadata": {
@@ -107,8 +106,7 @@
         "intSubnetPrivateAddress3": "[concat(parameters('internalIpPrefix'),add(parameters('internalLastOctet'),3))]",
         "mgmtRouteGw": "`tmsh list sys management-route default gateway | grep gateway | sed 's/gateway //;s/ //g'`",
         "routeCmdArray": {
-            "12.1.2200": "[concat('route add 168.63.129.16 gw ', variables('mgmtRouteGw'), ' eth0')]",
-            "13.0.0300": "route",
+            "12.1.303000": "[concat('route add 168.63.129.16 gw ', variables('mgmtRouteGw'), ' eth0')]",
             "13.1.0200": "route"
         },
         "bigIpNicPortMap": {
@@ -132,11 +130,8 @@
             }
         },
         "bigIpVersionPortMap": {
-            "12.1.2200": {
+            "12.1.303000": {
                 "Port": 443
-            },
-            "13.0.0300": {
-                "Port": 8443
             },
             "13.1.0200": {
                 "Port": 8443
@@ -184,7 +179,7 @@
             "plan": {
                 "name": "[parameters('imageName')]",
                 "publisher": "f5-networks",
-                "product": "[if(or(equals(parameters('bigIpVersion'), '12.1.2200'), equals(parameters('bigIpVersion'), '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best')]"
+                "product": "f5-big-ip-best"
             },
             "properties": {
                 "availabilitySet": {
@@ -201,7 +196,7 @@
                 "storageProfile": {
                     "imageReference": {
                         "publisher": "f5-networks",
-                        "offer": "[if(or(equals(parameters('bigIpVersion'), '12.1.2200'), equals(parameters('bigIpVersion'), '13.0.0300')), 'f5-big-ip-hourly', 'f5-big-ip-best')]",
+                        "offer": "f5-big-ip-best",
                         "sku": "[parameters('imageName')]",
                         "version": "[parameters('bigIpVersion')]"
                     },
