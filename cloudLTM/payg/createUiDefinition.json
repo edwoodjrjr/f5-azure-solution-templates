@@ -1,4 +1,5 @@
 {
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
     "handler": "Microsoft.Compute.MultiVm",
     "version": "0.1.2-preview",
     "parameters": {
@@ -2260,7 +2261,8 @@
                         "label": "App Insights Group",
                         "toolTip": "Enter the resource group of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
                         "constraints": {
-                            "required": true
+                            "required": true,
+                            "regex": "^[a-zA-Z0-9-_().]{1,90}$"
                         },
                         "visible": "[equals(steps('autoscaleSettings').appInsightsNewOrExisting, 'existing')]"
                     },
@@ -2510,7 +2512,6 @@
             "vnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.addressPrefixes]",
             "subnetName": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.name]",
             "subnetAddressPrefix": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.addressPrefix]",
-            "privateIpAddressRangeStart": "[steps('infrastructureSettings').virtualNetwork.subnets.subnet1.startAddress]",
             "restrictedSrcAddress": "[steps('infrastructureSettings').restrictedSrcAddress]",
             "ntpServer": "[steps('infrastructureSettings').ntpServer]",
             "timeZone": "[steps('infrastructureSettings').timeZone]",

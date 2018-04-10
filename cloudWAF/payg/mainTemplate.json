@@ -165,13 +165,6 @@
                 "description": "Specify the virtual subnet address space."
             }
         },
-        "privateIpAddressRangeStart": {
-            "type": "string",
-            "defaultValue": "0.0.0.0",
-            "metadata": {
-                "description": "Enter an IP address for the BIG-IP."
-            }
-        },
         "restrictedSrcAddress": {
             "defaultValue": "*",
             "metadata": {
