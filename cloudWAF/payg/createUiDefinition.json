@@ -663,7 +663,8 @@
                            "defaultValue": "myAppInsights",
                            "toolTip": "Enter the name of your existing Application Insights environment that will be used to receive custom BIG-IP metrics you can use for Scale Set rules and device visibility.",
                            "constraints": {
-                               "required": true
+                               "required": true,
+                               "regex": "[A-Za-z0-9-_]+$"
                            },
                            "visible": "[equals(steps('autoscaleSettings').appInsightsNewOrExisting, 'existing')]"
                        },
