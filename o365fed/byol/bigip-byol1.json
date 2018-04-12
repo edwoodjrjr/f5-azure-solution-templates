@@ -280,7 +280,7 @@
           "osDisk": {
             "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/',parameters('newStorageAccountName'),'/osDisk',copyindex(1),'.vhd')]"
+              "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('newStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, 'osDisk/', parameters('bigipNamePrefix'), copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -296,7 +296,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[concat('http://',parameters('diagStorageAccountName'),'.blob.core.windows.net')]"
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('diagStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob]"
           }
         }
       }
