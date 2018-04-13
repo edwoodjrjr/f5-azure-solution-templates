@@ -39,7 +39,6 @@
             "name": "adminUsername",
             "type": "Microsoft.Compute.UserNameTextBox",
             "label": "BIG-IP Administrator Username",
-            "defaultValue": "azureuser",
             "toolTip": "Type the administrator username for the BIG-IP VE",
             "osPlatform": "Windows"
           },
