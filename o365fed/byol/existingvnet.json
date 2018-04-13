@@ -21,7 +21,7 @@
       }
     },
     "vnetAddressPrefix": {
-      "type": "string",
+      "type": "array",
       "metadata": {
         "description": "Address Prefix for Virtual Network"
       }
