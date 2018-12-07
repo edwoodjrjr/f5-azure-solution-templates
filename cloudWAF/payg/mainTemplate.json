@@ -86,10 +86,10 @@
         },
         "bigIpVersion": {
             "allowedValues": [
-                "13.1.0200",
+                "13.1.007001",
                 "12.1.303000"
             ],
-            "defaultValue": "13.1.0200",
+            "defaultValue": "13.1.007001",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
@@ -470,7 +470,7 @@
             "12.1.303000": {
                 "Port": 443
             },
-            "13.1.0200": {
+            "13.1.007001": {
                 "Port": 8443
             },
             "443": {
@@ -634,6 +634,19 @@
         "commandArgs": "[concat('-m ', parameters('applicationProtocols'), ' -d ', parameters('solutionDeploymentName'), ' -n ', parameters('applicationAddress'), ' -j 880 -k 8445 -h ', parameters('applicationPort'), ' -s ', parameters('applicationSecurePort'), ' -t ', toLower(variables('appType')), ' -l ', toLower(parameters('blockingLevel')), ' -a ', parameters('customPolicy'), ' -c ', parameters('sslCert'), ' -r ', parameters('sslPswd'), ' -o ', parameters('applicationServiceFqdn'), ' -u ', parameters('adminUsername'))]"
     },
     "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "name": "pid-acd0b981-db1b-483b-b5ef-c4e1e4215ac8",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": []
+                }
+            }
+        },
         {
             "apiVersion": "[variables('apiVersionNetwork')]",
             "type": "Microsoft.Network/publicIPAddresses",

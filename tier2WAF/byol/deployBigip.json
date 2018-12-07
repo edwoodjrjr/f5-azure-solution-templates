@@ -13,10 +13,10 @@
         },
         "bigIpVersion": {
             "allowedValues": [
-                "13.1.0200",
+                "13.1.007001",
                 "12.1.303000"
             ],
-            "defaultValue": "13.1.0200",
+            "defaultValue": "13.1.007001",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
@@ -119,7 +119,7 @@
         "mgmtRouteGw": "`tmsh list sys management-route default gateway | grep gateway | sed 's/gateway //;s/ //g'`",
         "routeCmdArray": {
             "12.1.303000": "[concat('route add 168.63.129.16 gw ', variables('mgmtRouteGw'), ' eth0')]",
-            "13.1.0200": "route"
+            "13.1.007001": "route"
         },
         "bigIpNicPortMap": {
             "1": {
@@ -145,7 +145,7 @@
             "12.1.303000": {
                 "Port": 443
             },
-            "13.1.0200": {
+            "13.1.007001": {
                 "Port": 8443
             },
             "443": {

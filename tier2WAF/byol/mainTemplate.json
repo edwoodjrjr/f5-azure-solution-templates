@@ -24,10 +24,10 @@
         },
         "bigIpVersion": {
             "allowedValues": [
-                "13.1.0200",
+                "13.1.007001",
                 "12.1.303000"
             ],
-            "defaultValue": "13.1.0200",
+            "defaultValue": "13.1.007001",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
@@ -488,6 +488,19 @@
     },
     "resources": [
         {
+            "apiVersion": "2018-02-01",
+            "name": "pid-62682a31-41e6-4585-a289-0fc2b05a3eed",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": []
+                }
+            }
+        },
+        {
             "apiVersion": "[variables('apiVersionNetwork')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "condition": "[equals(parameters('publicIpNewOrExisting'),'new')]",
@@ -920,7 +933,7 @@
                 "extNicCopy",
                 "intNicCopy",
                 "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]",
+                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
             ],
             "properties": {
                 "mode": "incremental",

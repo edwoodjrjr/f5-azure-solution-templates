@@ -31,13 +31,13 @@
                         "name": "bigIpVersion",
                         "type": "Microsoft.Common.OptionsGroup",
                         "label": "BIG-IP Version",
-                        "defaultValue": "13.1.0200",
+                        "defaultValue": "13.1.007001",
                         "toolTip": "F5 BIG-IP version you want to use.",
                         "constraints": {
                             "allowedValues": [
                                 {
-                                    "label": "13.1.0200",
-                                    "value": "13.1.0200"
+                                    "label": "13.1.007001",
+                                    "value": "13.1.007001"
                                 },
                                 {
                                     "label": "12.1.303000",
@@ -104,8 +104,8 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "f5-networks",
-                            "offer": "f5-big-ip-best",
-                            "sku": "f5-bigip-virtual-edition-best-byol"
+                            "offer": "f5-big-ip-byol",
+                            "sku": "f5-big-ltm-2slot-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
                         "visible": "[equals(steps('infrastructureSettings').storageType, 'Premium_LRS')]"
