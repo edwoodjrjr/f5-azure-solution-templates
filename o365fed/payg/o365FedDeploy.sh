@@ -20,11 +20,12 @@ done
 
 user="admin"
 
-# download and install Certificate
+sleep 10
+# download and install certificate
 echo "Starting Certificate download"
-certificate_location=$sslCert
-curl -k -s -f --retry 5 --retry-delay 10 --retry-max-time 10 -o /config/o365FedCert.pfx $certificate_location
- 
+certificate_location="$sslCert"
+curl -k -f --retry 10 --retry-delay 5 --retry-max-time 30 -o /config/o365FedCert.pfx $certificate_location
+
 response_code=$(curl -sku $user:$(passwd) -w "%{http_code}" -X POST -H "Content-Type: application/json" https://localhost/mgmt/tm/sys/crypto/pkcs12 -d '{"command": "install","name": "o365FedCert","options": [ { "from-local-file": "/config/o365FedCert.pfx" }, { "passphrase": "'"$sslPswd"'" } ] }' -o /dev/null)
 
 if [[ $response_code != 200  ]]; then

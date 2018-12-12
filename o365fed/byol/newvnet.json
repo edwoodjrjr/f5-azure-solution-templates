@@ -21,7 +21,7 @@
       }
     },
     "vnetAddressPrefix": {
-      "type": "string",
+      "type": "array",
       "metadata": {
         "description": "Address Prefix for Virtual Network"
       }
@@ -47,18 +47,18 @@
   },
     "variables": {
       "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
-      "subnet1": "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]"
+      "apiVersionNetwork": "[parameters('apiVersionNetwork')]"
     },
     "resources": [
       {
-        "apiVersion": "[parameters('apiVersionNetwork')]",
+        "apiVersion": "[variables('apiVersionNetwork')]",
         "type": "Microsoft.Network/virtualNetworks",
         "name": "[parameters('vnetName')]",
         "location": "[parameters('location')]",
         "properties": {
           "addressSpace": {
             "addressPrefixes": [
-              "[parameters('vnetAddressPrefix')]"
+              "[parameters('vnetAddressPrefix')[0]]"
             ]
           },
           "subnets": [

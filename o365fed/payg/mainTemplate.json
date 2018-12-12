@@ -12,7 +12,6 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "westus",
       "metadata": {
         "description": "The Azure location hosting the resource"
       }
@@ -39,7 +38,6 @@
     },
     "adminUsername": {
       "type": "string",
-      "defaultValue": "azureuser",
       "metadata": {
         "description": "The BIG-IP administrator username."
       }
@@ -157,8 +155,8 @@
       }
     },
     "vnetAddressPrefix": {
-      "type": "string",
-      "defaultValue": "10.0.0.0/16",
+      "type": "array",
+      "defaultValue": "[10.0.0.0/16]",
       "metadata": {
         "description": "Specify the virtual network address space."
       }
@@ -440,11 +438,11 @@
           }
        },
     {
-      "apiVersion": "2015-01-01",
+      "apiVersion": "[variables('linkTemplateApiVersion')]",
       "name": "virtualNetworkTemplate",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "incremental",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[variables('vnetLink')]",
           "contentVersion": "1.0.0.0"

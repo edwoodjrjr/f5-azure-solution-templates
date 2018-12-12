@@ -184,10 +184,12 @@
     }
   },
   "variables": {
+    "apiVersionCompute": "[parameters('apiVersionCompute')]",
+    "apiVersionNetwork": "[parameters('apiVersionNetwork')]"
   },
   "resources": [
     {
-      "apiVersion": "[parameters('apiVersionNetwork')]",
+      "apiVersion": "[variables('apiVersionNetwork')]",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('nicNamePrefix'),copyindex(1))]",
       "location": "[parameters('location')]",
@@ -233,7 +235,7 @@
       }
     },
     {
-      "apiVersion": "[parameters('apiVersionCompute')]",
+      "apiVersion": "[variables('apiVersionCompute')]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('bigipNamePrefix'),copyindex(1))]",
       "location": "[parameters('location')]",
@@ -272,9 +274,9 @@
             "version": "12.1.303000"
           },
           "osDisk": {
-            "name": "[concat('osdisk',parameters('bigipNamePrefix'),copyindex(1))]",
+            "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/',parameters('newStorageAccountName'),'/osDisk',copyindex(1),'.vhd')]"
+              "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('newStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, 'osdisk/', parameters('bigipNamePrefix'), copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -290,7 +292,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[concat('http://',parameters('diagStorageAccountName'),'.blob.core.windows.net')]"
+            "storageUri": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('diagStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob]"
           }
         }
       }
@@ -298,7 +300,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('bigipNamePrefix'),'1','/start')]",
-      "apiVersion": "[parameters('apiVersionCompute')]",
+      "apiVersion": "[variables('apiVersionCompute')]",
       "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('bigipNamePrefix'),'1'))]"
