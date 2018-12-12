@@ -105,7 +105,7 @@
                         "imageReference": {
                             "publisher": "f5-networks",
                             "offer": "f5-big-ip-byol",
-                            "sku": "f5-big-ltm-2slot-byol"
+                            "sku": "f5-big-all-2slot-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
                         "visible": "[equals(steps('infrastructureSettings').storageType, 'Premium_LRS')]"
@@ -150,8 +150,8 @@
                         "osPlatform": "Linux",
                         "imageReference": {
                             "publisher": "f5-networks",
-                            "offer": "f5-big-ip-best",
-                            "sku": "f5-bigip-virtual-edition-best-byol"
+                            "offer": "f5-big-ip-byol",
+                            "sku": "f5-big-all-2slot-byol"
                         },
                         "count": "[steps('infrastructureSettings').numberOfInstances]",
                         "visible": "[equals(steps('infrastructureSettings').storageType, 'Standard_LRS')]"

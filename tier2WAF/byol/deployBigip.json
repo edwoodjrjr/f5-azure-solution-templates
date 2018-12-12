@@ -189,9 +189,9 @@
                 "displayName": "VirtualMachine"
             },
             "plan": {
-                "name": "f5-bigip-virtual-edition-best-byol",
+                "name": "f5-big-all-2slot-byol",
                 "publisher": "f5-networks",
-                "product": "f5-big-ip-best"
+                "product": "f5-big-ip-byol"
             },
             "properties": {
                 "availabilitySet": {
@@ -208,8 +208,8 @@
                 "storageProfile": {
                     "imageReference": {
                         "publisher": "f5-networks",
-                        "offer": "f5-big-ip-best",
-                        "sku": "f5-bigip-virtual-edition-best-byol",
+                        "offer": "f5-big-ip-byol",
+                        "sku": "f5-big-all-2slot-byol",
                         "version": "[parameters('bigIpVersion')]"
                     },
                     "osDisk": {
