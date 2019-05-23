@@ -82,10 +82,11 @@
         },
         "bigIpVersion": {
             "allowedValues": [
-                "13.1.0200",
-                "12.1.303000"
+                "14.1.003000",
+                "13.1.104000",
+                "12.1.401000"
             ],
-            "defaultValue": "13.1.0200",
+            "defaultValue": "13.1.104000",
             "metadata": {
                 "description": "F5 BIG-IP version you want to use."
             },
@@ -839,10 +840,13 @@
             }
         },
         "bigIpVersionPortMap": {
-            "12.1.303000": {
+            "12.1.401000": {
                 "Port": 443
             },
-            "13.1.0200": {
+            "13.1.104000": {
+                "Port": 8443
+            },
+            "14.1.003000": {
                 "Port": 8443
             },
             "443": {
@@ -927,6 +931,19 @@
         "customEmail": "[take(variables('customEmailToUse'), length(replace(parameters('customEmail'), 'OPTIONAL', '')))]"
     },
     "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "name": "pid-c23c6fc6-763f-4c3c-bef4-884fd74d07b2",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": []
+                }
+            }
+        },
         {
             "apiVersion": "[variables('apiVersionNetwork')]",
             "type": "Microsoft.Network/publicIPAddresses",
